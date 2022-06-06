@@ -7,12 +7,12 @@ using System.Text;
 public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
 
     private IEnumerator<T> Source { get; }
-    public Option<T> Current { get; set; }
-    private Option<T> Next { get; set; }
-    public bool HasNext => PeekInternal().HasValue;
     public bool IsStarted { get; private set; }
     public bool IsLast => !PeekInternal().HasValue;
     public bool IsFinished { get; private set; }
+    public bool HasNext => PeekInternal().HasValue;
+    public Option<T> Current { get; private set; }
+    private Option<T> Next { get; set; }
 
 
     public PeekableEnumerator(IEnumerator<T> source!!) {
@@ -46,29 +46,25 @@ public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
     // Reset
     public void Reset() {
         Source.Reset();
-        Current = default;
-        Next = default;
-        IsStarted = false;
-        IsFinished = false;
+        (IsStarted, IsFinished) = (false, false);
+        (Current, Next) = (default, default);
     }
 
 
     // Helpers
     private Option<T> TakeInternal() {
         var value = MoveNext( Next, Source );
-        Current = value;
-        Next = default;
-        IsStarted = true;
-        IsFinished = !Current.HasValue;
-        return Current;
+        (IsStarted, IsFinished) = (true, !value.HasValue);
+        (Current, Next) = (value, default);
+        return value;
     }
     private Option<T> PeekInternal() {
         var value = MoveNext( Next, Source );
-        // It does not affect Current
-        Next = value;
-        return Next;
         // It does not affect IsStarted
         // It does not affect IsFinished
+        // It does not affect Current
+        (Current, Next) = (Current, value);
+        return value;
     }
     private static Option<T> MoveNext(Option<T> next, IEnumerator<T> enumerator) {
         if (next.HasValue) return next;

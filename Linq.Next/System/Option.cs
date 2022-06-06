@@ -13,13 +13,12 @@ public static class Option {
         if ((opt1.HasValue, opt2.HasValue) == (true, true)) return Comparer<T>.Default.Compare( opt1.Value, opt2.Value );
         return Comparer<bool>.Default.Compare( opt1.HasValue, opt2.HasValue );
     }
-    public static Type? GetUnderlyingType(Type type) {
-        if (type is null) throw new ArgumentNullException( nameof( type ) );
+    public static Type? GetUnderlyingType(Type type!!) {
         if (GetUnboundType( type ) == typeof( Option<> )) return type.GetGenericArguments().First();
         return null;
     }
     // Helpers
-    private static Type GetUnboundType(Type type) {
+    private static Type GetUnboundType(Type type!!) {
         if (type.IsGenericType) {
             return type.IsGenericTypeDefinition ? type : type.GetGenericTypeDefinition();
         } else {
@@ -35,17 +34,18 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IComparable<Option<T>>
 
     private readonly bool hasValue;
     private readonly T value;
+    public static Option<T> Default => default;
     public bool HasValue => hasValue;
     public T Value => hasValue ? value : throw new InvalidOperationException( "Option object must have a value" );
     public T? ValueOrDefault => hasValue ? value : default;
 
     public Option(T value) {
-        hasValue = true;
+        this.hasValue = true;
         this.value = value;
     }
 
     // TryGetValue
-    public bool TryGetValue([MaybeNullWhen( false )] out T value) {
+    public bool TryGetValue([MaybeNullWhen( false )] out T? value) {
         value = hasValue ? this.value : default;
         return hasValue;
     }
@@ -72,6 +72,11 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IComparable<Option<T>>
         return 0;
     }
 
+    // Utils
+    public static Option<T> Create(T value) {
+        return new Option<T>( value );
+    }
+
     // Conversions
     public static implicit operator Option<T>(T value) {
         return new Option<T>( value );
@@ -82,10 +87,10 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IComparable<Option<T>>
 
     // Operators
     public static bool operator ==(Option<T> left, Option<T> right) {
-        return left.Equals( right );
+        return Option.Equals( left, right );
     }
     public static bool operator !=(Option<T> left, Option<T> right) {
-        return !left.Equals( right );
+        return !Option.Equals( left, right );
     }
 
 

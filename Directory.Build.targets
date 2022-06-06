@@ -1,0 +1,8 @@
+<Project>
+
+    <PropertyGroup>
+        <!--https://github.com/dotnet/project-system/issues/6250#issuecomment-635258518-->
+        <RootNamespace></RootNamespace>
+    </PropertyGroup>
+
+</Project>

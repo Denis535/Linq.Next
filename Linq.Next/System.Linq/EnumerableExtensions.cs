@@ -142,30 +142,30 @@ public static class EnumerableExtensions {
 
 
     // With/Prev-Next
-    //public static IEnumerable<(T Value, T? Prev)> WithPrev<T>(this IEnumerable<T> source) where T : struct {
-    //    var prev = default( T? );
+    //public static IEnumerable<(T Value, Option<T> Prev)> WithPrev<T>(this IEnumerable<T> source) {
+    //    var prev = default( Option<T> );
     //    foreach (var item in source) {
     //        yield return (item, prev);
     //        prev = item;
     //    }
     //}
-    //public static IEnumerable<(T Value, T? Next)> WithNext<T>(this IEnumerable<T> source) where T : struct {
+    //public static IEnumerable<(T Value, Option<T> Next)> WithNext<T>(this IEnumerable<T> source) {
     //    using var source_enumerator = source.GetEnumerator();
-    //    var item = source_enumerator.MoveNext() ? source_enumerator.Current : default( T? );
+    //    var item = source_enumerator.MoveNext() ? source_enumerator.Current : default( Option<T> );
     //    while (source_enumerator.MoveNext()) {
     //        var next = source_enumerator.Current;
     //        yield return (item!.Value, next);
     //        item = next;
     //    }
     //    if (item != null) {
-    //        yield return (item.Value, null);
-    //        item = null;
+    //        yield return (item.Value, default);
+    //        item = default;
     //    }
     //}
-    //public static IEnumerable<(T Value, T? Prev, T? Next)> WithPrevNext<T>(this IEnumerable<T> source) where T : struct {
+    //public static IEnumerable<(T Value, Option<T> Prev, Option<T> Next)> WithPrevNext<T>(this IEnumerable<T> source) {
     //    using var source_enumerator = source.GetEnumerator();
-    //    var prev = default( T? );
-    //    var item = source_enumerator.MoveNext() ? source_enumerator.Current : default( T? );
+    //    var prev = default( Option<T> );
+    //    var item = source_enumerator.MoveNext() ? source_enumerator.Current : default( Option<T> );
     //    while (source_enumerator.MoveNext()) {
     //        var next = source_enumerator.Current;
     //        yield return (item!.Value, prev, next);
@@ -173,9 +173,9 @@ public static class EnumerableExtensions {
     //        item = next;
     //    }
     //    if (item != null) {
-    //        yield return (item.Value, prev, null);
+    //        yield return (item.Value, prev, default);
     //        prev = item;
-    //        item = null;
+    //        item = default;
     //    }
     //}
 

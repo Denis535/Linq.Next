@@ -5,6 +5,12 @@ using System.Text;
 using System.Linq;
 
 public static class Option {
+    public static Option<T> Default<T>() {
+        return new Option<T>();
+    }
+    public static Option<T> Create<T>(T value) {
+        return new Option<T>( value );
+    }
     public static bool Equals<T>(Option<T> opt1, Option<T> opt2) {
         if ((opt1.HasValue, opt2.HasValue) == (true, true)) return EqualityComparer<T>.Default.Equals( opt1.Value, opt2.Value );
         return EqualityComparer<bool>.Default.Equals( opt1.HasValue, opt2.HasValue );
@@ -70,11 +76,6 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IComparable<Option<T>>
     public override int GetHashCode() {
         if (hasValue) return value?.GetHashCode() ?? 0;
         return 0;
-    }
-
-    // Utils
-    public static Option<T> Create(T value) {
-        return new Option<T>( value );
     }
 
     // Conversions

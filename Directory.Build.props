@@ -1,11 +1,10 @@
 <Project>
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace></RootNamespace>
         <LangVersion>preview</LangVersion>
         <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>

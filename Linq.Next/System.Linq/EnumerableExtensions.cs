@@ -101,34 +101,6 @@ public static class EnumerableExtensions {
             segment.Clear();
         }
     }
-    // Slice/By
-    //public static IEnumerable<T[]> SliceBy<T, TKey>(this IEnumerable<T> source, Func<T, TKey> keySelector) {
-    //    return source.SliceBy( keySelector, i => i, EqualityComparer<TKey>.Default );
-    //}
-    //public static IEnumerable<TResult[]> SliceBy<T, TKey, TResult>(this IEnumerable<T> source, Func<T, TKey> keySelector, Func<T, TResult> resultSelector) {
-    //    return source.SliceBy( keySelector, resultSelector, EqualityComparer<TKey>.Default );
-    //}
-    //public static IEnumerable<TResult[]> SliceBy<T, TKey, TResult>(this IEnumerable<T> source, Func<T, TKey> keySelector, Func<T, TResult> resultSelector, IEqualityComparer<TKey> comparer) {
-    //    return source.FastSliceBy( keySelector, resultSelector, comparer ).Select( i => i.ToArray() );
-    //}
-    //public static IEnumerable<IList<TResult>> FastSliceBy<T, TKey, TResult>(this IEnumerable<T> source, Func<T, TKey> keySelector, Func<T, TResult> resultSelector, IEqualityComparer<TKey> comparer) {
-    //    // [0, 0, 0, 0], [1, 1], [2]
-    //    var prev = Option<TKey>.Default;
-    //    var segment = new List<TResult>();
-    //    foreach (var item in source) {
-    //        var key = keySelector( item );
-    //        if (prev.HasValue && !comparer.Equals( prev.Value, key )) {
-    //            yield return segment;
-    //            segment.Clear();
-    //        }
-    //        segment.Add( resultSelector( item ) );
-    //        prev = key;
-    //    }
-    //    if (segment.Any()) {
-    //        yield return segment;
-    //        segment.Clear();
-    //    }
-    //}
 
 
     // Tag/First

@@ -60,9 +60,9 @@ public class Tests_EnumerableExtensions {
             Assert.That( actual, Is.EquivalentTo( expected ) );
         }
     }
-    // Slice/Before
+    // Split/Before
     [Test]
-    public void Test_02_SliceBefore() {
+    public void Test_02_SplitBefore() {
         // Empty
         Fn( Source(), i => true,
             Expected<int[]>()
@@ -89,9 +89,9 @@ public class Tests_EnumerableExtensions {
             Assert.That( actual, Is.EquivalentTo( expected ) );
         }
     }
-    // Slice/After
+    // Split/After
     [Test]
-    public void Test_02_SliceAfter() {
+    public void Test_02_SplitAfter() {
         // Empty
         Fn( Source(), i => true,
             Expected<int[]>()
@@ -118,27 +118,6 @@ public class Tests_EnumerableExtensions {
             Assert.That( actual, Is.EquivalentTo( expected ) );
         }
     }
-    // Slice/By
-    //[Test]
-    //public void Test_02_SliceBy() {
-    //    Fn( Source(),
-    //        Expected<int[]>()
-    //    );
-    //    Fn( Source( 0, 0, 0, 0, 0, 0 ),
-    //        Expected<int[]>( Array( 0, 0, 0, 0, 0, 0 ) )
-    //    );
-    //    Fn( Source( 0, 1, 2, 3, 4, 5 ),
-    //        Expected( Array( 0 ), Array( 1 ), Array( 2 ), Array( 3 ), Array( 4 ), Array( 5 ) )
-    //    );
-    //    Fn( Source( 0, 0, 0, 1, 1, 2 ),
-    //        Expected( Array( 0, 0, 0 ), Array( 1, 1 ), Array( 2 ) )
-    //    );
-
-    //    static void Fn(int[] source, int[][] expected) {
-    //        var actual = source.SliceBy( i => i ).ToArray();
-    //        Assert.That( actual, Is.EquivalentTo( expected ) );
-    //    }
-    //}
 
 
     // Tag/First

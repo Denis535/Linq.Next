@@ -21,19 +21,9 @@ public class Tests_EnumerableExtensions {
     }
 
 
-    // Shuffle
-    [Test]
-    public void Test_01_Shuffle() {
-        var source = Source( 0, 1, 2 );
-        var actual = source.Shuffle( new Random( 0 ) ).ToArray();
-        var expected = Expected( 2, 0, 1 );
-        Assert.That( actual, Is.EquivalentTo( expected ) );
-    }
-
-
     // Split
     [Test]
-    public void Test_02_Split() {
+    public void Test_01_Split() {
         // Empty
         Fn( Source(), i => true,
             Expected<int[]>()
@@ -62,7 +52,7 @@ public class Tests_EnumerableExtensions {
     }
     // Split/Before
     [Test]
-    public void Test_02_SplitBefore() {
+    public void Test_01_SplitBefore() {
         // Empty
         Fn( Source(), i => true,
             Expected<int[]>()
@@ -91,7 +81,7 @@ public class Tests_EnumerableExtensions {
     }
     // Split/After
     [Test]
-    public void Test_02_SplitAfter() {
+    public void Test_01_SplitAfter() {
         // Empty
         Fn( Source(), i => true,
             Expected<int[]>()
@@ -122,7 +112,7 @@ public class Tests_EnumerableExtensions {
 
     // Tag/First
     [Test]
-    public static void Test_03_TagFirst() {
+    public static void Test_02_TagFirst() {
         Fn( Source(),
             Expected<int, bool>()
         );
@@ -140,7 +130,7 @@ public class Tests_EnumerableExtensions {
     }
     // Tag/Last
     [Test]
-    public static void Test_03_TagLast() {
+    public static void Test_02_TagLast() {
         Fn( Source(),
             Expected<int, bool>()
         );
@@ -158,7 +148,7 @@ public class Tests_EnumerableExtensions {
     }
     // Tag/First-Last
     [Test]
-    public static void Test_03_TagFirstLast() {
+    public static void Test_02_TagFirstLast() {
         Fn( Source(),
             Expected<int, bool, bool>()
         );
@@ -178,7 +168,7 @@ public class Tests_EnumerableExtensions {
 
     // With/Prev
     [Test]
-    public static void Test_04_WithPrev() {
+    public static void Test_03_WithPrev() {
         Fn( Source(),
             Expected<int, Option<int>>()
         );
@@ -196,7 +186,7 @@ public class Tests_EnumerableExtensions {
     }
     // With/Next
     [Test]
-    public static void Test_04_WithNext() {
+    public static void Test_03_WithNext() {
         Fn( Source(),
             Expected<int, Option<int>>()
         );
@@ -214,7 +204,7 @@ public class Tests_EnumerableExtensions {
     }
     // With/Prev-Next
     [Test]
-    public static void Test_04_WithPrevNext() {
+    public static void Test_03_WithPrevNext() {
         Fn( Source(),
             Expected<int, Option<int>, Option<int>>()
         );

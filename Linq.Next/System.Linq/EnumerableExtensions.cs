@@ -14,20 +14,6 @@ public static class EnumerableExtensions {
     }
 
 
-    // Shuffle
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source) {
-        return source.Shuffle( new Random() );
-    }
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> source, Random random) {
-        var result = source.ToArray();
-        for (var i = 0; i < result.Length; i++) {
-            var i2 = i + random.Next( 0, result.Length - i );
-            (result[ i2 ], result[ i ]) = (result[ i ], result[ i2 ]);
-        }
-        return result;
-    }
-
-
     // Split
     public static IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Predicate<T> predicate) {
         return source.FastSplit( predicate, i => i ).Select( i => i.ToArray() );

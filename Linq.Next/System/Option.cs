@@ -11,6 +11,10 @@ public static class Option {
     public static Option<T> Create<T>(T value) {
         return new Option<T>( value );
     }
+    public static Option<T> Create<T>(T? value) where T : struct {
+        if (value.HasValue) return new Option<T>( value.Value );
+        return default;
+    }
     public static bool Equals<T>(Option<T> opt1, Option<T> opt2) {
         if ((opt1.HasValue, opt2.HasValue) == (true, true)) return EqualityComparer<T>.Default.Equals( opt1.Value, opt2.Value );
         return EqualityComparer<bool>.Default.Equals( opt1.HasValue, opt2.HasValue );

@@ -6,12 +6,6 @@ using System.Text;
 public static class EnumerableExtensions {
 
 
-    // GetPeekableEnumerator
-    //public static PeekableEnumerator<T> GetPeekableEnumerator<T>(this IEnumerable<T> enumerable) {
-    //    return new PeekableEnumerator<T>( enumerable.GetEnumerator() );
-    //}
-
-
     // Compare
     public static void Compare<T>(this IEnumerable<T> source, IEnumerable<T> standard, out T[] missing, out T[] extra) {
         var expected_ = new LinkedList<T>( standard );
@@ -34,44 +28,6 @@ public static class EnumerableExtensions {
     }
 
 
-    // Slice
-    //public static IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, bool> predicate) {
-    //    using var source_enumerator = source.GetPeekableEnumerator();
-    //    var slice = new List<T>();
-    //    while (source_enumerator.HasNext) {
-    //        slice.Clear();
-    //        slice.AddRange( source_enumerator.TakeSlice( predicate ) );
-    //        yield return slice.ToArray();
-    //    }
-    //}
-    //public static IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, T, bool> predicate) {
-    //    using var source_enumerator = source.GetPeekableEnumerator();
-    //    var slice = new List<T>();
-    //    while (source_enumerator.HasNext) {
-    //        slice.Clear();
-    //        slice.AddRange( source_enumerator.TakeSlice( predicate ) );
-    //        yield return slice.ToArray();
-    //    }
-    //}
-    // Slice/TakeSlice
-    //private static IEnumerable<T> TakeSlice<T>(this IEnumerator<T> enumerator, Func<T, bool> predicate) {
-    //    // a
-    //    // a,    [break], b
-    //    // a, a, [break], b, b
-    //    while (enumerator.TryTake( out var current )) {
-    //        yield return current;
-    //        if (predicate( current )) yield break;
-    //    }
-    //}
-    //private static IEnumerable<T> TakeSlice<T>(this IEnumerator<T> enumerator, Func<T, T, bool> predicate) {
-    //    // a
-    //    // a,    [break], b
-    //    // a, a, [break], b, b
-    //    while (enumerator.TryTake( out var current )) {
-    //        yield return current;
-    //        if (enumerator.TryPeek( out var next ) && predicate( current, next )) yield break;
-    //    }
-    //}
     // Slice/Before
     public static IEnumerable<T[]> SliceBefore<T>(this IEnumerable<T> source, Predicate<T> predicate) {
         return source.SliceBefore( predicate, i => i );
@@ -146,31 +102,6 @@ public static class EnumerableExtensions {
     //}
 
 
-    // Tag/First-Last
-    //public static IEnumerable<(T Value, bool IsFirst)> TagFirst<T>(this IEnumerable<T> source) {
-    //    using var source_enumerator = source.GetEnumerator();
-    //    if (source_enumerator.TryTake( out var value_first )) {
-    //        yield return (value_first, true);
-    //    }
-    //    while (source_enumerator.TryTake( out var value )) {
-    //        yield return (value, false);
-    //    }
-    //}
-    //public static IEnumerable<(T Value, bool IsLast)> TagLast<T>(this IEnumerable<T> source) {
-    //    using var source_enumerator = source.GetPeekableEnumerator();
-    //    while (source_enumerator.TryTake( out var value )) {
-    //        yield return (value, source_enumerator.IsLast);
-    //    }
-    //}
-    //public static IEnumerable<(T Value, bool IsFirst, bool IsLast)> TagFirstLast<T>(this IEnumerable<T> source) {
-    //    using var source_enumerator = source.GetPeekableEnumerator();
-    //    if (source_enumerator.TryTake( out var value_first )) {
-    //        yield return (value_first, true, source_enumerator.IsLast);
-    //    }
-    //    while (source_enumerator.TryTake( out var value )) {
-    //        yield return (value, false, source_enumerator.IsLast);
-    //    }
-    //}
     // Tag/First
     public static IEnumerable<(T Value, bool IsFirst)> TagFirst<T>(this IEnumerable<T> source) {
         using var source_enumerator = source.GetEnumerator();
@@ -207,29 +138,6 @@ public static class EnumerableExtensions {
     }
 
 
-    //// With/Prev-Next
-    //public static IEnumerable<(T Current, Option<T> Prev)> WithPrev<T>(this IEnumerable<T> source) {
-    //    using var source_enumerator = source.GetEnumerator();
-    //    var prev = default( Option<T> );
-    //    while (source_enumerator.TryTake( out var current )) {
-    //        yield return (current, prev);
-    //        prev = current;
-    //    }
-    //}
-    //public static IEnumerable<(T Current, Option<T> Next)> WithNext<T>(this IEnumerable<T> source) {
-    //    using var source_enumerator = source.GetPeekableEnumerator();
-    //    while (source_enumerator.TryTake( out var current )) {
-    //        yield return (current, source_enumerator.Peek());
-    //    }
-    //}
-    //public static IEnumerable<(T Current, Option<T> Prev, Option<T> Next)> WithPrevNext<T>(this IEnumerable<T> source) {
-    //    using var source_enumerator = source.GetPeekableEnumerator();
-    //    var prev = default( Option<T> );
-    //    while (source_enumerator.TryTake( out var current )) {
-    //        yield return (current, prev, source_enumerator.Peek());
-    //        prev = current;
-    //    }
-    //}
     // With/Prev
     public static IEnumerable<(T Value, Option<T> Prev)> WithPrev<T>(this IEnumerable<T> source) {
         var prev = Option<T>.Default;

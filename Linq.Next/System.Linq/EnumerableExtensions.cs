@@ -28,20 +28,47 @@ public static class EnumerableExtensions {
     }
 
 
-    // Slice/Before
-    public static IEnumerable<T[]> SliceBefore<T>(this IEnumerable<T> source, Predicate<T> predicate) {
-        return source.SliceBefore( predicate, i => i );
+    // Split
+    public static IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Predicate<T> predicate) {
+        return source.FastSplit( predicate, i => i ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<TResult[]> SliceBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
-        return source.FastSliceBefore( predicate, resultSelector ).Select( i => i.ToArray() );
+    public static IEnumerable<TResult[]> Split<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+        return source.FastSplit( predicate, resultSelector ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<IList<TResult>> FastSliceBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<IList<TResult>> FastSplit<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+        // [false, false, false], break, [false, false]
+        var segment = new List<TResult>();
+        foreach (var item in source) {
+            if (predicate( item )) {
+                if (segment.Any()) {
+                    yield return segment;
+                    segment.Clear();
+                }
+            } else {
+                segment.Add( resultSelector( item ) );
+            }
+        }
+        if (segment.Any()) {
+            yield return segment;
+            segment.Clear();
+        }
+    }
+    // Split/Before
+    public static IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Predicate<T> predicate) {
+        return source.FastSplitBefore( predicate, i => i ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<TResult[]> SplitBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+        return source.FastSplitBefore( predicate, resultSelector ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<IList<TResult>> FastSplitBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
         // [false, false, false], break, [true, false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
-            if (predicate( item ) && segment.Any()) {
-                yield return segment;
-                segment.Clear();
+            if (predicate( item )) {
+                if (segment.Any()) {
+                    yield return segment;
+                    segment.Clear();
+                }
             }
             segment.Add( resultSelector( item ) );
         }
@@ -50,21 +77,23 @@ public static class EnumerableExtensions {
             segment.Clear();
         }
     }
-    // Slice/After
-    public static IEnumerable<T[]> SliceAfter<T>(this IEnumerable<T> source, Predicate<T> predicate) {
-        return source.SliceAfter( predicate, i => i );
+    // Split/After
+    public static IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Predicate<T> predicate) {
+        return source.FastSplitAfter( predicate, i => i ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<TResult[]> SliceAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
-        return source.FastSliceAfter( predicate, resultSelector ).Select( i => i.ToArray() );
+    public static IEnumerable<TResult[]> SplitAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+        return source.FastSplitAfter( predicate, resultSelector ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<IList<TResult>> FastSliceAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<IList<TResult>> FastSplitAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
         // [false, false, false, true], break, [false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
             segment.Add( resultSelector( item ) );
             if (predicate( item )) {
-                yield return segment;
-                segment.Clear();
+                if (segment.Any()) {
+                    yield return segment;
+                    segment.Clear();
+                }
             }
         }
         if (segment.Any()) {

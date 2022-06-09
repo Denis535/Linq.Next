@@ -31,51 +31,90 @@ public class Tests_EnumerableExtensions {
     }
 
 
-    // Slice/Before
+    // Split
     [Test]
-    public void Test_02_SliceBefore() {
+    public void Test_02_Split() {
+        // Empty
         Fn( Source(), i => true,
             Expected<int[]>()
         );
+        // False
         Fn( Source( 0, 1, 2, 3, 4, 5 ), i => false,
             Expected<int[]>( Array( 0, 1, 2, 3, 4, 5 ) )
         );
+        // True
         Fn( Source( 0, 1, 2, 3, 4, 5 ), i => true,
-            Expected( Array( 0 ), Array( 1 ), Array( 2 ), Array( 3 ), Array( 4 ), Array( 5 ) )
+            Expected<int[]>()
         );
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 2 or 4),
-            Expected( Array( 0, 1 ), Array( 2, 3 ), Array( 4, 5 ) )
+        // 2, 3
+        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 2 or 3),
+            Expected( Array( 0, 1 ), Array( 4, 5 ) )
         );
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 4 or 5),
-            Expected( Array( 0, 1 ), Array( 2, 3 ), Array( 4 ), Array( 5 ) )
+        // 0, 2, 3, 5
+        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5),
+            Expected( Array( 1 ), Array( 4 ) )
         );
 
         static void Fn(int[] source, Predicate<int> predicate, int[][] expected) {
-            var actual = source.SliceBefore( predicate ).ToArray();
+            var actual = source.Split( predicate ).ToArray();
+            Assert.That( actual, Is.EquivalentTo( expected ) );
+        }
+    }
+    // Slice/Before
+    [Test]
+    public void Test_02_SliceBefore() {
+        // Empty
+        Fn( Source(), i => true,
+            Expected<int[]>()
+        );
+        // False
+        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => false,
+            Expected<int[]>( Array( 0, 1, 2, 3, 4, 5 ) )
+        );
+        // True
+        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => true,
+            Expected( Array( 0 ), Array( 1 ), Array( 2 ), Array( 3 ), Array( 4 ), Array( 5 ) )
+        );
+        // 2, 3
+        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 2 or 3),
+            Expected( Array( 0, 1 ), Array( 2 ), Array( 3, 4, 5 ) )
+        );
+        // 0, 2, 3, 5
+        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5),
+            Expected( Array( 0, 1 ), Array( 2 ), Array( 3, 4 ), Array( 5 ) )
+        );
+
+        static void Fn(int[] source, Predicate<int> predicate, int[][] expected) {
+            var actual = source.SplitBefore( predicate ).ToArray();
             Assert.That( actual, Is.EquivalentTo( expected ) );
         }
     }
     // Slice/After
     [Test]
     public void Test_02_SliceAfter() {
+        // Empty
         Fn( Source(), i => true,
             Expected<int[]>()
         );
+        // False
         Fn( Source( 0, 1, 2, 3, 4, 5 ), i => false,
             Expected<int[]>( Array( 0, 1, 2, 3, 4, 5 ) )
         );
+        // True
         Fn( Source( 0, 1, 2, 3, 4, 5 ), i => true,
             Expected( Array( 0 ), Array( 1 ), Array( 2 ), Array( 3 ), Array( 4 ), Array( 5 ) )
         );
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => i is (2 or 4),
-            Expected( Array( 0, 1, 2 ), Array( 3, 4 ), Array( 5 ) )
+        // 2, 3
+        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => i is (2 or 3),
+            Expected( Array( 0, 1, 2 ), Array( 3 ), Array( 4, 5 ) )
         );
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 4 or 5),
-            Expected( Array( 0 ), Array( 1, 2 ), Array( 3, 4 ), Array( 5 ) )
+        // 0, 2, 3, 5
+        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5),
+            Expected( Array( 0 ), Array( 1, 2 ), Array( 3 ), Array( 4, 5 ) )
         );
 
         static void Fn(int[] source, Predicate<int> predicate, int[][] expected) {
-            var actual = source.SliceAfter( predicate ).ToArray();
+            var actual = source.SplitAfter( predicate ).ToArray();
             Assert.That( actual, Is.EquivalentTo( expected ) );
         }
     }

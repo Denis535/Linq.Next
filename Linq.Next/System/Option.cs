@@ -5,7 +5,8 @@ using System.Text;
 using System.Linq;
 
 public static class Option {
-    public static Option<T> Default<T>() {
+    // Create
+    public static Option<T> Create<T>() {
         return new Option<T>();
     }
     public static Option<T> Create<T>(T value) {
@@ -15,14 +16,33 @@ public static class Option {
         if (value.HasValue) return new Option<T>( value.Value );
         return default;
     }
-    public static bool Equals<T>(Option<T> opt1, Option<T> opt2) {
-        if ((opt1.HasValue, opt2.HasValue) == (true, true)) return EqualityComparer<T>.Default.Equals( opt1.Value, opt2.Value );
-        return EqualityComparer<bool>.Default.Equals( opt1.HasValue, opt2.HasValue );
+    // Equals
+    public static bool Equals<T>(Option<T> v1, Option<T> v2) {
+        if (v1.HasValue && v2.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2.Value );
+        return EqualityComparer<bool>.Default.Equals( v1.HasValue, v2.HasValue );
     }
-    public static int Compare<T>(Option<T> opt1, Option<T> opt2) {
-        if ((opt1.HasValue, opt2.HasValue) == (true, true)) return Comparer<T>.Default.Compare( opt1.Value, opt2.Value );
-        return Comparer<bool>.Default.Compare( opt1.HasValue, opt2.HasValue );
+    public static bool Equals<T>(Option<T> v1, T? v2) where T : struct {
+        if (v1.HasValue && v2.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2.Value );
+        return EqualityComparer<bool>.Default.Equals( v1.HasValue, v2.HasValue );
     }
+    public static bool Equals<T>(Option<T> v1, T v2) {
+        if (v1.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2 );
+        return EqualityComparer<bool>.Default.Equals( v1.HasValue, true );
+    }
+    // Compare
+    public static int Compare<T>(Option<T> v1, Option<T> v2) {
+        if (v1.HasValue && v2.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2.Value );
+        return Comparer<bool>.Default.Compare( v1.HasValue, v2.HasValue );
+    }
+    public static int Compare<T>(Option<T> v1, T? v2) where T : struct {
+        if (v1.HasValue && v2.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2.Value );
+        return Comparer<bool>.Default.Compare( v1.HasValue, v2.HasValue );
+    }
+    public static int Compare<T>(Option<T> v1, T v2) {
+        if (v1.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2 );
+        return Comparer<bool>.Default.Compare( v1.HasValue, true );
+    }
+    // GetUnderlyingType
     public static Type? GetUnderlyingType(Type type!!) {
         if (GetUnboundType( type ) == typeof( Option<> )) return type.GetGenericArguments().First();
         return null;
@@ -40,7 +60,7 @@ public static class Option {
 // Note: We need something like [MemberMaybeNullWhen( false, nameof( ValueOrDefault ) )]
 // Note: Value is nullable when T is nullable
 [Serializable]
-public readonly struct Option<T> : IEquatable<Option<T>>, IComparable<Option<T>> {
+public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, IComparable<Option<T>>, IComparable<T> {
 
     private readonly bool hasValue;
     private readonly T value;
@@ -64,14 +84,20 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IComparable<Option<T>>
     public bool Equals(Option<T> other) {
         return Option.Equals( this, other );
     }
+    public bool Equals(T other) {
+        return Option.Equals( this, other );
+    }
     public int CompareTo(Option<T> other) {
+        return Option.Compare( this, other );
+    }
+    public int CompareTo(T other) {
         return Option.Compare( this, other );
     }
 
     // Utils
     public override string ToString() {
-        if (hasValue) return value?.ToString() ?? "";
-        return "";
+        if (hasValue) return value?.ToString() ?? "Null";
+        return "Empty";
     }
     public override bool Equals(object? other) {
         if (other is Option<T> other_) return Option.Equals( this, other_ );

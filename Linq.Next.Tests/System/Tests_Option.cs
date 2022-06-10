@@ -9,55 +9,42 @@ using NUnit.Framework;
 public class Tests_Option {
 
 
+    // Constructor
     [Test]
-    public void Test_00_Constructor() {
-        _ = new Option<object>();
-    }
-    [TestCase( null )]
-    public void Test_00_Constructor(object value) {
-        _ = new Option<object>( value );
-    }
-    [TestCase( 777 )]
-    public void Test_00_Constructor<T>(T value) {
-        _ = new Option<T>( value );
+    public void Constructor() {
+        _ = new Option<object?>( new object() );
     }
 
 
     // Value
     [Test]
-    public void Test_01_Value() {
-        var option = new Option<object>();
-
-        Assert.That( option.HasValue, Is.False );
-        Assert.Throws<InvalidOperationException>( () => _ = option.Value );
-        Assert.That( option.ValueOrDefault, Is.Null );
-
-        Assert.That( option.TryGetValue( out var val ), Is.False );
-        Assert.That( val, Is.Null );
+    public void Value() {
+        Value( Option() );
+        Value( Option( null ), null );
+        Value( Option( this ), this );
+        Value( Option( 777 ), 777 );
     }
-    [TestCase( null )]
-    public void Test_01_Value(object value) {
-        var option = new Option<object?>( value );
-
-        Assert.That( option.HasValue, Is.True );
-        Assert.That( option.Value, Is.EqualTo( value ) );
-        Assert.That( option.ValueOrDefault, Is.EqualTo( value ) );
-
-        var hasVal = option.TryGetValue( out var val );
-        Assert.That( hasVal, Is.True );
-        Assert.That( val, Is.EqualTo( value ) );
+    private static void Value<T>(Option<T> source) {
+        Assert.That( source.HasValue, Is.False );
+        Assert.Throws<InvalidOperationException>( () => _ = source.Value );
+        Assert.That( source.ValueOrDefault, Is.EqualTo( default( T ) ) );
     }
-    [TestCase( 777 )]
-    public void Test_01_Value<T>(T value) {
-        var option = new Option<T>( value );
+    private static void Value<T>(Option<T> source, T expected_value) {
+        Assert.That( source.HasValue, Is.True );
+        Assert.That( source.Value, Is.EqualTo( expected_value ) );
+        Assert.That( source.ValueOrDefault, Is.EqualTo( expected_value ) );
+    }
 
-        Assert.That( option.HasValue, Is.True );
-        Assert.That( option.Value, Is.EqualTo( value ) );
-        Assert.That( option.ValueOrDefault, Is.EqualTo( value ) );
 
-        var hasVal = option.TryGetValue( out var val );
-        Assert.That( hasVal, Is.True );
-        Assert.That( val, Is.EqualTo( value ) );
+    // Helpers
+    private static Option<object> Option() {
+        return new Option<object>();
+    }
+    private static Option<object?> Option(object? value) {
+        return new Option<object?>( value );
+    }
+    private static Option<int> Option(int value) {
+        return new Option<int>( value );
     }
 
 

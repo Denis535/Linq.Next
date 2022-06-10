@@ -6,8 +6,8 @@ using System.Text;
 public static class EnumerableExtensions {
 
 
-    // Compare
-    public static void Compare<T>(this IEnumerable<T> source, IEnumerable<T> standard, out T[] missing, out T[] extra) {
+    // CompareTo
+    public static void CompareTo<T>(this IEnumerable<T> source, IEnumerable<T> standard, out T[] missing, out T[] extra) {
         var expected_ = new LinkedList<T>( standard );
         extra = source.Where( i => !expected_.Remove( i ) ).ToArray();
         missing = expected_.ToArray();

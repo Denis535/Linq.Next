@@ -8,113 +8,78 @@ using NUnit.Framework;
 
 public class Tests_PeekableEnumerator {
 
+    private static readonly Option<int> Default = default;
 
+
+    // Constructor
     [Test]
-    public void Test_00_Constructor() {
-        using var enumerator = new PeekableEnumerator<int>( Enumerable.Empty<int>().GetEnumerator() );
-        Assert.That( enumerator.IsStarted, Is.False );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option<int>.Default ) );
+    public void Constructor() {
+        using var source = Enumerator( 0, 1, 2 );
+        Assert.That( source.IsStarted, Is.False );
+        Assert.That( source.IsFinished, Is.False );
+        Assert.That( source.Current, Is.EqualTo( Default ) );
     }
 
 
     // Take
-    [TestCase]
-    public void Test_01_Take() {
-        using var enumerator = new PeekableEnumerator<int>( Enumerable.Empty<int>().GetEnumerator() );
-        // Take/Finish
-        Assert.That( enumerator.Take(), Is.EqualTo( Option<int>.Default ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.True );
-        Assert.That( enumerator.Current, Is.EqualTo( Option<int>.Default ) );
+    [Test]
+    public void Take_00() {
+        using var source = Enumerator();
+        // Peek
+        Peek( source, false, false, Default, Default );
+        // Take-Peek
+        Take( source, true, true, Default );
+        Peek( source, true, true, Default, Default );
     }
-    [TestCase( 1, 2 )]
-    public void Test_01_Take(params int[] array) {
-        using var enumerator = new PeekableEnumerator<int>( array.AsEnumerable().GetEnumerator() );
-        // Take/First
-        Assert.That( enumerator.Take(), Is.EqualTo( Option.Create( 1 ) ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option.Create( 1 ) ) );
-
-        // Take/Second
-        Assert.That( enumerator.Take(), Is.EqualTo( Option.Create( 2 ) ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option.Create( 2 ) ) );
-
-        // Take/Finish
-        Assert.That( enumerator.Take(), Is.EqualTo( Option<int>.Default ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.True );
-        Assert.That( enumerator.Current, Is.EqualTo( Option<int>.Default ) );
+    [Test]
+    public void Take_01() {
+        using var source = Enumerator( 0, 1, 2 );
+        // Peek
+        Peek( source, false, false, Default, 0 );
+        // Take-Peek
+        Take( source, true, false, 0 );
+        Peek( source, true, false, 0, 1 );
+        // Take-Peek
+        Take( source, true, false, 1 );
+        Peek( source, true, false, 1, 2 );
+        // Take-Peek
+        Take( source, true, false, 2 );
+        Peek( source, true, false, 2, Default );
+        // Take-Peek
+        Take( source, true, true, Default );
+        Peek( source, true, true, Default, Default );
     }
-
-
-    // Peek
-    [TestCase]
-    public void Test_02_Peek() {
-        using var enumerator = new PeekableEnumerator<int>( Enumerable.Empty<int>().GetEnumerator() );
-        // Next/Finish
-        Assert.That( enumerator.Peek(), Is.EqualTo( Option<int>.Default ) );
-        Assert.That( enumerator.IsStarted, Is.False );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option<int>.Default ) );
-        // Take/Finish
-        Assert.That( enumerator.Take(), Is.EqualTo( Option<int>.Default ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.True );
-        Assert.That( enumerator.Current, Is.EqualTo( Option<int>.Default ) );
+    private static void Take(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
+        source.Take();
+        Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
+        Assert.That( source.IsFinished, Is.EqualTo( expected_isFinished ) );
+        Assert.That( source.Current, Is.EqualTo( expected_current ) );
     }
-    [TestCase( 1, 2 )]
-    public void Test_02_Peek(params int[] array) {
-        using var enumerator = new PeekableEnumerator<int>( array.AsEnumerable().GetEnumerator() );
-        // Next/First
-        Assert.That( enumerator.Peek(), Is.EqualTo( Option.Create( 1 ) ) );
-        Assert.That( enumerator.IsStarted, Is.False );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option<int>.Default ) );
-        // Take/First
-        Assert.That( enumerator.Take(), Is.EqualTo( Option.Create( 1 ) ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option.Create( 1 ) ) );
-
-        // Next/Second
-        Assert.That( enumerator.Peek(), Is.EqualTo( Option.Create( 2 ) ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option.Create( 1 ) ) );
-        // Take/Second
-        Assert.That( enumerator.Take(), Is.EqualTo( Option.Create( 2 ) ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option.Create( 2 ) ) );
-
-        // Next/Finish
-        Assert.That( enumerator.Peek(), Is.EqualTo( Option<int>.Default ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option.Create( 2 ) ) );
-        // Take/Finish
-        Assert.That( enumerator.Take(), Is.EqualTo( Option<int>.Default ) );
-        Assert.That( enumerator.IsStarted, Is.True );
-        Assert.That( enumerator.IsFinished, Is.True );
-        Assert.That( enumerator.Current, Is.EqualTo( Option<int>.Default ) );
+    private static void Peek(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current, Option<int> expected_next) {
+        source.Peek();
+        Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
+        Assert.That( source.IsFinished, Is.EqualTo( expected_isFinished ) );
+        Assert.That( source.Current, Is.EqualTo( expected_current ) );
+        Assert.That( source.Next, Is.EqualTo( expected_next ) );
     }
 
 
     // Reset
     [Test]
-    public void Test_03_Reset() {
-        using var enumerator = new PeekableEnumerator<int>( Enumerable.Empty<int>().GetEnumerator() );
-        _ = enumerator.Take();
+    public void Reset() {
+        using var source = Enumerator( 0, 1, 2 );
+        source.Take();
 
-        // Reset
-        enumerator.Reset();
-        Assert.That( enumerator.IsStarted, Is.False );
-        Assert.That( enumerator.IsFinished, Is.False );
-        Assert.That( enumerator.Current, Is.EqualTo( Option<int>.Default ) );
+        source.Reset();
+        Assert.That( source.IsStarted, Is.False );
+        Assert.That( source.IsFinished, Is.False );
+        Assert.That( source.Current, Is.EqualTo( Default ) );
+    }
+
+
+    // Helpers
+    private static PeekableEnumerator<int> Enumerator(params int[] array) {
+        return new PeekableEnumerator<int>( array.AsEnumerable().GetEnumerator() );
     }
 
 

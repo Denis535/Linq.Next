@@ -9,13 +9,13 @@ using NUnit.Framework;
 public class Tests_EnumerableExtensions {
 
 
-    // Compare
+    // CompareTo
     [Test]
-    public void Test_00_Compare() {
-        var source = Source( 0, 1, 2 );
-        source.Compare( Array( 2, 3, 4 ), out var actual_missing, out var actual_extra );
-        var expected_missing = Expected( 3, 4 );
-        var expected_extra = Expected( 0, 1 );
+    public void CompareTo() {
+        CompareTo( Array( 0, 1, 2 ), Array( 2, 3, 4 ), Array( 3, 4 ), Array( 0, 1 ) );
+    }
+    private static void CompareTo(int[] source, int[] standard, int[] expected_missing, int[] expected_extra) {
+        source.CompareTo( standard, out var actual_missing, out var actual_extra );
         Assert.That( actual_missing, Is.EqualTo( expected_missing ) );
         Assert.That( actual_extra, Is.EqualTo( expected_extra ) );
     }
@@ -23,219 +23,144 @@ public class Tests_EnumerableExtensions {
 
     // Split
     [Test]
-    public void Test_01_Split() {
+    public void Split() {
         // Empty
-        Fn( Source(), i => true,
-            Expected<int[]>()
-        );
+        Split( Array(), i => true, Array2D() );
         // False
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => false,
-            Expected<int[]>( Array( 0, 1, 2, 3, 4, 5 ) )
-        );
+        Split( Array( 0, 1, 2, 3, 4, 5 ), i => false, Array2D( Array( 0, 1, 2, 3, 4, 5 ) ) );
         // True
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => true,
-            Expected<int[]>()
-        );
+        Split( Array( 0, 1, 2, 3, 4, 5 ), i => true, Array2D() );
         // 2, 3
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 2 or 3),
-            Expected( Array( 0, 1 ), Array( 4, 5 ) )
-        );
+        Split( Array( 0, 1, 2, 3, 4, 5 ), i => (i is 2 or 3), Array2D( Array( 0, 1 ), Array( 4, 5 ) ) );
         // 0, 2, 3, 5
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5),
-            Expected( Array( 1 ), Array( 4 ) )
-        );
-
-        static void Fn(int[] source, Predicate<int> predicate, int[][] expected) {
-            var actual = source.Split( predicate ).ToArray();
-            Assert.That( actual, Is.EquivalentTo( expected ) );
-        }
+        Split( Array( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5), Array2D( Array( 1 ), Array( 4 ) ) );
+    }
+    private static void Split(int[] source, Predicate<int> predicate, int[][] expected) {
+        var actual = source.Split( predicate ).ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
     }
     // Split/Before
     [Test]
-    public void Test_01_SplitBefore() {
+    public void SplitBefore() {
         // Empty
-        Fn( Source(), i => true,
-            Expected<int[]>()
-        );
+        SplitBefore( Array(), i => true, Array2D() );
         // False
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => false,
-            Expected<int[]>( Array( 0, 1, 2, 3, 4, 5 ) )
-        );
+        SplitBefore( Array( 0, 1, 2, 3, 4, 5 ), i => false, Array2D( Array( 0, 1, 2, 3, 4, 5 ) ) );
         // True
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => true,
-            Expected( Array( 0 ), Array( 1 ), Array( 2 ), Array( 3 ), Array( 4 ), Array( 5 ) )
-        );
+        SplitBefore( Array( 0, 1, 2, 3, 4, 5 ), i => true, Array2D( Array( 0 ), Array( 1 ), Array( 2 ), Array( 3 ), Array( 4 ), Array( 5 ) ) );
         // 2, 3
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 2 or 3),
-            Expected( Array( 0, 1 ), Array( 2 ), Array( 3, 4, 5 ) )
-        );
+        SplitBefore( Array( 0, 1, 2, 3, 4, 5 ), i => (i is 2 or 3), Array2D( Array( 0, 1 ), Array( 2 ), Array( 3, 4, 5 ) ) );
         // 0, 2, 3, 5
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5),
-            Expected( Array( 0, 1 ), Array( 2 ), Array( 3, 4 ), Array( 5 ) )
-        );
-
-        static void Fn(int[] source, Predicate<int> predicate, int[][] expected) {
-            var actual = source.SplitBefore( predicate ).ToArray();
-            Assert.That( actual, Is.EquivalentTo( expected ) );
-        }
+        SplitBefore( Array( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5), Array2D( Array( 0, 1 ), Array( 2 ), Array( 3, 4 ), Array( 5 ) ) );
+    }
+    private static void SplitBefore(int[] source, Predicate<int> predicate, int[][] expected) {
+        var actual = source.SplitBefore( predicate ).ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
     }
     // Split/After
     [Test]
-    public void Test_01_SplitAfter() {
+    public void SplitAfter() {
         // Empty
-        Fn( Source(), i => true,
-            Expected<int[]>()
-        );
+        SplitAfter( Array(), i => true, Array2D() );
         // False
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => false,
-            Expected<int[]>( Array( 0, 1, 2, 3, 4, 5 ) )
-        );
+        SplitAfter( Array( 0, 1, 2, 3, 4, 5 ), i => false, Array2D( Array( 0, 1, 2, 3, 4, 5 ) ) );
         // True
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => true,
-            Expected( Array( 0 ), Array( 1 ), Array( 2 ), Array( 3 ), Array( 4 ), Array( 5 ) )
-        );
+        SplitAfter( Array( 0, 1, 2, 3, 4, 5 ), i => true, Array2D( Array( 0 ), Array( 1 ), Array( 2 ), Array( 3 ), Array( 4 ), Array( 5 ) ) );
         // 2, 3
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => i is (2 or 3),
-            Expected( Array( 0, 1, 2 ), Array( 3 ), Array( 4, 5 ) )
-        );
+        SplitAfter( Array( 0, 1, 2, 3, 4, 5 ), i => i is (2 or 3), Array2D( Array( 0, 1, 2 ), Array( 3 ), Array( 4, 5 ) ) );
         // 0, 2, 3, 5
-        Fn( Source( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5),
-            Expected( Array( 0 ), Array( 1, 2 ), Array( 3 ), Array( 4, 5 ) )
-        );
-
-        static void Fn(int[] source, Predicate<int> predicate, int[][] expected) {
-            var actual = source.SplitAfter( predicate ).ToArray();
-            Assert.That( actual, Is.EquivalentTo( expected ) );
-        }
+        SplitAfter( Array( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5), Array2D( Array( 0 ), Array( 1, 2 ), Array( 3 ), Array( 4, 5 ) ) );
+    }
+    private static void SplitAfter(int[] source, Predicate<int> predicate, int[][] expected) {
+        var actual = source.SplitAfter( predicate ).ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
     }
 
 
     // Tag/First
     [Test]
-    public static void Test_02_TagFirst() {
-        Fn( Source(),
-            Expected<int, bool>()
-        );
-        Fn( Source( 0 ),
-            Expected( (0, true) )
-        );
-        Fn( Source( 0, 1, 2 ),
-            Expected( (0, true), (1, false), (2, false) )
-        );
-
-        static void Fn(int[] source, (int, bool)[] expected) {
-            var actual = source.TagFirst().ToArray();
-            Assert.That( actual, Is.EquivalentTo( expected ) );
-        }
+    public static void TagFirst() {
+        TagFirst( Array(), Array2D() );
+        TagFirst( Array( 0 ), Array2D( (0, true) ) );
+        TagFirst( Array( 0, 1, 2 ), Array2D( (0, true), (1, false), (2, false) ) );
+        static (int, bool)[] Array2D(params (int, bool)[] array) => array;
+    }
+    private static void TagFirst(int[] source, (int, bool)[] expected) {
+        var actual = source.TagFirst().ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
     }
     // Tag/Last
     [Test]
-    public static void Test_02_TagLast() {
-        Fn( Source(),
-            Expected<int, bool>()
-        );
-        Fn( Source( 0 ),
-            Expected( (0, true) )
-        );
-        Fn( Source( 0, 1, 2 ),
-            Expected( (0, false), (1, false), (2, true) )
-        );
-
-        static void Fn(int[] source, (int, bool)[] expected) {
-            var actual = source.TagLast().ToArray();
-            Assert.That( actual, Is.EquivalentTo( expected ) );
-        }
+    public static void TagLast() {
+        TagLast( Array(), Array2D() );
+        TagLast( Array( 0 ), Array2D( (0, true) ) );
+        TagLast( Array( 0, 1, 2 ), Array2D( (0, false), (1, false), (2, true) ) );
+        static (int, bool)[] Array2D(params (int, bool)[] array) => array;
+    }
+    private static void TagLast(int[] source, (int, bool)[] expected) {
+        var actual = source.TagLast().ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
     }
     // Tag/First-Last
     [Test]
-    public static void Test_02_TagFirstLast() {
-        Fn( Source(),
-            Expected<int, bool, bool>()
-        );
-        Fn( Source( 0 ),
-            Expected( (0, true, true) )
-        );
-        Fn( Source( 0, 1, 2 ),
-            Expected( (0, true, false), (1, false, false), (2, false, true) )
-        );
-
-        static void Fn(int[] source, (int, bool, bool)[] expected) {
-            var actual = source.TagFirstLast().ToArray();
-            Assert.That( actual, Is.EquivalentTo( expected ) );
-        }
+    public static void TagFirstLast() {
+        TagFirstLast( Array(), Array2D() );
+        TagFirstLast( Array( 0 ), Array2D( (0, true, true) ) );
+        TagFirstLast( Array( 0, 1, 2 ), Array2D( (0, true, false), (1, false, false), (2, false, true) ) );
+        static (int, bool, bool)[] Array2D(params (int, bool, bool)[] array) => array;
+    }
+    private static void TagFirstLast(int[] source, (int, bool, bool)[] expected) {
+        var actual = source.TagFirstLast().ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
     }
 
 
     // With/Prev
     [Test]
-    public static void Test_03_WithPrev() {
-        Fn( Source(),
-            Expected<int, Option<int>>()
-        );
-        Fn( Source( 0 ),
-            Expected( (0, Option<int>.Default) )
-        );
-        Fn( Source( 0, 1, 2 ),
-            Expected( (0, Option<int>.Default), (1, 0), (2, 1) )
-        );
-
-        static void Fn(int[] source, (int, Option<int>)[] expected) {
-            var actual = source.WithPrev().ToArray();
-            Assert.That( actual, Is.EquivalentTo( expected ) );
-        }
+    public static void WithPrev() {
+        WithPrev( Array(), Array2D() );
+        WithPrev( Array( 0 ), Array2D( (0, default) ) );
+        WithPrev( Array( 0, 1, 2 ), Array2D( (0, default), (1, 0), (2, 1) ) );
+        static (int, Option<int>)[] Array2D(params (int, Option<int>)[] array) => array;
+    }
+    private static void WithPrev(int[] source, (int, Option<int>)[] expected) {
+        var actual = source.WithPrev().ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
     }
     // With/Next
     [Test]
-    public static void Test_03_WithNext() {
-        Fn( Source(),
-            Expected<int, Option<int>>()
-        );
-        Fn( Source( 0 ),
-            Expected( (0, Option<int>.Default) )
-        );
-        Fn( Source( 0, 1, 2 ),
-            Expected( (0, 1), (1, 2), (2, Option<int>.Default) )
-        );
-
-        static void Fn(int[] source, (int, Option<int>)[] expected) {
-            var actual = source.WithNext().ToArray();
-            Assert.That( actual, Is.EquivalentTo( expected ) );
-        }
+    public static void WithNext() {
+        WithNext( Array(), Array2D() );
+        WithNext( Array( 0 ), Array2D( (0, default) ) );
+        WithNext( Array( 0, 1, 2 ), Array2D( (0, 1), (1, 2), (2, default) ) );
+        static (int, Option<int>)[] Array2D(params (int, Option<int>)[] array) => array;
+    }
+    private static void WithNext(int[] source, (int, Option<int>)[] expected) {
+        var actual = source.WithNext().ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
     }
     // With/Prev-Next
     [Test]
-    public static void Test_03_WithPrevNext() {
-        Fn( Source(),
-            Expected<int, Option<int>, Option<int>>()
-        );
-        Fn( Source( 0 ),
-            Expected( (0, Option<int>.Default, Option<int>.Default) )
-        );
-        Fn( Source( 0, 1, 2 ),
-            Expected( (0, Option<int>.Default, 1), (1, 0, 2), (2, 1, Option<int>.Default) )
-        );
-
-        static void Fn(int[] source, (int, Option<int>, Option<int>)[] expected) {
-            var actual = source.WithPrevNext().ToArray();
-            Assert.That( actual, Is.EquivalentTo( expected ) );
-        }
+    public static void WithPrevNext() {
+        WithPrevNext( Array(), Array2D() );
+        WithPrevNext( Array( 0 ), Array2D( (0, default, default) ) );
+        WithPrevNext( Array( 0, 1, 2 ), Array2D( (0, default, 1), (1, 0, 2), (2, 1, default) ) );
+        static (int, Option<int>, Option<int>)[] Array2D(params (int, Option<int>, Option<int>)[] array) => array;
+    }
+    private static void WithPrevNext(int[] source, (int, Option<int>, Option<int>)[] expected) {
+        var actual = source.WithPrevNext().ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
     }
 
 
     // Helpers
-    private static int[] Source(params int[] array) {
-        return array;
-    }
-    private static T[] Expected<T>(params T[] array) {
-        return array;
-    }
-    private static (T1, T2)[] Expected<T1, T2>(params (T1, T2)[] array) {
-        return array;
-    }
-    private static (T1, T2, T3)[] Expected<T1, T2, T3>(params (T1, T2, T3)[] array) {
-        return array;
+    private static int[] Array() {
+        return System.Array.Empty<int>();
     }
     private static int[] Array(params int[] array) {
+        return array;
+    }
+    private static int[][] Array2D(params int[][] array) {
         return array;
     }
 

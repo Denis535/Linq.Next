@@ -5,16 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using static NUnit.Framework.Utils;
 
 public class Tests_PeekableEnumerator {
-
-    private static readonly Option<int> Default = default;
 
 
     // Constructor
     [Test]
     public void Constructor() {
-        using var source = Enumerator( 0, 1, 2 );
+        using var source = PeekableEnumerator( 0, 1, 2 );
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
         Assert.That( source.Current, Is.EqualTo( Default ) );
@@ -24,7 +23,7 @@ public class Tests_PeekableEnumerator {
     // Take
     [Test]
     public void Take_00() {
-        using var source = Enumerator();
+        using var source = PeekableEnumerator();
         // Peek
         Peek( source, false, false, Default, Default );
         // Take-Peek
@@ -33,7 +32,7 @@ public class Tests_PeekableEnumerator {
     }
     [Test]
     public void Take_01() {
-        using var source = Enumerator( 0, 1, 2 );
+        using var source = PeekableEnumerator( 0, 1, 2 );
         // Peek
         Peek( source, false, false, Default, 0 );
         // Take-Peek
@@ -67,19 +66,13 @@ public class Tests_PeekableEnumerator {
     // Reset
     [Test]
     public void Reset() {
-        using var source = Enumerator( 0, 1, 2 );
+        using var source = PeekableEnumerator( 0, 1, 2 );
         source.Take();
 
         source.Reset();
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
         Assert.That( source.Current, Is.EqualTo( Default ) );
-    }
-
-
-    // Helpers
-    private static PeekableEnumerator<int> Enumerator(params int[] array) {
-        return new PeekableEnumerator<int>( array.AsEnumerable().GetEnumerator() );
     }
 
 

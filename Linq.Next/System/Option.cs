@@ -25,7 +25,7 @@ public static class Option {
         if (v1.HasValue && v2.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2.Value );
         return EqualityComparer<bool>.Default.Equals( v1.HasValue, v2.HasValue );
     }
-    public static bool Equals<T>(Option<T> v1, T v2) {
+    public static bool Equals<T>(Option<T> v1, T? v2) {
         if (v1.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2 );
         return EqualityComparer<bool>.Default.Equals( v1.HasValue, true );
     }
@@ -38,7 +38,7 @@ public static class Option {
         if (v1.HasValue && v2.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2.Value );
         return Comparer<bool>.Default.Compare( v1.HasValue, v2.HasValue );
     }
-    public static int Compare<T>(Option<T> v1, T v2) {
+    public static int Compare<T>(Option<T> v1, T? v2) {
         if (v1.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2 );
         return Comparer<bool>.Default.Compare( v1.HasValue, true );
     }
@@ -57,14 +57,13 @@ public static class Option {
     }
 }
 // Note: Don't override true, false operators!
-// Note: We need something like [MemberMaybeNullWhen( false, nameof( ValueOrDefault ) )]
-// Note: Value is nullable when T is nullable
 [Serializable]
 public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, IComparable<Option<T>>, IComparable<T> {
 
     private readonly bool hasValue;
     private readonly T value;
     public static Option<T> Default => default;
+    //[MemberMaybeNullWhen( false, nameof( ValueOrDefault ) )] // When false: ValueOrDefault is always default
     public bool HasValue => hasValue;
     public T Value => hasValue ? value : throw new InvalidOperationException( "Option object must have a value" );
     public T? ValueOrDefault => hasValue ? value : default;
@@ -84,13 +83,13 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
     public bool Equals(Option<T> other) {
         return Option.Equals( this, other );
     }
-    public bool Equals(T other) {
+    public bool Equals(T? other) {
         return Option.Equals( this, other );
     }
     public int CompareTo(Option<T> other) {
         return Option.Compare( this, other );
     }
-    public int CompareTo(T other) {
+    public int CompareTo(T? other) {
         return Option.Compare( this, other );
     }
 

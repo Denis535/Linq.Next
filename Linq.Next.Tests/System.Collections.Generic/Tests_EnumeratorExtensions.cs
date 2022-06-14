@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using static NUnit.Framework.Utils;
 
 public class Tests_EnumeratorExtensions {
-
-    private static readonly Option<int> Default = default;
 
 
     // Take
@@ -21,10 +20,5 @@ public class Tests_EnumeratorExtensions {
         Assert.That( source.Take(), Is.EqualTo( Default ) );
     }
 
-
-    // Helpers
-    private static IEnumerator<int> Enumerator(params int[] array) {
-        return array.AsEnumerable().GetEnumerator();
-    }
 
 }

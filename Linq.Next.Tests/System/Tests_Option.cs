@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using static NUnit.Framework.Utils;
 
 public class Tests_Option {
 
@@ -33,18 +34,6 @@ public class Tests_Option {
         Assert.That( source.HasValue, Is.True );
         Assert.That( source.Value, Is.EqualTo( expected_value ) );
         Assert.That( source.ValueOrDefault, Is.EqualTo( expected_value ) );
-    }
-
-
-    // Helpers
-    private static Option<object> Option() {
-        return new Option<object>();
-    }
-    private static Option<object?> Option(object? value) {
-        return new Option<object?>( value );
-    }
-    private static Option<int> Option(int value) {
-        return new Option<int>( value );
     }
 
 

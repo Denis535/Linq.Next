@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using static NUnit.Framework.Utils;
 
 public class Tests_EnumerableExtensions {
 
@@ -150,18 +151,6 @@ public class Tests_EnumerableExtensions {
     private static void WithPrevNext(int[] source, (int, Option<int>, Option<int>)[] expected) {
         var actual = source.WithPrevNext().ToArray();
         Assert.That( actual, Is.EquivalentTo( expected ) );
-    }
-
-
-    // Helpers
-    private static int[] Array() {
-        return System.Array.Empty<int>();
-    }
-    private static int[] Array(params int[] array) {
-        return array;
-    }
-    private static int[][] Array2D(params int[][] array) {
-        return array;
     }
 
 

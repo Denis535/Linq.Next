@@ -7,10 +7,10 @@ public static class EnumerableExtensions {
 
 
     // CompareTo
-    public static void CompareTo<T>(this IEnumerable<T> source, IEnumerable<T> standard, out T[] missing, out T[] extra) {
-        var expected_ = new LinkedList<T>( standard );
-        extra = source.Where( i => !expected_.Remove( i ) ).ToArray();
-        missing = expected_.ToArray();
+    public static void CompareTo<T>(this IEnumerable<T> first, IEnumerable<T> second, out T[] missing, out T[] extra) {
+        var second_ = new LinkedList<T>( second );
+        extra = first.Where( i => !second_.Remove( i ) ).ToArray();
+        missing = second_.ToArray();
     }
 
 
@@ -153,18 +153,6 @@ public static class EnumerableExtensions {
             yield return (value.Value, prev, next);
             (prev, value, next) = (value, next, source_enumerator.Take());
         }
-    }
-
-
-    // ToEnumerable
-    public static IEnumerable<T> ToEnumerable<T>(this T element) {
-        return new[] { element };
-    }
-    public static IEnumerable<T> ToEnumerable<T>(this T element, T second) {
-        return new[] { element, second };
-    }
-    public static IEnumerable<T> ToEnumerable<T>(this T element, IEnumerable<T> seconds) {
-        return seconds.Prepend( element );
     }
 
 

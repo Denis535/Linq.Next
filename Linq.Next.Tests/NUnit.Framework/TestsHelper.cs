@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-internal static class Utils {
+internal static class TestsHelper {
 
     public static readonly Option<int> Default = default;
 
@@ -23,12 +23,6 @@ internal static class Utils {
 
     public static IEnumerator<int> Enumerator(params int[] array) {
         return array.AsEnumerable().GetEnumerator();
-    }
-    public static PeekableEnumerator<int> PeekableEnumerator(params int[] array) {
-        return new PeekableEnumerator<int>( array.AsEnumerable().GetEnumerator() );
-    }
-    public static StatefulEnumerator<int> StatefulEnumerator(params int[] array) {
-        return new StatefulEnumerator<int>( array.AsEnumerable().GetEnumerator() );
     }
 
 

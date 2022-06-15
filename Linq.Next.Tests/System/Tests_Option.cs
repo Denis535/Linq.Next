@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using static NUnit.Framework.Utils;
+using static NUnit.Framework.TestsHelper;
 
 public class Tests_Option {
 

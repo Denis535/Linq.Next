@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using static NUnit.Framework.Utils;
+using static NUnit.Framework.TestsHelper;
 
+[TestFixture( TestName = "Tests_Enumerable/Extensions" )]
 public class Tests_EnumerableExtensions {
 
 
@@ -15,8 +16,8 @@ public class Tests_EnumerableExtensions {
     public void CompareTo() {
         CompareTo( Array( 0, 1, 2 ), Array( 2, 3, 4 ), Array( 3, 4 ), Array( 0, 1 ) );
     }
-    private static void CompareTo(int[] source, int[] standard, int[] expected_missing, int[] expected_extra) {
-        source.CompareTo( standard, out var actual_missing, out var actual_extra );
+    private static void CompareTo(int[] first, int[] second, int[] expected_missing, int[] expected_extra) {
+        first.CompareTo( second, out var actual_missing, out var actual_extra );
         Assert.That( actual_missing, Is.EqualTo( expected_missing ) );
         Assert.That( actual_extra, Is.EqualTo( expected_extra ) );
     }

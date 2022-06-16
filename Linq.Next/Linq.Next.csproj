@@ -4,7 +4,7 @@
         <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
 
         <!--Assembly attributes-->
-        <VersionPrefix>1.0.0</VersionPrefix>
+        <VersionPrefix>1.0.1</VersionPrefix>
         <VersionSuffix Condition="false">alpha.$([System.DateTime]::UtcNow.ToString(yyyy-MM-dd--HH-mm-ss))</VersionSuffix>
         <Description></Description>
         <Authors>Denis535</Authors>
@@ -23,13 +23,14 @@
         <PackageDescription>$(Description)</PackageDescription>
         <PackageTags>Linq; MoreLinq; Enumerable; Enumerator; Iterator; Peekable</PackageTags>
         <PackageProjectUrl>https://github.com/Denis535/Linq.Next</PackageProjectUrl>
+        <PackageReadmeFile>Readme.md</PackageReadmeFile>
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseUrl></PackageLicenseUrl>
         <IsTool>false</IsTool>
         <DevelopmentDependency>false</DevelopmentDependency>
         <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 
-        <!--Nuget options-->
+        <!--Nuget pack options-->
         <EnableDefaultItems>true</EnableDefaultItems>
         <EnableDefaultNoneItems>true</EnableDefaultNoneItems>
         <EnableDefaultCompileItems>true</EnableDefaultCompileItems>

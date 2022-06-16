@@ -26,24 +26,50 @@ public class Tests_LinqNext {
     }
 
 
+    // LazyGroup
+    [Test]
+    public void LazyGroup() {
+        // Empty
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.Groups();
+        LazyGroup( source, (i, group) => true, expected );
+        // By: false
+        source = SourceFactory.Array( 0, 1, 1, 2, 2, 2 );
+        expected = ExpectedFactory.Groups( 0, 1, 1, 2, 2, 2 );
+        LazyGroup( source, (i, group) => false, expected );
+        // By: true
+        source = SourceFactory.Array( 0, 1, 1, 2, 2, 2 );
+        expected = ExpectedFactory.Groups( (0, 1, 1, 2, 2, 2) );
+        LazyGroup( source, (i, group) => true, expected );
+        // By: equality
+        source = SourceFactory.Array( 0, 1, 1, 2, 2, 2 );
+        expected = ExpectedFactory.Groups( 0, (1, 1), (2, 2, 2) );
+        LazyGroup( source, (i, group) => i == group.Last(), expected );
+    }
+    private static void LazyGroup(int[] source, Func<int, IList<int>, bool> predicate, int[][] expected) {
+        var actual = source.LazyGroup( predicate ).ToArray();
+        Assert.That( actual, Is.EquivalentTo( expected ) );
+    }
+
+
     // Split
     [Test]
     public void Split() {
         // Empty
         var source = SourceFactory.Array();
-        var expected = ExpectedFactory.Slices();
-        Split( source, i => false, expected );
-        // False
+        var expected = ExpectedFactory.Groups();
+        Split( source, i => true, expected );
+        // By: false
         source = SourceFactory.Array( 0, 1, 2 );
-        expected = ExpectedFactory.Slices( (0, 1, 2) );
+        expected = ExpectedFactory.Groups( (0, 1, 2) );
         Split( source, i => false, expected );
-        // 1
+        // By: 1
         source = SourceFactory.Array( 0, 1, 2 );
-        expected = ExpectedFactory.Slices( 0, 2 );
+        expected = ExpectedFactory.Groups( 0, 2 );
         Split( source, i => (i is 1), expected );
-        // 0, 1, 2
+        // By: 0, 1, 2
         source = SourceFactory.Array( 0, 1, 2 );
-        expected = ExpectedFactory.Slices();
+        expected = ExpectedFactory.Groups();
         Split( source, i => (i is 0 or 1 or 2), expected );
     }
     private static void Split(int[] source, Predicate<int> predicate, int[][] expected) {
@@ -55,19 +81,19 @@ public class Tests_LinqNext {
     public void SplitBefore() {
         // Empty
         var source = SourceFactory.Array();
-        var expected = ExpectedFactory.Slices();
+        var expected = ExpectedFactory.Groups();
         SplitBefore( source, i => true, expected );
-        // False
+        // By: false
         source = SourceFactory.Array( 0, 1, 2 );
-        expected = ExpectedFactory.Slices( (0, 1, 2) );
+        expected = ExpectedFactory.Groups( (0, 1, 2) );
         SplitBefore( source, i => false, expected );
-        // 1
+        // By: 1
         source = SourceFactory.Array( 0, 1, 2 );
-        expected = ExpectedFactory.Slices( 0, (1, 2) );
+        expected = ExpectedFactory.Groups( 0, (1, 2) );
         SplitBefore( source, i => (i is 1), expected );
-        // 0, 1, 2
+        // By: 0, 1, 2
         source = SourceFactory.Array( 0, 1, 2 );
-        expected = ExpectedFactory.Slices( 0, 1, 2 );
+        expected = ExpectedFactory.Groups( 0, 1, 2 );
         SplitBefore( source, i => (i is 0 or 1 or 2), expected );
     }
     private static void SplitBefore(int[] source, Predicate<int> predicate, int[][] expected) {
@@ -79,19 +105,19 @@ public class Tests_LinqNext {
     public void SplitAfter() {
         // Empty
         var source = SourceFactory.Array();
-        var expected = ExpectedFactory.Slices();
+        var expected = ExpectedFactory.Groups();
         SplitAfter( source, i => true, expected );
-        // False
+        // By: false
         source = SourceFactory.Array( 0, 1, 2 );
-        expected = ExpectedFactory.Slices( (0, 1, 2) );
+        expected = ExpectedFactory.Groups( (0, 1, 2) );
         SplitAfter( source, i => false, expected );
-        // 1
+        // By: 1
         source = SourceFactory.Array( 0, 1, 2 );
-        expected = ExpectedFactory.Slices( (0, 1), 2 );
+        expected = ExpectedFactory.Groups( (0, 1), 2 );
         SplitAfter( source, i => (i is 1), expected );
-        // 0, 1, 2
+        // By: 0, 1, 2
         source = SourceFactory.Array( 0, 1, 2 );
-        expected = ExpectedFactory.Slices( 0, 1, 2 );
+        expected = ExpectedFactory.Groups( 0, 1, 2 );
         SplitAfter( source, i => (i is 0 or 1 or 2), expected );
     }
     private static void SplitAfter(int[] source, Predicate<int> predicate, int[][] expected) {
@@ -103,14 +129,15 @@ public class Tests_LinqNext {
     // Tag/First
     [Test]
     public static void TagFirst() {
+        // Empty
         var source = SourceFactory.Array();
         var expected = ExpectedFactory.TagFirst();
         TagFirst( source, expected );
-
+        // 0
         source = SourceFactory.Array( 0 );
         expected = ExpectedFactory.TagFirst( (0, true) );
         TagFirst( source, expected );
-
+        // 0, 1, 2
         source = SourceFactory.Array( 0, 1, 2 );
         expected = ExpectedFactory.TagFirst( (0, true), (1, false), (2, false) );
         TagFirst( source, expected );
@@ -122,14 +149,15 @@ public class Tests_LinqNext {
     // Tag/Last
     [Test]
     public static void TagLast() {
+        // Empty
         var source = SourceFactory.Array();
         var expected = ExpectedFactory.TagLast();
         TagLast( source, expected );
-
+        // 0
         source = SourceFactory.Array( 0 );
         expected = ExpectedFactory.TagLast( (0, true) );
         TagLast( source, expected );
-
+        // 0, 1, 2
         source = SourceFactory.Array( 0, 1, 2 );
         expected = ExpectedFactory.TagLast( (0, false), (1, false), (2, true) );
         TagLast( source, expected );
@@ -141,14 +169,15 @@ public class Tests_LinqNext {
     // Tag/First-Last
     [Test]
     public static void TagFirstLast() {
+        // Empty
         var source = SourceFactory.Array();
         var expected = ExpectedFactory.TagFirstLast();
         TagFirstLast( source, expected );
-
+        // 0
         source = SourceFactory.Array( 0 );
         expected = ExpectedFactory.TagFirstLast( (0, true, true) );
         TagFirstLast( source, expected );
-
+        // 0, 1, 2
         source = SourceFactory.Array( 0, 1, 2 );
         expected = ExpectedFactory.TagFirstLast( (0, true, false), (1, false, false), (2, false, true) );
         TagFirstLast( source, expected );
@@ -162,14 +191,15 @@ public class Tests_LinqNext {
     // With/Prev
     [Test]
     public static void WithPrev() {
+        // Empty
         var source = SourceFactory.Array();
         var expected = ExpectedFactory.WithPrev();
         WithPrev( source, expected );
-
+        // 0
         source = SourceFactory.Array( 0 );
         expected = ExpectedFactory.WithPrev( (0, default) );
         WithPrev( source, expected );
-
+        // 0, 1, 2
         source = SourceFactory.Array( 0, 1, 2 );
         expected = ExpectedFactory.WithPrev( (0, default), (1, 0), (2, 1) );
         WithPrev( source, expected );
@@ -181,14 +211,15 @@ public class Tests_LinqNext {
     // With/Next
     [Test]
     public static void WithNext() {
+        // Empty
         var source = SourceFactory.Array();
         var expected = ExpectedFactory.WithNext();
         WithNext( source, expected );
-
+        // 0
         source = SourceFactory.Array( 0 );
         expected = ExpectedFactory.WithNext( (0, default) );
         WithNext( source, expected );
-
+        // 0, 1, 2
         source = SourceFactory.Array( 0, 1, 2 );
         expected = ExpectedFactory.WithNext( (0, 1), (1, 2), (2, default) );
         WithNext( source, expected );
@@ -200,14 +231,15 @@ public class Tests_LinqNext {
     // With/Prev-Next
     [Test]
     public static void WithPrevNext() {
+        // Empty
         var source = SourceFactory.Array();
         var expected = ExpectedFactory.WithPrevNext();
         WithPrevNext( source, expected );
-
+        // 0
         source = SourceFactory.Array( 0 );
         expected = ExpectedFactory.WithPrevNext( (0, default, default) );
         WithPrevNext( source, expected );
-
+        // 0, 1, 2
         source = SourceFactory.Array( 0, 1, 2 );
         expected = ExpectedFactory.WithPrevNext( (0, default, 1), (1, 0, 2), (2, 1, default) );
         WithPrevNext( source, expected );

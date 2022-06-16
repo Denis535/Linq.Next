@@ -14,6 +14,34 @@ public static class LinqNext {
     }
 
 
+    // LazyGroup
+    public static IEnumerable<T[]> LazyGroup<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> predicate) {
+        return source.FastLazyGroup( predicate, i => i ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<TResult[]> LazyGroup<T, TResult>(this IEnumerable<T> source, Func<T, IList<TResult>, bool> predicate, Func<T, TResult> resultSelector) {
+        return source.FastLazyGroup( predicate, resultSelector ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<IList<TResult>> FastLazyGroup<T, TResult>(this IEnumerable<T> source, Func<T, IList<TResult>, bool> predicate, Func<T, TResult> resultSelector) {
+        using var source_enumerator = source.GetEnumerator();
+        var group = new List<TResult>();
+        var item = source_enumerator.Take();
+        while (item.HasValue) {
+
+            while (item.HasValue) {
+                if (!group.Any() || predicate( item.Value, group )) {
+                    group.Add( resultSelector( item.Value ) );
+                    item = source_enumerator.Take();
+                    continue;
+                }
+                break;
+            }
+            yield return group;
+            group.Clear();
+
+        }
+    }
+
+
     // Split
     public static IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Predicate<T> predicate) {
         return source.FastSplit( predicate, i => i ).Select( i => i.ToArray() );
@@ -22,7 +50,7 @@ public static class LinqNext {
         return source.FastSplit( predicate, resultSelector ).Select( i => i.ToArray() );
     }
     public static IEnumerable<IList<TResult>> FastSplit<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
-        // [false, false, false], break, [false, false]
+        // [false, false, false], true, [false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
             if (predicate( item )) {
@@ -47,7 +75,7 @@ public static class LinqNext {
         return source.FastSplitBefore( predicate, resultSelector ).Select( i => i.ToArray() );
     }
     public static IEnumerable<IList<TResult>> FastSplitBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
-        // [false, false, false], break, [true, false, false]
+        // [false, false, false], [true, false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
             if (predicate( item )) {
@@ -71,7 +99,7 @@ public static class LinqNext {
         return source.FastSplitAfter( predicate, resultSelector ).Select( i => i.ToArray() );
     }
     public static IEnumerable<IList<TResult>> FastSplitAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
-        // [false, false, false, true], break, [false, false]
+        // [false, false, false, true], [false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
             segment.Add( resultSelector( item ) );

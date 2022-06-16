@@ -35,10 +35,10 @@ internal static class ExpectedFactory {
         return array;
     }
 
-    public static int[][] Slices(params object[] array) {
-        return array.Select( Slice ).ToArray();
+    public static int[][] Groups(params object[] array) {
+        return array.Select( Group ).ToArray();
     }
-    private static int[] Slice(object @object) {
+    private static int[] Group(object @object) {
         if (@object is ITuple values) {
             return Enumerable.Range( 0, values.Length ).Select( i => values[ i ] ).Cast<int>().ToArray();
         }

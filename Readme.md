@@ -1,9 +1,10 @@
 ﻿﻿# Overview
 
-The **Linq.Next** project enhances the linq and the collections with an extra features.
+The **Linq.Next** package is intended to enhance the linq and the collections with an extra features.
 
 - Linq:
   - CompareTo
+  - LazyGroup
   - Split
   - SplitBefore
   - SplitAfter

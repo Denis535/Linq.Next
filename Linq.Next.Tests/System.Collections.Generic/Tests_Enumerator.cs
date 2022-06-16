@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using static NUnit.Framework.TestsHelper;
 
-// Enumerator/Extensions
+[TestFixture( TestName = "Tests_Enumerator" )]
 public class Tests_EnumeratorExtensions {
 
     private IEnumerator<int> Source { get; set; } = default!;

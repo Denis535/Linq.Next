@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using static NUnit.Framework.TestsHelper;
 
-// Enumerator
+[TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumerator {
 
     private PeekableEnumerator<int> Source { get; set; } = default!;
@@ -92,7 +92,7 @@ public class Tests_PeekableEnumerator {
 
 }
 
-// Enumerator/Extensions
+[TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumeratorExtensions {
 
     private PeekableEnumerator<int> Source { get; set; } = default!;

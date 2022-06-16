@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-public static class EnumerableExtensions {
+public static class LinqNext {
 
 
     // CompareTo

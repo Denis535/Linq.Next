@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using static NUnit.Framework.TestsHelper;
 
-public class Tests_EnumerableExtensions {
+public class Tests_LinqNext {
 
 
     // CompareTo

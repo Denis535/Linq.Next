@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using static NUnit.Framework.TestsHelper;
 
-// Enumerator
+[TestFixture( TestName = "Tests_Enumerator/Stateful" )]
 public class Tests_StatefulEnumerator {
 
     private StatefulEnumerator<int> Source { get; set; } = default!;

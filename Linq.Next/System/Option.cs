@@ -16,14 +16,6 @@ public static class Option {
         if (value.HasValue) return new Option<T>( value.Value );
         return default;
     }
-    // AsOption
-    //public static Option<T> AsOption<T>(this T value) {
-    //    return new Option<T>( value );
-    //}
-    //public static Option<T> AsOption<T>(this T? value) where T : struct {
-    //    if (value.HasValue) return new Option<T>( value.Value );
-    //    return default;
-    //}
     // Equals
     public static bool Equals<T>(Option<T> v1, Option<T> v2) {
         if (v1.HasValue && v2.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2.Value );

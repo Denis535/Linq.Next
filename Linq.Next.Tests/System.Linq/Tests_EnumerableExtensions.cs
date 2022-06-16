@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using static NUnit.Framework.TestsHelper;
 
-[TestFixture( TestName = "Tests_Enumerable/Extensions" )]
+[TestFixture( TestName = "Tests_Enumerable" )]
 public class Tests_EnumerableExtensions {
 
 
     // CompareTo
     [Test]
     public void CompareTo() {
-        CompareTo( SourceFactory.Array( 0, 1, 2 ), SourceFactory.Array( 2, 3, 4 ), ExpectedFactory.Array( 3, 4 ), ExpectedFactory.Array( 0, 1 ) );
+        var source_first = SourceFactory.Array( 0, 1, 2 );
+        var source_second = SourceFactory.Array( 2, 3, 4 );
+        var expected_missing = ExpectedFactory.Array( 3, 4 );
+        var expected_extra = ExpectedFactory.Array( 0, 1 );
+        CompareTo( source_first, source_second, expected_missing, expected_extra );
     }
     private static void CompareTo(int[] first, int[] second, int[] expected_missing, int[] expected_extra) {
         first.CompareTo( second, out var actual_missing, out var actual_extra );
@@ -27,15 +31,25 @@ public class Tests_EnumerableExtensions {
     [Test]
     public void Split() {
         // Empty
-        Split( SourceFactory.Array(), i => true, ExpectedFactory.Array2D() );
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.Slices();
+        Split( source, i => true, expected );
         // False
-        Split( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => false, ExpectedFactory.Array2D( (0, 1, 2, 3, 4, 5) ) );
-        // True
-        Split( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => true, ExpectedFactory.Array2D() );
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( (0, 1, 2, 3, 4, 5) );
+        Split( source, i => false, expected );
         // 2, 3
-        Split( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => (i is 2 or 3), ExpectedFactory.Array2D( (0, 1), (4, 5) ) );
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( (0, 1), (4, 5) );
+        Split( source, i => (i is 2 or 3), expected );
         // 0, 2, 3, 5
-        Split( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5), ExpectedFactory.Array2D( 1, 4 ) );
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( 1, 4 );
+        Split( source, i => (i is 0 or 2 or 3 or 5), expected );
+        // 0, 1, 2, 3, 4, 5
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices();
+        Split( source, i => true, expected );
     }
     private static void Split(int[] source, Predicate<int> predicate, int[][] expected) {
         var actual = source.Split( predicate ).ToArray();
@@ -45,15 +59,25 @@ public class Tests_EnumerableExtensions {
     [Test]
     public void SplitBefore() {
         // Empty
-        SplitBefore( SourceFactory.Array(), i => true, ExpectedFactory.Array2D() );
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.Slices();
+        SplitBefore( source, i => true, expected );
         // False
-        SplitBefore( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => false, ExpectedFactory.Array2D( (0, 1, 2, 3, 4, 5) ) );
-        // True
-        SplitBefore( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => true, ExpectedFactory.Array2D( 0, 1, 2, 3, 4, 5 ) );
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( (0, 1, 2, 3, 4, 5) );
+        SplitBefore( source, i => false, expected );
         // 2, 3
-        SplitBefore( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => (i is 2 or 3), ExpectedFactory.Array2D( (0, 1), 2, (3, 4, 5) ) );
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( (0, 1), 2, (3, 4, 5) );
+        SplitBefore( source, i => (i is 2 or 3), expected );
         // 0, 2, 3, 5
-        SplitBefore( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5), ExpectedFactory.Array2D( (0, 1), 2, (3, 4), 5 ) );
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( (0, 1), 2, (3, 4), 5 );
+        SplitBefore( source, i => (i is 0 or 2 or 3 or 5), expected );
+        // 0, 1, 2, 3, 4, 5
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( 0, 1, 2, 3, 4, 5 );
+        SplitBefore( source, i => true, expected );
     }
     private static void SplitBefore(int[] source, Predicate<int> predicate, int[][] expected) {
         var actual = source.SplitBefore( predicate ).ToArray();
@@ -63,15 +87,25 @@ public class Tests_EnumerableExtensions {
     [Test]
     public void SplitAfter() {
         // Empty
-        SplitAfter( SourceFactory.Array(), i => true, ExpectedFactory.Array2D() );
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.Slices();
+        SplitAfter( source, i => true, expected );
         // False
-        SplitAfter( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => false, ExpectedFactory.Array2D( (0, 1, 2, 3, 4, 5) ) );
-        // True
-        SplitAfter( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => true, ExpectedFactory.Array2D( 0, 1, 2, 3, 4, 5 ) );
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( (0, 1, 2, 3, 4, 5) );
+        SplitAfter( source, i => false, expected );
         // 2, 3
-        SplitAfter( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => i is (2 or 3), ExpectedFactory.Array2D( (0, 1, 2), 3, (4, 5) ) );
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( (0, 1, 2), 3, (4, 5) );
+        SplitAfter( source, i => i is (2 or 3), expected );
         // 0, 2, 3, 5
-        SplitAfter( SourceFactory.Array( 0, 1, 2, 3, 4, 5 ), i => (i is 0 or 2 or 3 or 5), ExpectedFactory.Array2D( 0, (1, 2), 3, (4, 5) ) );
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( 0, (1, 2), 3, (4, 5) );
+        SplitAfter( source, i => (i is 0 or 2 or 3 or 5), expected );
+        // 0, 1, 2, 3, 4, 5
+        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        expected = ExpectedFactory.Slices( 0, 1, 2, 3, 4, 5 );
+        SplitAfter( source, i => true, expected );
     }
     private static void SplitAfter(int[] source, Predicate<int> predicate, int[][] expected) {
         var actual = source.SplitAfter( predicate ).ToArray();
@@ -82,10 +116,17 @@ public class Tests_EnumerableExtensions {
     // Tag/First
     [Test]
     public static void TagFirst() {
-        TagFirst( SourceFactory.Array(), Expected_Array2D() );
-        TagFirst( SourceFactory.Array( 0 ), Expected_Array2D( (0, true) ) );
-        TagFirst( SourceFactory.Array( 0, 1, 2 ), Expected_Array2D( (0, true), (1, false), (2, false) ) );
-        static (int, bool)[] Expected_Array2D(params (int, bool)[] array) => array;
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.TagFirst();
+        TagFirst( source, expected );
+
+        source = SourceFactory.Array( 0 );
+        expected = ExpectedFactory.TagFirst( (0, true) );
+        TagFirst( source, expected );
+
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.TagFirst( (0, true), (1, false), (2, false) );
+        TagFirst( source, expected );
     }
     private static void TagFirst(int[] source, (int, bool)[] expected) {
         var actual = source.TagFirst().ToArray();
@@ -94,10 +135,17 @@ public class Tests_EnumerableExtensions {
     // Tag/Last
     [Test]
     public static void TagLast() {
-        TagLast( SourceFactory.Array(), Expected_Array2D() );
-        TagLast( SourceFactory.Array( 0 ), Expected_Array2D( (0, true) ) );
-        TagLast( SourceFactory.Array( 0, 1, 2 ), Expected_Array2D( (0, false), (1, false), (2, true) ) );
-        static (int, bool)[] Expected_Array2D(params (int, bool)[] array) => array;
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.TagLast();
+        TagLast( source, expected );
+
+        source = SourceFactory.Array( 0 );
+        expected = ExpectedFactory.TagLast( (0, true) );
+        TagLast( source, expected );
+
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.TagLast( (0, false), (1, false), (2, true) );
+        TagLast( source, expected );
     }
     private static void TagLast(int[] source, (int, bool)[] expected) {
         var actual = source.TagLast().ToArray();
@@ -106,10 +154,17 @@ public class Tests_EnumerableExtensions {
     // Tag/First-Last
     [Test]
     public static void TagFirstLast() {
-        TagFirstLast( SourceFactory.Array(), Expected_Array2D() );
-        TagFirstLast( SourceFactory.Array( 0 ), Expected_Array2D( (0, true, true) ) );
-        TagFirstLast( SourceFactory.Array( 0, 1, 2 ), Expected_Array2D( (0, true, false), (1, false, false), (2, false, true) ) );
-        static (int, bool, bool)[] Expected_Array2D(params (int, bool, bool)[] array) => array;
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.TagFirstLast();
+        TagFirstLast( source, expected );
+
+        source = SourceFactory.Array( 0 );
+        expected = ExpectedFactory.TagFirstLast( (0, true, true) );
+        TagFirstLast( source, expected );
+
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.TagFirstLast( (0, true, false), (1, false, false), (2, false, true) );
+        TagFirstLast( source, expected );
     }
     private static void TagFirstLast(int[] source, (int, bool, bool)[] expected) {
         var actual = source.TagFirstLast().ToArray();
@@ -120,10 +175,17 @@ public class Tests_EnumerableExtensions {
     // With/Prev
     [Test]
     public static void WithPrev() {
-        WithPrev( SourceFactory.Array(), Expected_Array2D() );
-        WithPrev( SourceFactory.Array( 0 ), Expected_Array2D( (0, default) ) );
-        WithPrev( SourceFactory.Array( 0, 1, 2 ), Expected_Array2D( (0, default), (1, 0), (2, 1) ) );
-        static (int, Option<int>)[] Expected_Array2D(params (int, Option<int>)[] array) => array;
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.WithPrev();
+        WithPrev( source, expected );
+
+        source = SourceFactory.Array( 0 );
+        expected = ExpectedFactory.WithPrev( (0, default) );
+        WithPrev( source, expected );
+
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.WithPrev( (0, default), (1, 0), (2, 1) );
+        WithPrev( source, expected );
     }
     private static void WithPrev(int[] source, (int, Option<int>)[] expected) {
         var actual = source.WithPrev().ToArray();
@@ -132,10 +194,17 @@ public class Tests_EnumerableExtensions {
     // With/Next
     [Test]
     public static void WithNext() {
-        WithNext( SourceFactory.Array(), Expected_Array2D() );
-        WithNext( SourceFactory.Array( 0 ), Expected_Array2D( (0, default) ) );
-        WithNext( SourceFactory.Array( 0, 1, 2 ), Expected_Array2D( (0, 1), (1, 2), (2, default) ) );
-        static (int, Option<int>)[] Expected_Array2D(params (int, Option<int>)[] array) => array;
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.WithNext();
+        WithNext( source, expected );
+
+        source = SourceFactory.Array( 0 );
+        expected = ExpectedFactory.WithNext( (0, default) );
+        WithNext( source, expected );
+
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.WithNext( (0, 1), (1, 2), (2, default) );
+        WithNext( source, expected );
     }
     private static void WithNext(int[] source, (int, Option<int>)[] expected) {
         var actual = source.WithNext().ToArray();
@@ -144,10 +213,17 @@ public class Tests_EnumerableExtensions {
     // With/Prev-Next
     [Test]
     public static void WithPrevNext() {
-        WithPrevNext( SourceFactory.Array(), Expected_Array2D() );
-        WithPrevNext( SourceFactory.Array( 0 ), Expected_Array2D( (0, default, default) ) );
-        WithPrevNext( SourceFactory.Array( 0, 1, 2 ), Expected_Array2D( (0, default, 1), (1, 0, 2), (2, 1, default) ) );
-        static (int, Option<int>, Option<int>)[] Expected_Array2D(params (int, Option<int>, Option<int>)[] array) => array;
+        var source = SourceFactory.Array();
+        var expected = ExpectedFactory.WithPrevNext();
+        WithPrevNext( source, expected );
+
+        source = SourceFactory.Array( 0 );
+        expected = ExpectedFactory.WithPrevNext( (0, default, default) );
+        WithPrevNext( source, expected );
+
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.WithPrevNext( (0, default, 1), (1, 0, 2), (2, 1, default) );
+        WithPrevNext( source, expected );
     }
     private static void WithPrevNext(int[] source, (int, Option<int>, Option<int>)[] expected) {
         var actual = source.WithPrevNext().ToArray();

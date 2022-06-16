@@ -8,7 +8,7 @@ using NUnit.Framework;
 using static NUnit.Framework.TestsHelper;
 
 // Enumerator
-[TestFixture( TestName = "Tests_Enumerator/Extensions" )]
+[TestFixture( TestName = "Tests_Enumerator" )]
 public class Tests_EnumeratorExtensions {
 
     private IEnumerator<int> Source { get; set; } = default!;
@@ -39,7 +39,7 @@ public class Tests_EnumeratorExtensions {
 }
 
 // Enumerator/Peekable
-[TestFixture( TestName = "Tests_Enumerator/Peekable/Extensions" )]
+[TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumeratorExtensions {
 
     private PeekableEnumerator<int> Source { get; set; } = default!;

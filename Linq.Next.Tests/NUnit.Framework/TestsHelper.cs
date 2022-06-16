@@ -23,30 +23,22 @@ internal static class TestsHelper {
 
 }
 internal static class SourceFactory {
-    public static int[] Array() {
-        return System.Array.Empty<int>();
-    }
     public static int[] Array(params int[] array) {
         return array;
-    }
-    public static IEnumerator<int> Enumerator() {
-        return System.Array.Empty<int>().AsEnumerable().GetEnumerator();
     }
     public static IEnumerator<int> Enumerator(params int[] array) {
         return array.AsEnumerable().GetEnumerator();
     }
 }
 internal static class ExpectedFactory {
-    public static int[] Array() {
-        return System.Array.Empty<int>();
-    }
     public static int[] Array(params int[] array) {
         return array;
     }
-    public static int[][] Array2D(params object[] array) {
-        return array.Select( Array1D ).ToArray();
+
+    public static int[][] Slices(params object[] array) {
+        return array.Select( Slice ).ToArray();
     }
-    private static int[] Array1D(object @object) {
+    private static int[] Slice(object @object) {
         if (@object is ITuple values) {
             return Enumerable.Range( 0, values.Length ).Select( i => values[ i ] ).Cast<int>().ToArray();
         }
@@ -58,4 +50,25 @@ internal static class ExpectedFactory {
         }
         throw new ArgumentException( $"Object '{@object}' is invalid" );
     }
+
+    public static (int, bool)[] TagFirst(params (int, bool)[] array) {
+        return array;
+    }
+    public static (int, bool)[] TagLast(params (int, bool)[] array) {
+        return array;
+    }
+    public static (int, bool, bool)[] TagFirstLast(params (int, bool, bool)[] array) {
+        return array;
+    }
+
+    public static (int, Option<int>)[] WithPrev(params (int, Option<int>)[] array) {
+        return array;
+    }
+    public static (int, Option<int>)[] WithNext(params (int, Option<int>)[] array) {
+        return array;
+    }
+    public static (int, Option<int>, Option<int>)[] WithPrevNext(params (int, Option<int>, Option<int>)[] array) {
+        return array;
+    }
+
 }

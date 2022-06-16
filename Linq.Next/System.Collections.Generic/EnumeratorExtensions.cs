@@ -30,60 +30,6 @@ public static class EnumeratorExtensions {
 
 }
 
-// Enumerator/Stateful
-public static class StatefulEnumeratorExtensions {
-
-
-    // Take/While
-    public static IEnumerable<T> TakeWhile<T>(this StatefulEnumerator<T> enumerator, Predicate<T> predicate) {
-        // [true, true], false
-        while (enumerator.TryTake( out var current )) {
-            if (predicate( current )) {
-                yield return current;
-            } else {
-                break;
-            }
-        }
-    }
-    // Take/Until
-    public static IEnumerable<T> TakeUntil<T>(this StatefulEnumerator<T> enumerator, Predicate<T> predicate) {
-        // [false, false], true
-        while (enumerator.TryTake( out var current )) {
-            if (!predicate( current )) {
-                yield return current;
-            } else {
-                break;
-            }
-        }
-    }
-
-
-    // Take/Try
-    public static bool TryTakeIf<T>(this StatefulEnumerator<T> enumerator, Predicate<T> predicate, [MaybeNullWhen( false )] out T current) {
-        return enumerator.TakeIf( predicate ).TryGetValue( out current );
-    }
-    public static bool TryTakeIfNot<T>(this StatefulEnumerator<T> enumerator, Predicate<T> predicate, [MaybeNullWhen( false )] out T current) {
-        return enumerator.TakeIfNot( predicate ).TryGetValue( out current );
-    }
-
-
-    // Take
-    public static Option<T> TakeIf<T>(this StatefulEnumerator<T> enumerator, Predicate<T> predicate) {
-        if (enumerator.TryTake( out var current ) && predicate( current )) {
-            return enumerator.Current;
-        }
-        return default;
-    }
-    public static Option<T> TakeIfNot<T>(this StatefulEnumerator<T> enumerator, Predicate<T> predicate) {
-        if (enumerator.TryTake( out var current ) && !predicate( current )) {
-            return enumerator.Current;
-        }
-        return default;
-    }
-
-
-}
-
 // Enumerator/Peekable
 public static class PeekableEnumeratorExtensions {
 

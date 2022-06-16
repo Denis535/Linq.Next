@@ -1,25 +1,25 @@
 ﻿﻿# Overview
 
-- [System](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System/)
-  - [Option](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System/Option.cs)
+The ***Linq.Next*** project enhances the linq and the collections with an extra features.
 
-- [System.Collections.Generic](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Collections.Generic/)
-  - [Enumerator](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Collections.Generic/Enumerator.cs)
-  - [StatefulEnumerator](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Collections.Generic/StatefulEnumerator.cs)
-  - [PeekableEnumerator](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Collections.Generic/PeekableEnumerator.cs)
+- Linq:
+  - CompareTo
+  - Split
+  - SplitBefore
+  - SplitAfter
+  - TagFirst
+  - TagLast
+  - TagFirstLast
+  - WithPrev
+  - WithNext
+  - WithPrevNext
 
-- [System.Linq](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/)
-  - [LinqNext](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/LinqNext.cs)
-    - CompareTo
-    - Split
-    - SplitBefore
-    - SplitAfter
-    - TagFirst
-    - TagLast
-    - TagFirstLast
-    - WithPrev
-    - WithNext
-    - WithPrevNext
+- Collections:
+  - StatefulEnumerator
+  - PeekableEnumerator
+
+- System
+  - Option
 
 # Github
 https://github.com/Denis535/Linq.Next

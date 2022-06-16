@@ -32,23 +32,19 @@ public class Tests_LinqNext {
         // Empty
         var source = SourceFactory.Array();
         var expected = ExpectedFactory.Slices();
-        Split( source, i => true, expected );
-        // False
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( (0, 1, 2, 3, 4, 5) );
         Split( source, i => false, expected );
-        // 2, 3
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( (0, 1), (4, 5) );
-        Split( source, i => (i is 2 or 3), expected );
-        // 0, 2, 3, 5
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( 1, 4 );
-        Split( source, i => (i is 0 or 2 or 3 or 5), expected );
-        // 0, 1, 2, 3, 4, 5
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
+        // False
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.Slices( (0, 1, 2) );
+        Split( source, i => false, expected );
+        // 1
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.Slices( 0, 2 );
+        Split( source, i => (i is 1), expected );
+        // 0, 1, 2
+        source = SourceFactory.Array( 0, 1, 2 );
         expected = ExpectedFactory.Slices();
-        Split( source, i => true, expected );
+        Split( source, i => (i is 0 or 1 or 2), expected );
     }
     private static void Split(int[] source, Predicate<int> predicate, int[][] expected) {
         var actual = source.Split( predicate ).ToArray();
@@ -62,21 +58,17 @@ public class Tests_LinqNext {
         var expected = ExpectedFactory.Slices();
         SplitBefore( source, i => true, expected );
         // False
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( (0, 1, 2, 3, 4, 5) );
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.Slices( (0, 1, 2) );
         SplitBefore( source, i => false, expected );
-        // 2, 3
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( (0, 1), 2, (3, 4, 5) );
-        SplitBefore( source, i => (i is 2 or 3), expected );
-        // 0, 2, 3, 5
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( (0, 1), 2, (3, 4), 5 );
-        SplitBefore( source, i => (i is 0 or 2 or 3 or 5), expected );
-        // 0, 1, 2, 3, 4, 5
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( 0, 1, 2, 3, 4, 5 );
-        SplitBefore( source, i => true, expected );
+        // 1
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.Slices( 0, (1, 2) );
+        SplitBefore( source, i => (i is 1), expected );
+        // 0, 1, 2
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.Slices( 0, 1, 2 );
+        SplitBefore( source, i => (i is 0 or 1 or 2), expected );
     }
     private static void SplitBefore(int[] source, Predicate<int> predicate, int[][] expected) {
         var actual = source.SplitBefore( predicate ).ToArray();
@@ -90,21 +82,17 @@ public class Tests_LinqNext {
         var expected = ExpectedFactory.Slices();
         SplitAfter( source, i => true, expected );
         // False
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( (0, 1, 2, 3, 4, 5) );
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.Slices( (0, 1, 2) );
         SplitAfter( source, i => false, expected );
-        // 2, 3
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( (0, 1, 2), 3, (4, 5) );
-        SplitAfter( source, i => i is (2 or 3), expected );
-        // 0, 2, 3, 5
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( 0, (1, 2), 3, (4, 5) );
-        SplitAfter( source, i => (i is 0 or 2 or 3 or 5), expected );
-        // 0, 1, 2, 3, 4, 5
-        source = SourceFactory.Array( 0, 1, 2, 3, 4, 5 );
-        expected = ExpectedFactory.Slices( 0, 1, 2, 3, 4, 5 );
-        SplitAfter( source, i => true, expected );
+        // 1
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.Slices( (0, 1), 2 );
+        SplitAfter( source, i => (i is 1), expected );
+        // 0, 1, 2
+        source = SourceFactory.Array( 0, 1, 2 );
+        expected = ExpectedFactory.Slices( 0, 1, 2 );
+        SplitAfter( source, i => (i is 0 or 1 or 2), expected );
     }
     private static void SplitAfter(int[] source, Predicate<int> predicate, int[][] expected) {
         var actual = source.SplitAfter( predicate ).ToArray();

@@ -17,8 +17,8 @@ public class Tests_EnumeratorExtensions {
 
     [SetUp]
     public void SetUp() {
-        Source = Enumerator( 0, 1, 2 );
-        Source_Empty = Enumerator();
+        Source = SourceFactory.Enumerator( 0, 1, 2 );
+        Source_Empty = SourceFactory.Enumerator();
     }
     [TearDown]
     public void TearDown() {
@@ -48,8 +48,8 @@ public class Tests_StatefulEnumeratorExtensions {
 
     [SetUp]
     public void SetUp() {
-        Source = Enumerator( 0, 1, 2 ).AsStateful();
-        Source_Empty = Enumerator().AsStateful();
+        Source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();
+        Source_Empty = SourceFactory.Enumerator().AsStateful();
     }
     [TearDown]
     public void TearDown() {
@@ -61,13 +61,13 @@ public class Tests_StatefulEnumeratorExtensions {
     // Take/While
     [Test]
     public void TakeWhile() {
-        Assert.That( Source.TakeWhile( Predicate ), Is.EquivalentTo( Array( 0, 1 ) ) );
+        Assert.That( Source.TakeWhile( Predicate ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
         Assert.That( Source.Current, Is.EqualTo( 2 ) );
     }
     // Take/Until
     [Test]
     public void TakeUntil() {
-        Assert.That( Source.TakeUntil( PredicateInverted ), Is.EquivalentTo( Array( 0, 1 ) ) );
+        Assert.That( Source.TakeUntil( PredicateInverted ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
         Assert.That( Source.Current, Is.EqualTo( 2 ) );
     }
 
@@ -105,8 +105,8 @@ public class Tests_PeekableEnumeratorExtensions {
 
     [SetUp]
     public void SetUp() {
-        Source = Enumerator( 0, 1, 2 ).AsPeekable();
-        Source_Empty = Enumerator().AsPeekable();
+        Source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        Source_Empty = SourceFactory.Enumerator().AsPeekable();
     }
     [TearDown]
     public void TearDown() {
@@ -118,13 +118,13 @@ public class Tests_PeekableEnumeratorExtensions {
     // Take/While
     [Test]
     public void TakeWhile() {
-        Assert.That( Source.TakeWhile( Predicate ), Is.EquivalentTo( Array( 0, 1 ) ) );
+        Assert.That( Source.TakeWhile( Predicate ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
         Assert.That( Source.Current, Is.EqualTo( 1 ) );
     }
     // Take/Until
     [Test]
     public void TakeUntil() {
-        Assert.That( Source.TakeUntil( PredicateInverted ), Is.EquivalentTo( Array( 0, 1 ) ) );
+        Assert.That( Source.TakeUntil( PredicateInverted ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
         Assert.That( Source.Current, Is.EqualTo( 1 ) );
     }
 

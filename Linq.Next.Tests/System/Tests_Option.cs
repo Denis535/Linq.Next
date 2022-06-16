@@ -20,20 +20,24 @@ public class Tests_Option {
     // Value
     [Test]
     public void Value() {
-        Value( Option() );
-        Value( Option( null ), null );
-        Value( Option( this ), this );
-        Value( Option( 777 ), 777 );
-    }
-    private static void Value<T>(Option<T> source) {
-        Assert.That( source.HasValue, Is.False );
-        Assert.Throws<InvalidOperationException>( () => _ = source.Value );
-        Assert.That( source.ValueOrDefault, Is.EqualTo( default( T ) ) );
-    }
-    private static void Value<T>(Option<T> source, T expected_value) {
-        Assert.That( source.HasValue, Is.True );
-        Assert.That( source.Value, Is.EqualTo( expected_value ) );
-        Assert.That( source.ValueOrDefault, Is.EqualTo( expected_value ) );
+        {
+            var source = new Option<object?>();
+            Assert.That( source.HasValue, Is.False );
+            Assert.Throws<InvalidOperationException>( () => _ = source.Value );
+            Assert.That( source.ValueOrDefault, Is.EqualTo( null ) );
+        }
+        {
+            var source = new Option<object?>( "Hello World !!!" );
+            Assert.That( source.HasValue, Is.True );
+            Assert.That( source.Value, Is.EqualTo( "Hello World !!!" ) );
+            Assert.That( source.ValueOrDefault, Is.EqualTo( "Hello World !!!" ) );
+        }
+        {
+            var source = new Option<object?>( null );
+            Assert.That( source.HasValue, Is.True );
+            Assert.That( source.Value, Is.EqualTo( null ) );
+            Assert.That( source.ValueOrDefault, Is.EqualTo( null ) );
+        }
     }
 
 

@@ -16,6 +16,14 @@ public static class Option {
         if (value.HasValue) return new Option<T>( value.Value );
         return default;
     }
+    // AsOption
+    //public static Option<T> AsOption<T>(this T value) {
+    //    return new Option<T>( value );
+    //}
+    //public static Option<T> AsOption<T>(this T? value) where T : struct {
+    //    if (value.HasValue) return new Option<T>( value.Value );
+    //    return default;
+    //}
     // Equals
     public static bool Equals<T>(Option<T> v1, Option<T> v2) {
         if (v1.HasValue && v2.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2.Value );
@@ -109,6 +117,10 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
 
     // Conversions
     public static implicit operator Option<T>(T value) {
+        // This can lead to the next problem:
+        // source = new Option<object>();
+        // source = new Option<int>(); 
+        // Option<object>.Value is Option<int>
         return new Option<T>( value );
     }
     public static explicit operator T(Option<T> value) {

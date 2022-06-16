@@ -17,8 +17,8 @@ public class Tests_StatefulEnumerator {
 
     [SetUp]
     public void SetUp() {
-        Source = Enumerator( 0, 1, 2 ).AsStateful();
-        Source_Empty = Enumerator().AsStateful();
+        Source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();
+        Source_Empty = SourceFactory.Enumerator().AsStateful();
     }
     [TearDown]
     public void TearDown() {
@@ -81,8 +81,8 @@ public class Tests_PeekableEnumerator {
 
     [SetUp]
     public void SetUp() {
-        Source = Enumerator( 0, 1, 2 ).AsPeekable();
-        Source_Empty = Enumerator().AsPeekable();
+        Source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        Source_Empty = SourceFactory.Enumerator().AsPeekable();
     }
     [TearDown]
     public void TearDown() {

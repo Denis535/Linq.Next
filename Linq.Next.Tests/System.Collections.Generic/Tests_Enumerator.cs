@@ -11,49 +11,61 @@ using static NUnit.Framework.TestsHelper;
 [TestFixture( TestName = "Tests_Enumerator/Stateful" )]
 public class Tests_StatefulEnumerator {
 
+    private StatefulEnumerator<int> Source { get; set; } = default!;
+    private StatefulEnumerator<int> Source_Empty { get; set; } = default!;
+
+
+    [SetUp]
+    public void SetUp() {
+        Source = Enumerator( 0, 1, 2 ).AsStateful();
+        Source_Empty = Enumerator().AsStateful();
+    }
+    [TearDown]
+    public void TearDown() {
+        Source.Dispose();
+        Source_Empty.Dispose();
+    }
+
 
     // Constructor
     [Test]
     public void Constructor() {
-        using var source = Enumerator( 0, 1, 2 ).AsStateful();
-        Assert.That( source.IsStarted, Is.False );
-        Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Default ) );
+        Assert.That( Source.IsStarted, Is.False );
+        Assert.That( Source.IsFinished, Is.False );
+        Assert.That( Source.Current, Is.EqualTo( Default ) );
     }
 
 
     // Take
     [Test]
     public void Take_00() {
-        using var source = Enumerator().AsStateful();
-        Take( source, true, true, Default );
+        Take( Source_Empty, true, true, Default );
     }
     [Test]
     public void Take_01() {
-        using var source = Enumerator( 0, 1, 2 ).AsStateful();
-        Take( source, true, false, 0 );
-        Take( source, true, false, 1 );
-        Take( source, true, false, 2 );
-        Take( source, true, true, Default );
+        Take( Source, true, false, 0 );
+        Take( Source, true, false, 1 );
+        Take( Source, true, false, 2 );
+        Take( Source, true, true, Default );
     }
     private static void Take(StatefulEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
-        source.Take();
+        var current = source.Take();
         Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
         Assert.That( source.IsFinished, Is.EqualTo( expected_isFinished ) );
         Assert.That( source.Current, Is.EqualTo( expected_current ) );
+        Assert.That( source.Current, Is.EqualTo( current ) );
     }
 
 
     // Reset
     [Test]
     public void Reset() {
-        using var source = Enumerator( 0, 1, 2 ).AsStateful();
-        source.Take();
+        ((IEnumerator<int>) Source).MoveNext();
 
-        source.Reset();
-        Assert.That( source.IsStarted, Is.False );
-        Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Default ) );
+        Source.Reset();
+        Assert.That( Source.IsStarted, Is.False );
+        Assert.That( Source.IsFinished, Is.False );
+        Assert.That( Source.Current, Is.EqualTo( Default ) );
     }
 
 
@@ -63,70 +75,83 @@ public class Tests_StatefulEnumerator {
 [TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumerator {
 
+    private PeekableEnumerator<int> Source { get; set; } = default!;
+    private PeekableEnumerator<int> Source_Empty { get; set; } = default!;
+
+
+    [SetUp]
+    public void SetUp() {
+        Source = Enumerator( 0, 1, 2 ).AsPeekable();
+        Source_Empty = Enumerator().AsPeekable();
+    }
+    [TearDown]
+    public void TearDown() {
+        Source.Dispose();
+        Source_Empty.Dispose();
+    }
+
 
     // Constructor
     [Test]
     public void Constructor() {
-        using var source = Enumerator( 0, 1, 2 ).AsPeekable();
-        Assert.That( source.IsStarted, Is.False );
-        Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Default ) );
+        Assert.That( Source.IsStarted, Is.False );
+        Assert.That( Source.IsFinished, Is.False );
+        Assert.That( Source.Current, Is.EqualTo( Default ) );
     }
 
 
     // Take
     [Test]
     public void Take_00() {
-        using var source = Enumerator().AsPeekable();
         // Peek
-        Peek( source, false, false, Default, Default );
+        Peek( Source_Empty, false, false, Default, Default );
         // Take-Peek
-        Take( source, true, true, Default );
-        Peek( source, true, true, Default, Default );
+        Take( Source_Empty, true, true, Default );
+        Peek( Source_Empty, true, true, Default, Default );
     }
     [Test]
     public void Take_01() {
-        using var source = Enumerator( 0, 1, 2 ).AsPeekable();
         // Peek
-        Peek( source, false, false, Default, 0 );
+        Peek( Source, false, false, Default, 0 );
         // Take-Peek
-        Take( source, true, false, 0 );
-        Peek( source, true, false, 0, 1 );
+        Take( Source, true, false, 0 );
+        Peek( Source, true, false, 0, 1 );
         // Take-Peek
-        Take( source, true, false, 1 );
-        Peek( source, true, false, 1, 2 );
+        Take( Source, true, false, 1 );
+        Peek( Source, true, false, 1, 2 );
         // Take-Peek
-        Take( source, true, false, 2 );
-        Peek( source, true, false, 2, Default );
+        Take( Source, true, false, 2 );
+        Peek( Source, true, false, 2, Default );
         // Take-Peek
-        Take( source, true, true, Default );
-        Peek( source, true, true, Default, Default );
+        Take( Source, true, true, Default );
+        Peek( Source, true, true, Default, Default );
     }
     private static void Take(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
-        source.Take();
+        var current = source.Take();
         Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
         Assert.That( source.IsFinished, Is.EqualTo( expected_isFinished ) );
         Assert.That( source.Current, Is.EqualTo( expected_current ) );
+        Assert.That( source.Current, Is.EqualTo( current ) );
     }
     private static void Peek(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current, Option<int> expected_next) {
-        source.Peek();
+        var next = source.Peek();
         Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
         Assert.That( source.IsFinished, Is.EqualTo( expected_isFinished ) );
         Assert.That( source.Current, Is.EqualTo( expected_current ) );
         Assert.That( source.Next, Is.EqualTo( expected_next ) );
+        Assert.That( source.Next, Is.EqualTo( next ) );
     }
 
 
     // Reset
     [Test]
     public void Reset() {
-        using var source = Enumerator( 0, 1, 2 ).AsPeekable();
-        source.Take();
+        ((IEnumerator<int>) Source).MoveNext();
 
-        source.Reset();
-        Assert.That( source.IsStarted, Is.False );
-        Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Default ) );
+        Source.Reset();
+        Assert.That( Source.IsStarted, Is.False );
+        Assert.That( Source.IsFinished, Is.False );
+        Assert.That( Source.Current, Is.EqualTo( Default ) );
     }
 
 

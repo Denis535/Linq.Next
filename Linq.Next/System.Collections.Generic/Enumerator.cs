@@ -3,6 +3,27 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
+// Usually iterating over an array looks like this:
+// var i = 0;
+// var v0 = array[i]; i++;
+// var v1 = array[i]; i++;
+
+// But iterating over an enumerator looks like this:
+// var i = -1;
+// Take:
+//   i++;
+//   var value = array[i];
+// Peek:
+//   var value = array[i+1];
+
+// Maybe the desired behavior would be???:
+// var i = -1;
+// Take:
+//   if (i == -1) i++;
+//   var value = array[i]; i++;
+// Peek:
+//   var value = array[i+1];
+
 // Enumerator/Stateful
 // Note: Don't use try-catch-finally in Take, Reset (because enumerator can not be started, finished, reseted if there was exception)
 public class StatefulEnumerator<T> : IEnumerator<T>, IDisposable {
@@ -45,14 +66,14 @@ public class StatefulEnumerator<T> : IEnumerator<T>, IDisposable {
 
     // Helpers
     private Option<T> TakeInternal() {
-        var value = MoveNext( Source );
-        (IsStarted, IsFinished) = (true, !value.HasValue);
-        current = value;
-        return value;
-    }
-    private static Option<T> MoveNext(IEnumerator<T> enumerator) {
-        if (enumerator.MoveNext()) return enumerator.Current;
-        return default;
+        if (Source.MoveNext()) {
+            (IsStarted, IsFinished) = (true, false);
+            current = Source.Current;
+            return current;
+        }
+        (IsStarted, IsFinished) = (true, true);
+        current = default;
+        return current;
     }
 
 
@@ -110,23 +131,33 @@ public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
 
     // Helpers
     private Option<T> TakeInternal() {
-        var value = MoveNext( next, Source );
-        (IsStarted, IsFinished) = (true, !value.HasValue);
-        (current, next) = (value, default);
-        return value;
+        if (next.HasValue) {
+            (IsStarted, IsFinished) = (true, false);
+            (current, next) = (next, default);
+            return current;
+        }
+        if (Source.MoveNext()) {
+            (IsStarted, IsFinished) = (true, false);
+            (current, next) = (Source.Current, default);
+            return current;
+        }
+        (IsStarted, IsFinished) = (true, true);
+        (current, next) = (default, default);
+        return current;
     }
     private Option<T> PeekInternal() {
         // It does not affect IsStarted
         // It does not affect IsFinished
         // It does not affect Current
-        var value = MoveNext( next, Source );
-        next = value;
-        return value;
-    }
-    private static Option<T> MoveNext(Option<T> next, IEnumerator<T> enumerator) {
-        if (next.HasValue) return next;
-        if (enumerator.MoveNext()) return enumerator.Current;
-        return default;
+        if (next.HasValue) {
+            return next;
+        }
+        if (Source.MoveNext()) {
+            next = Source.Current;
+            return next;
+        }
+        next = default;
+        return next;
     }
 
 

@@ -11,162 +11,145 @@ using static NUnit.Framework.TestsHelper;
 [TestFixture( TestName = "Tests_Enumerator/Extensions" )]
 public class Tests_EnumeratorExtensions {
 
-
-    // Take/While
-    [Test]
-    public void TakeWhile() {
-        var source = Enumerator( 0, 1, 2, 3 );
-        Assert.That( source.TakeWhile( WhilePredicate ), Is.EquivalentTo( Array( 0, 1, 2 ) ) );
-        Assert.That( source.Current, Is.EqualTo( 3 ) );
-    }
-    // Take/Until
-    [Test]
-    public void TakeUntil() {
-        var source = Enumerator( 0, 1, 2, 3 );
-        Assert.That( source.TakeUntil( UntilPredicate ), Is.EquivalentTo( Array( 0, 1, 2 ) ) );
-        Assert.That( source.Current, Is.EqualTo( 3 ) );
-    }
+    private IEnumerator<int> Source { get; set; } = default!;
+    private IEnumerator<int> Source_Empty { get; set; } = default!;
 
 
-    // Take
-    [Test]
-    public void TakeIf() {
-        var source = Enumerator( 0, 1, 2, 3 );
-        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Default ) ); // 0 is skipped
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 1 ) );        // 1
-        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Default ) ); // 2 is skipped
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 3 ) );        // 2
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Default ) );  // finish
+    [SetUp]
+    public void SetUp() {
+        Source = Enumerator( 0, 1, 2 );
+        Source_Empty = Enumerator();
     }
-    [Test]
-    public void TakeIfNot() {
-        var source = Enumerator( 0, 1, 2, 3 );
-        Assert.That( source.TakeIfNot( i => true ), Is.EqualTo( Default ) );  // 0 is skipped
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 1 ) );       // 1
-        Assert.That( source.TakeIfNot( i => true ), Is.EqualTo( Default ) );  // 2 is skipped
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 3 ) );       // 2
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( Default ) ); // finish
+    [TearDown]
+    public void TearDown() {
+        Source.Dispose();
+        Source_Empty.Dispose();
     }
+
+
     [Test]
     public void Take() {
-        var source = Enumerator( 0, 1, 2, 3 );
-        Assert.That( source.Take(), Is.EqualTo( 0 ) );
-        Assert.That( source.Take(), Is.EqualTo( 1 ) );
-        Assert.That( source.Take(), Is.EqualTo( 2 ) );
-        Assert.That( source.Take(), Is.EqualTo( 3 ) );
-        Assert.That( source.Take(), Is.EqualTo( Default ) );
+        Assert.That( Source.Take(), Is.EqualTo( 0 ) );
+        Assert.That( Source.Take(), Is.EqualTo( 1 ) );
+        Assert.That( Source.Take(), Is.EqualTo( 2 ) );
+        Assert.That( Source.Take(), Is.EqualTo( Default ) );
     }
 
-
-    // Helpers
-    private static bool WhilePredicate(int value) => value <= 2;
-    private static bool UntilPredicate(int value) => !(value <= 2);
 
 }
 
 // Enumerator/Stateful
-[TestFixture( TestName = "Tests_Enumerator/Extensions/Stateful" )]
+[TestFixture( TestName = "Tests_Enumerator/Stateful/Extensions" )]
 public class Tests_StatefulEnumeratorExtensions {
+
+    private StatefulEnumerator<int> Source { get; set; } = default!;
+    private StatefulEnumerator<int> Source_Empty { get; set; } = default!;
+
+
+    [SetUp]
+    public void SetUp() {
+        Source = Enumerator( 0, 1, 2 ).AsStateful();
+        Source_Empty = Enumerator().AsStateful();
+    }
+    [TearDown]
+    public void TearDown() {
+        Source.Dispose();
+        Source_Empty.Dispose();
+    }
 
 
     // Take/While
     [Test]
     public void TakeWhile() {
-        var source = Enumerator( 0, 1, 2, 3 ).AsStateful();
-        Assert.That( source.TakeWhile( WhilePredicate ), Is.EquivalentTo( Array( 0, 1, 2 ) ) );
-        Assert.That( source.Current, Is.EqualTo( 3 ) );
+        Assert.That( Source.TakeWhile( Predicate ), Is.EquivalentTo( Array( 0, 1 ) ) );
+        Assert.That( Source.Current, Is.EqualTo( 2 ) );
     }
     // Take/Until
     [Test]
     public void TakeUntil() {
-        var source = Enumerator( 0, 1, 2, 3 ).AsStateful();
-        Assert.That( source.TakeUntil( UntilPredicate ), Is.EquivalentTo( Array( 0, 1, 2 ) ) );
-        Assert.That( source.Current, Is.EqualTo( 3 ) );
+        Assert.That( Source.TakeUntil( PredicateInverted ), Is.EquivalentTo( Array( 0, 1 ) ) );
+        Assert.That( Source.Current, Is.EqualTo( 2 ) );
     }
 
 
     // Take
     [Test]
     public void TakeIf() {
-        var source = Enumerator( 0, 1, 2, 3 ).AsStateful();
-        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Default ) ); // 0 is skipped
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 1 ) );        // 1
-        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Default ) ); // 2 is skipped
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 3 ) );        // 2
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Default ) );  // finish
+        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( 0 ) );
+        Assert.That( Source.TakeIf( i => false ), Is.EqualTo( Default ) );
+        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( 2 ) );
+        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( Default ) );
     }
     [Test]
     public void TakeIfNot() {
-        var source = Enumerator( 0, 1, 2, 3 ).AsStateful();
-        Assert.That( source.TakeIfNot( i => true ), Is.EqualTo( Default ) );  // 0 is skipped
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 1 ) );       // 1
-        Assert.That( source.TakeIfNot( i => true ), Is.EqualTo( Default ) );  // 2 is skipped
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 3 ) );       // 2
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( Default ) ); // finish
-    }
-    [Test]
-    public void Take() {
-        var source = Enumerator( 0, 1, 2, 3 ).AsStateful();
-        Assert.That( source.Take(), Is.EqualTo( 0 ) );
-        Assert.That( source.Take(), Is.EqualTo( 1 ) );
-        Assert.That( source.Take(), Is.EqualTo( 2 ) );
-        Assert.That( source.Take(), Is.EqualTo( 3 ) );
-        Assert.That( source.Take(), Is.EqualTo( Default ) );
+        Assert.That( Source.TakeIfNot( i => !true ), Is.EqualTo( 0 ) );
+        Assert.That( Source.TakeIfNot( i => !false ), Is.EqualTo( Default ) );
+        Assert.That( Source.TakeIfNot( i => !true ), Is.EqualTo( 2 ) );
+        Assert.That( Source.TakeIfNot( i => !true ), Is.EqualTo( Default ) );
     }
 
 
     // Helpers
-    private static bool WhilePredicate(int value) => value <= 2;
-    private static bool UntilPredicate(int value) => !(value <= 2);
+    private static bool Predicate(int value) => value <= 1;
+    private static bool PredicateInverted(int value) => !(value <= 1);
 
 }
 
 // Enumerator/Peekable
-[TestFixture( TestName = "Tests_Enumerator/Extensions/Peekable" )]
+[TestFixture( TestName = "Tests_Enumerator/Peekable/Extensions" )]
 public class Tests_PeekableEnumeratorExtensions {
+
+    private PeekableEnumerator<int> Source { get; set; } = default!;
+    private PeekableEnumerator<int> Source_Empty { get; set; } = default!;
+
+
+    [SetUp]
+    public void SetUp() {
+        Source = Enumerator( 0, 1, 2 ).AsPeekable();
+        Source_Empty = Enumerator().AsPeekable();
+    }
+    [TearDown]
+    public void TearDown() {
+        Source.Dispose();
+        Source_Empty.Dispose();
+    }
 
 
     // Take/While
     [Test]
     public void TakeWhile() {
-        var source = Enumerator( 0, 1, 2, 3 ).AsPeekable();
-        Assert.That( source.TakeWhile( WhilePredicate ), Is.EquivalentTo( Array( 0, 1, 2 ) ) );
-        Assert.That( source.Current, Is.EqualTo( 2 ) );
+        Assert.That( Source.TakeWhile( Predicate ), Is.EquivalentTo( Array( 0, 1 ) ) );
+        Assert.That( Source.Current, Is.EqualTo( 1 ) );
     }
     // Take/Until
     [Test]
     public void TakeUntil() {
-        var source = Enumerator( 0, 1, 2, 3 ).AsPeekable();
-        Assert.That( source.TakeUntil( UntilPredicate ), Is.EquivalentTo( Array( 0, 1, 2 ) ) );
-        Assert.That( source.Current, Is.EqualTo( 2 ) );
+        Assert.That( Source.TakeUntil( PredicateInverted ), Is.EquivalentTo( Array( 0, 1 ) ) );
+        Assert.That( Source.Current, Is.EqualTo( 1 ) );
     }
 
 
     // Take
     [Test]
     public void TakeIf() {
-        var source = Enumerator( 0, 1, 2, 3 ).AsPeekable();
-        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Default ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 0 ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 1 ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 2 ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 3 ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Default ) );
+        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( 0 ) );
+        Assert.That( Source.TakeIf( i => false ), Is.EqualTo( Default ) );
+        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( 1 ) );
+        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( 2 ) );
+        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( Default ) );
     }
     [Test]
     public void TakeIfNot() {
-        var source = Enumerator( 0, 1, 2, 3 ).AsPeekable();
-        Assert.That( source.TakeIfNot( i => true ), Is.EqualTo( Default ) );
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 0 ) );
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 1 ) );
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 2 ) );
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 3 ) );
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( Default ) );
+        Assert.That( Source.TakeIfNot( i => false ), Is.EqualTo( 0 ) );
+        Assert.That( Source.TakeIfNot( i => true ), Is.EqualTo( Default ) );
+        Assert.That( Source.TakeIfNot( i => false ), Is.EqualTo( 1 ) );
+        Assert.That( Source.TakeIfNot( i => false ), Is.EqualTo( 2 ) );
+        Assert.That( Source.TakeIfNot( i => false ), Is.EqualTo( Default ) );
     }
 
 
     // Helpers
-    private static bool WhilePredicate(int value) => value <= 2;
-    private static bool UntilPredicate(int value) => !(value <= 2);
+    private static bool Predicate(int value) => value <= 1;
+    private static bool PredicateInverted(int value) => !(value <= 1);
 
 }

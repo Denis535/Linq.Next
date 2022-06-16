@@ -2,6 +2,65 @@
 
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+
+        <!--Assembly attributes-->
+        <VersionPrefix>1.0.0</VersionPrefix>
+        <VersionSuffix Condition="false">alpha.$([System.DateTime]::UtcNow.ToString(yyyy-MM-dd--HH-mm-ss))</VersionSuffix>
+        <Description></Description>
+        <Authors>Denis535</Authors>
+        <Company>Denis535</Company>
+        <Product>$(AssemblyName)</Product>
+        <Copyright></Copyright>
+        <RepositoryUrl>https://github.com/Denis535/Linq.Next</RepositoryUrl>
+
+        <!--Nuget package attributes-->
+        <Title>$(AssemblyName)</Title>
+        <IsPackable>true</IsPackable>
+        <PackageId>$(AssemblyName)</PackageId>
+        <PackageVersion>$(Version)</PackageVersion>
+        <PackageIcon>Icon.png</PackageIcon>
+        <PackageIconUrl></PackageIconUrl>
+        <PackageDescription>$(Description)</PackageDescription>
+        <PackageTags>Linq; MoreLinq; Enumerable; Enumerator; Iterator; Peekable</PackageTags>
+        <PackageProjectUrl>https://github.com/Denis535/Linq.Next</PackageProjectUrl>
+        <PackageLicenseFile></PackageLicenseFile>
+        <PackageLicenseUrl></PackageLicenseUrl>
+        <IsTool>false</IsTool>
+        <DevelopmentDependency>false</DevelopmentDependency>
+        <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+
+        <!--Nuget options-->
+        <EnableDefaultItems>true</EnableDefaultItems>
+        <EnableDefaultNoneItems>true</EnableDefaultNoneItems>
+        <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+        <EnableDefaultEmbeddedResourceItems>true</EnableDefaultEmbeddedResourceItems>
+
+        <IncludeBuildOutput>true</IncludeBuildOutput>
+        <IncludeContentInPack>true</IncludeContentInPack>
+        <IncludeSymbols>false</IncludeSymbols>
+        <IncludeSource>false</IncludeSource>
+
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeBuilds</TargetsForTfmSpecificBuildOutput>
+        <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);IncludeContent</TargetsForTfmSpecificContentInPackage>
     </PropertyGroup>
+
+    <!--Clean-->
+    <ItemGroup>
+        <Clean Include="$(PackageOutputPath)\*.nupkg" />
+    </ItemGroup>
+
+    <!--Include builds-->
+    <Target Name="IncludeBuilds">
+        <ItemGroup>
+        </ItemGroup>
+    </Target>
+
+    <!--Include content-->
+    <Target Name="IncludeContent">
+        <ItemGroup>
+            <TfmSpecificPackageFile Include="../Readme.md" PackagePath="/" />
+            <TfmSpecificPackageFile Include="../Icon.png" PackagePath="/" />
+        </ItemGroup>
+    </Target>
 
 </Project>

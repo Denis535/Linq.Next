@@ -1,6 +1,6 @@
 ﻿﻿# Overview
 
-The ***Linq.Next*** project enhances the linq and the collections with an extra features.
+The **Linq.Next** project enhances the linq and the collections with an extra features.
 
 - Linq:
   - CompareTo

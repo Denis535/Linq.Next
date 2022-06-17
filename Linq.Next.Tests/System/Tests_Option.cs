@@ -13,16 +13,9 @@ using static NUnit.Framework.TestsHelper;
 public class Tests_Option {
 
 
-    // Constructor
+    // Tests/Constructor
     [Test]
     public void Constructor() {
-        _ = new Option<object?>( new object() );
-    }
-
-
-    // Value
-    [Test]
-    public void Value() {
         {
             var source = new Option<object?>();
             Assert.That( source.HasValue, Is.False );

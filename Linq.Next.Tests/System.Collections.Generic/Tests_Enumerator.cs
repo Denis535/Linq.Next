@@ -14,6 +14,7 @@ using static NUnit.Framework.TestsHelper;
 public class Tests_EnumeratorExtensions {
 
 
+    // Tests/Take
     [Test]
     public void Take() {
         using var source = SourceFactory.Enumerator( 0, 1, 2 );

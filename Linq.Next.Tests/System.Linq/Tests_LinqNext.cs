@@ -51,7 +51,7 @@ public class Tests_LinqNext {
     }
     private static void LazyGroup(int[] source, Func<int, IReadOnlyList<int>, bool> predicate, int[][] expected) {
         var actual = source.LazyGroup( predicate ).ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
 
 
@@ -77,7 +77,7 @@ public class Tests_LinqNext {
     }
     private static void Split(int[] source, Predicate<int> predicate, int[][] expected) {
         var actual = source.Split( predicate ).ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
     // Split/Before
     [Test]
@@ -101,7 +101,7 @@ public class Tests_LinqNext {
     }
     private static void SplitBefore(int[] source, Predicate<int> predicate, int[][] expected) {
         var actual = source.SplitBefore( predicate ).ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
     // Split/After
     [Test]
@@ -125,7 +125,7 @@ public class Tests_LinqNext {
     }
     private static void SplitAfter(int[] source, Predicate<int> predicate, int[][] expected) {
         var actual = source.SplitAfter( predicate ).ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
 
 
@@ -147,7 +147,7 @@ public class Tests_LinqNext {
     }
     private static void TagFirst(int[] source, (int, bool)[] expected) {
         var actual = source.TagFirst().ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
     // Tag/Last
     [Test]
@@ -167,7 +167,7 @@ public class Tests_LinqNext {
     }
     private static void TagLast(int[] source, (int, bool)[] expected) {
         var actual = source.TagLast().ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
     // Tag/First-Last
     [Test]
@@ -187,7 +187,7 @@ public class Tests_LinqNext {
     }
     private static void TagFirstLast(int[] source, (int, bool, bool)[] expected) {
         var actual = source.TagFirstLast().ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
 
 
@@ -209,7 +209,7 @@ public class Tests_LinqNext {
     }
     private static void WithPrev(int[] source, (int, Option<int>)[] expected) {
         var actual = source.WithPrev().ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
     // With/Next
     [Test]
@@ -229,7 +229,7 @@ public class Tests_LinqNext {
     }
     private static void WithNext(int[] source, (int, Option<int>)[] expected) {
         var actual = source.WithNext().ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
     // With/Prev-Next
     [Test]
@@ -249,7 +249,7 @@ public class Tests_LinqNext {
     }
     private static void WithPrevNext(int[] source, (int, Option<int>, Option<int>)[] expected) {
         var actual = source.WithPrevNext().ToArray();
-        Assert.That( actual, Is.EquivalentTo( expected ) );
+        Assert.That( actual, Is.EqualTo( expected ) );
     }
 
 

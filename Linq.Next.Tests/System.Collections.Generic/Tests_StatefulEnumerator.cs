@@ -14,7 +14,7 @@ using static NUnit.Framework.TestsHelper;
 public class Tests_StatefulEnumerator {
 
 
-    // Constructor
+    // Tests/Constructor
     [Test]
     public void Constructor() {
         using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();
@@ -24,10 +24,10 @@ public class Tests_StatefulEnumerator {
     }
 
 
-    // Take
+    // Tests/Take
     [Test]
     public void Take_00() {
-        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();
+        using var source = SourceFactory.Enumerator().AsStateful();
         Take( source, true, true, Default );
     }
     [Test]
@@ -47,7 +47,7 @@ public class Tests_StatefulEnumerator {
     }
 
 
-    // Reset
+    // Tests/Reset
     [Test]
     public void Reset() {
         using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();

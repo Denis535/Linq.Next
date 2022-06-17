@@ -14,7 +14,7 @@ using static NUnit.Framework.TestsHelper;
 public class Tests_PeekableEnumerator {
 
 
-    // Constructor
+    // Tests/Constructor
     [Test]
     public void Constructor() {
         using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
@@ -24,7 +24,7 @@ public class Tests_PeekableEnumerator {
     }
 
 
-    // Take
+    // Tests/Take
     [Test]
     public void Take_00() {
         using var source = SourceFactory.Enumerator().AsPeekable();
@@ -69,7 +69,7 @@ public class Tests_PeekableEnumerator {
     }
 
 
-    // Reset
+    // Tests/Reset
     [Test]
     public void Reset() {
         using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
@@ -88,23 +88,23 @@ public class Tests_PeekableEnumerator {
 public class Tests_PeekableEnumeratorExtensions {
 
 
-    // Take/While
+    // Tests/Take/While
     [Test]
     public void TakeWhile() {
         using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
-        Assert.That( source.TakeWhile( Predicate ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
+        Assert.That( source.TakeWhile( WhilePredicate ), Is.EqualTo( ExpectedFactory.Array( 0, 1 ) ) );
         Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
-    // Take/Until
+    // Tests/Take/Until
     [Test]
     public void TakeUntil() {
         using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
-        Assert.That( source.TakeUntil( PredicateInverted ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
+        Assert.That( source.TakeUntil( UntilPredicate ), Is.EqualTo( ExpectedFactory.Array( 0, 1 ) ) );
         Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
 
 
-    // Take
+    // Tests/Take
     [Test]
     public void TakeIf() {
         using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
@@ -126,7 +126,7 @@ public class Tests_PeekableEnumeratorExtensions {
 
 
     // Helpers
-    private static bool Predicate(int value) => value <= 1;
-    private static bool PredicateInverted(int value) => !(value <= 1);
+    private static bool WhilePredicate(int value) => value <= 1;
+    private static bool UntilPredicate(int value) => !(value <= 1);
 
 }

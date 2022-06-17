@@ -1,6 +1,6 @@
 ﻿# Overview
 
-The **Linq.Next** package is intended to enhance the linq and the collections with an extra features.
+The **Linq.Next** package is intended to enhance the linq and the collections with an extra useful features.
 
 - [Linq](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/LinqNext.cs):
   - CompareTo

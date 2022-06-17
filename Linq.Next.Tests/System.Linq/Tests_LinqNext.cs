@@ -1,4 +1,7 @@
-﻿namespace System.Linq;
+﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
+namespace System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +22,8 @@ public class Tests_LinqNext {
         var expected_extra = ExpectedFactory.Array( 0, 1 );
         CompareTo( source_first, source_second, expected_missing, expected_extra );
     }
-    private static void CompareTo(int[] first, int[] second, int[] expected_missing, int[] expected_extra) {
-        first.CompareTo( second, out var actual_missing, out var actual_extra );
+    private static void CompareTo(int[] source_first, int[] source_second, int[] expected_missing, int[] expected_extra) {
+        source_first.CompareTo( source_second, out var actual_missing, out var actual_extra );
         Assert.That( actual_missing, Is.EqualTo( expected_missing ) );
         Assert.That( actual_extra, Is.EqualTo( expected_extra ) );
     }

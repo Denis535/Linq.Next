@@ -1,4 +1,7 @@
-﻿namespace System.Collections.Generic;
+﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
+namespace System.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,28 +13,14 @@ using static NUnit.Framework.TestsHelper;
 [TestFixture( TestName = "Tests_Enumerator" )]
 public class Tests_EnumeratorExtensions {
 
-    private IEnumerator<int> Source { get; set; } = default!;
-    private IEnumerator<int> Source_Empty { get; set; } = default!;
-
-
-    [SetUp]
-    public void SetUp() {
-        Source = SourceFactory.Enumerator( 0, 1, 2 );
-        Source_Empty = SourceFactory.Enumerator();
-    }
-    [TearDown]
-    public void TearDown() {
-        Source.Dispose();
-        Source_Empty.Dispose();
-    }
-
 
     [Test]
     public void Take() {
-        Assert.That( Source.Take(), Is.EqualTo( 0 ) );
-        Assert.That( Source.Take(), Is.EqualTo( 1 ) );
-        Assert.That( Source.Take(), Is.EqualTo( 2 ) );
-        Assert.That( Source.Take(), Is.EqualTo( Default ) );
+        using var source = SourceFactory.Enumerator( 0, 1, 2 );
+        Assert.That( source.Take(), Is.EqualTo( 0 ) );
+        Assert.That( source.Take(), Is.EqualTo( 1 ) );
+        Assert.That( source.Take(), Is.EqualTo( 2 ) );
+        Assert.That( source.Take(), Is.EqualTo( Default ) );
     }
 
 

@@ -1,4 +1,7 @@
-﻿namespace System.Collections.Generic;
+﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
+namespace System.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,42 +13,30 @@ using static NUnit.Framework.TestsHelper;
 [TestFixture( TestName = "Tests_Enumerator/Stateful" )]
 public class Tests_StatefulEnumerator {
 
-    private StatefulEnumerator<int> Source { get; set; } = default!;
-    private StatefulEnumerator<int> Source_Empty { get; set; } = default!;
-
-
-    [SetUp]
-    public void SetUp() {
-        Source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();
-        Source_Empty = SourceFactory.Enumerator().AsStateful();
-    }
-    [TearDown]
-    public void TearDown() {
-        Source.Dispose();
-        Source_Empty.Dispose();
-    }
-
 
     // Constructor
     [Test]
     public void Constructor() {
-        Assert.That( Source.IsStarted, Is.False );
-        Assert.That( Source.IsFinished, Is.False );
-        Assert.That( Source.Current, Is.EqualTo( Default ) );
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();
+        Assert.That( source.IsStarted, Is.False );
+        Assert.That( source.IsFinished, Is.False );
+        Assert.That( source.Current, Is.EqualTo( Default ) );
     }
 
 
     // Take
     [Test]
     public void Take_00() {
-        Take( Source_Empty, true, true, Default );
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();
+        Take( source, true, true, Default );
     }
     [Test]
     public void Take_01() {
-        Take( Source, true, false, 0 );
-        Take( Source, true, false, 1 );
-        Take( Source, true, false, 2 );
-        Take( Source, true, true, Default );
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();
+        Take( source, true, false, 0 );
+        Take( source, true, false, 1 );
+        Take( source, true, false, 2 );
+        Take( source, true, true, Default );
     }
     private static void Take(StatefulEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
         var current = source.Take();
@@ -59,12 +50,13 @@ public class Tests_StatefulEnumerator {
     // Reset
     [Test]
     public void Reset() {
-        ((IEnumerator<int>) Source).MoveNext();
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsStateful();
+        ((IEnumerator<int>) source).MoveNext();
 
-        Source.Reset();
-        Assert.That( Source.IsStarted, Is.False );
-        Assert.That( Source.IsFinished, Is.False );
-        Assert.That( Source.Current, Is.EqualTo( Default ) );
+        source.Reset();
+        Assert.That( source.IsStarted, Is.False );
+        Assert.That( source.IsFinished, Is.False );
+        Assert.That( source.Current, Is.EqualTo( Default ) );
     }
 
 

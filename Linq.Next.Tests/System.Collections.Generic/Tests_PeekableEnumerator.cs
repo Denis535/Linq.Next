@@ -1,4 +1,7 @@
-﻿namespace System.Collections.Generic;
+﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
+
+namespace System.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,56 +13,44 @@ using static NUnit.Framework.TestsHelper;
 [TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumerator {
 
-    private PeekableEnumerator<int> Source { get; set; } = default!;
-    private PeekableEnumerator<int> Source_Empty { get; set; } = default!;
-
-
-    [SetUp]
-    public void SetUp() {
-        Source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
-        Source_Empty = SourceFactory.Enumerator().AsPeekable();
-    }
-    [TearDown]
-    public void TearDown() {
-        Source.Dispose();
-        Source_Empty.Dispose();
-    }
-
 
     // Constructor
     [Test]
     public void Constructor() {
-        Assert.That( Source.IsStarted, Is.False );
-        Assert.That( Source.IsFinished, Is.False );
-        Assert.That( Source.Current, Is.EqualTo( Default ) );
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        Assert.That( source.IsStarted, Is.False );
+        Assert.That( source.IsFinished, Is.False );
+        Assert.That( source.Current, Is.EqualTo( Default ) );
     }
 
 
     // Take
     [Test]
     public void Take_00() {
+        using var source = SourceFactory.Enumerator().AsPeekable();
         // Peek
-        Peek( Source_Empty, false, false, Default, Default );
+        Peek( source, false, false, Default, Default );
         // Take-Peek
-        Take( Source_Empty, true, true, Default );
-        Peek( Source_Empty, true, true, Default, Default );
+        Take( source, true, true, Default );
+        Peek( source, true, true, Default, Default );
     }
     [Test]
     public void Take_01() {
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
         // Peek
-        Peek( Source, false, false, Default, 0 );
+        Peek( source, false, false, Default, 0 );
         // Take-Peek
-        Take( Source, true, false, 0 );
-        Peek( Source, true, false, 0, 1 );
+        Take( source, true, false, 0 );
+        Peek( source, true, false, 0, 1 );
         // Take-Peek
-        Take( Source, true, false, 1 );
-        Peek( Source, true, false, 1, 2 );
+        Take( source, true, false, 1 );
+        Peek( source, true, false, 1, 2 );
         // Take-Peek
-        Take( Source, true, false, 2 );
-        Peek( Source, true, false, 2, Default );
+        Take( source, true, false, 2 );
+        Peek( source, true, false, 2, Default );
         // Take-Peek
-        Take( Source, true, true, Default );
-        Peek( Source, true, true, Default, Default );
+        Take( source, true, true, Default );
+        Peek( source, true, true, Default, Default );
     }
     private static void Take(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
         var current = source.Take();
@@ -81,12 +72,13 @@ public class Tests_PeekableEnumerator {
     // Reset
     [Test]
     public void Reset() {
-        ((IEnumerator<int>) Source).MoveNext();
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        ((IEnumerator<int>) source).MoveNext();
 
-        Source.Reset();
-        Assert.That( Source.IsStarted, Is.False );
-        Assert.That( Source.IsFinished, Is.False );
-        Assert.That( Source.Current, Is.EqualTo( Default ) );
+        source.Reset();
+        Assert.That( source.IsStarted, Is.False );
+        Assert.That( source.IsFinished, Is.False );
+        Assert.That( source.Current, Is.EqualTo( Default ) );
     }
 
 
@@ -95,52 +87,41 @@ public class Tests_PeekableEnumerator {
 [TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumeratorExtensions {
 
-    private PeekableEnumerator<int> Source { get; set; } = default!;
-    private PeekableEnumerator<int> Source_Empty { get; set; } = default!;
-
-
-    [SetUp]
-    public void SetUp() {
-        Source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
-        Source_Empty = SourceFactory.Enumerator().AsPeekable();
-    }
-    [TearDown]
-    public void TearDown() {
-        Source.Dispose();
-        Source_Empty.Dispose();
-    }
-
 
     // Take/While
     [Test]
     public void TakeWhile() {
-        Assert.That( Source.TakeWhile( Predicate ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
-        Assert.That( Source.Current, Is.EqualTo( 1 ) );
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        Assert.That( source.TakeWhile( Predicate ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
+        Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
     // Take/Until
     [Test]
     public void TakeUntil() {
-        Assert.That( Source.TakeUntil( PredicateInverted ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
-        Assert.That( Source.Current, Is.EqualTo( 1 ) );
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        Assert.That( source.TakeUntil( PredicateInverted ), Is.EquivalentTo( ExpectedFactory.Array( 0, 1 ) ) );
+        Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
 
 
     // Take
     [Test]
     public void TakeIf() {
-        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( 0 ) );
-        Assert.That( Source.TakeIf( i => false ), Is.EqualTo( Default ) );
-        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( 1 ) );
-        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( 2 ) );
-        Assert.That( Source.TakeIf( i => true ), Is.EqualTo( Default ) );
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 0 ) );
+        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Default ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 1 ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 2 ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Default ) );
     }
     [Test]
     public void TakeIfNot() {
-        Assert.That( Source.TakeIfNot( i => false ), Is.EqualTo( 0 ) );
-        Assert.That( Source.TakeIfNot( i => true ), Is.EqualTo( Default ) );
-        Assert.That( Source.TakeIfNot( i => false ), Is.EqualTo( 1 ) );
-        Assert.That( Source.TakeIfNot( i => false ), Is.EqualTo( 2 ) );
-        Assert.That( Source.TakeIfNot( i => false ), Is.EqualTo( Default ) );
+        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 0 ) );
+        Assert.That( source.TakeIfNot( i => true ), Is.EqualTo( Default ) );
+        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 1 ) );
+        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 2 ) );
+        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( Default ) );
     }
 
 

@@ -34,19 +34,19 @@ public class Tests_LinqNext {
         var expected = ExpectedFactory.Groups();
         LazyGroup( source, (i, group) => true, expected );
         // By: false
-        source = SourceFactory.Array( 0, 1, 1, 2, 2, 2 );
-        expected = ExpectedFactory.Groups( 0, 1, 1, 2, 2, 2 );
+        source = SourceFactory.Array( 0, 1, 1, 1, 2 );
+        expected = ExpectedFactory.Groups( 0, 1, 1, 1, 2 );
         LazyGroup( source, (i, group) => false, expected );
         // By: true
-        source = SourceFactory.Array( 0, 1, 1, 2, 2, 2 );
-        expected = ExpectedFactory.Groups( (0, 1, 1, 2, 2, 2) );
+        source = SourceFactory.Array( 0, 1, 1, 1, 2 );
+        expected = ExpectedFactory.Groups( (0, 1, 1, 1, 2) );
         LazyGroup( source, (i, group) => true, expected );
         // By: equality
-        source = SourceFactory.Array( 0, 1, 1, 2, 2, 2 );
-        expected = ExpectedFactory.Groups( 0, (1, 1), (2, 2, 2) );
+        source = SourceFactory.Array( 0, 1, 1, 1, 2 );
+        expected = ExpectedFactory.Groups( 0, (1, 1, 1), 2 );
         LazyGroup( source, (i, group) => i == group.Last(), expected );
     }
-    private static void LazyGroup(int[] source, Func<int, IList<int>, bool> predicate, int[][] expected) {
+    private static void LazyGroup(int[] source, Func<int, IReadOnlyList<int>, bool> predicate, int[][] expected) {
         var actual = source.LazyGroup( predicate ).ToArray();
         Assert.That( actual, Is.EquivalentTo( expected ) );
     }

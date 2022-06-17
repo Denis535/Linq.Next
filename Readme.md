@@ -2,7 +2,7 @@
 
 The **Linq.Next** package is intended to enhance the linq and the collections with an extra features.
 
-- Linq:
+- [Linq](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/LinqNext.cs):
   - CompareTo
   - LazyGroup
   - Split
@@ -15,11 +15,11 @@ The **Linq.Next** package is intended to enhance the linq and the collections wi
   - WithNext
   - WithPrevNext
 
-- Collections:
+- [Collections](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System.Collections.Generic):
   - StatefulEnumerator
   - PeekableEnumerator
 
-- System
+- [System](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System):
   - Option
 
 # Github

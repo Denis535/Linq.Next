@@ -15,29 +15,27 @@ public static class LinqNext {
 
 
     // LazyGroup
-    public static IEnumerable<T[]> LazyGroup<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> predicate) {
+    public static IEnumerable<T[]> LazyGroup<T>(this IEnumerable<T> source, Func<T, IReadOnlyList<T>, bool> predicate) {
         return source.FastLazyGroup( predicate, i => i ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<TResult[]> LazyGroup<T, TResult>(this IEnumerable<T> source, Func<T, IList<TResult>, bool> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<TResult[]> LazyGroup<T, TResult>(this IEnumerable<T> source, Func<T, IReadOnlyList<TResult>, bool> predicate, Func<T, TResult> resultSelector) {
         return source.FastLazyGroup( predicate, resultSelector ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<IList<TResult>> FastLazyGroup<T, TResult>(this IEnumerable<T> source, Func<T, IList<TResult>, bool> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<IReadOnlyList<TResult>> FastLazyGroup<T, TResult>(this IEnumerable<T> source, Func<T, IReadOnlyList<TResult>, bool> predicate, Func<T, TResult> resultSelector) {
         using var source_enumerator = source.GetEnumerator();
         var group = new List<TResult>();
         var item = source_enumerator.Take();
         while (item.HasValue) {
-
-            while (item.HasValue) {
-                if (!group.Any() || predicate( item.Value, group )) {
-                    group.Add( resultSelector( item.Value ) );
-                    item = source_enumerator.Take();
-                    continue;
-                }
-                break;
+            {
+                group.Add( resultSelector( item.Value ) );
+                item = source_enumerator.Take();
+            }
+            while (item.HasValue && predicate( item.Value, group )) {
+                group.Add( resultSelector( item.Value ) );
+                item = source_enumerator.Take();
             }
             yield return group;
             group.Clear();
-
         }
     }
 
@@ -49,7 +47,7 @@ public static class LinqNext {
     public static IEnumerable<TResult[]> Split<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
         return source.FastSplit( predicate, resultSelector ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<IList<TResult>> FastSplit<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<IReadOnlyList<TResult>> FastSplit<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
         // [false, false, false], true, [false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
@@ -74,7 +72,7 @@ public static class LinqNext {
     public static IEnumerable<TResult[]> SplitBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
         return source.FastSplitBefore( predicate, resultSelector ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<IList<TResult>> FastSplitBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<IReadOnlyList<TResult>> FastSplitBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
         // [false, false, false], [true, false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
@@ -98,7 +96,7 @@ public static class LinqNext {
     public static IEnumerable<TResult[]> SplitAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
         return source.FastSplitAfter( predicate, resultSelector ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<IList<TResult>> FastSplitAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<IReadOnlyList<TResult>> FastSplitAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
         // [false, false, false, true], [false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {

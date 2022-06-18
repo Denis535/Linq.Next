@@ -4,7 +4,7 @@
         <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
 
         <!--Assembly attributes-->
-        <VersionPrefix>1.1.0</VersionPrefix>
+        <VersionPrefix>1.1.1</VersionPrefix>
         <VersionSuffix Condition="false">alpha.$([System.DateTime]::UtcNow.ToString(yyyy-MM-dd--HH-mm-ss))</VersionSuffix>
         <Description></Description>
         <Authors>Denis535</Authors>

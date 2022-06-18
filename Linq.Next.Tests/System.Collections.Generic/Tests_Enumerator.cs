@@ -14,10 +14,10 @@ using static NUnit.Framework.TestsHelper;
 public class Tests_EnumeratorExtensions {
 
 
-    // Tests/Take
+    // Take
     [Test]
     public void Take() {
-        using var source = SourceFactory.Enumerator( 0, 1, 2 );
+        using var source = Source.Enumerator( 0, 1, 2 );
         Assert.That( source.Take(), Is.EqualTo( 0 ) );
         Assert.That( source.Take(), Is.EqualTo( 1 ) );
         Assert.That( source.Take(), Is.EqualTo( 2 ) );

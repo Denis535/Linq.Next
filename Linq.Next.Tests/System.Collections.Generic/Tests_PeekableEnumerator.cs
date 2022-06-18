@@ -14,20 +14,20 @@ using static NUnit.Framework.TestsHelper;
 public class Tests_PeekableEnumerator {
 
 
-    // Tests/Constructor
+    // Constructor
     [Test]
     public void Constructor() {
-        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        using var source = Source.Peekable( 0, 1, 2 );
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
         Assert.That( source.Current, Is.EqualTo( Default ) );
     }
 
 
-    // Tests/Take
+    // Take
     [Test]
     public void Take_00() {
-        using var source = SourceFactory.Enumerator().AsPeekable();
+        using var source = Source.Peekable();
         // Peek
         Peek( source, false, false, Default, Default );
         // Take-Peek
@@ -36,7 +36,7 @@ public class Tests_PeekableEnumerator {
     }
     [Test]
     public void Take_01() {
-        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        using var source = Source.Peekable( 0, 1, 2 );
         // Peek
         Peek( source, false, false, Default, 0 );
         // Take-Peek
@@ -69,10 +69,10 @@ public class Tests_PeekableEnumerator {
     }
 
 
-    // Tests/Reset
+    // Reset
     [Test]
     public void Reset() {
-        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        using var source = Source.Peekable( 0, 1, 2 );
         ((IEnumerator<int>) source).MoveNext();
 
         source.Reset();
@@ -88,26 +88,28 @@ public class Tests_PeekableEnumerator {
 public class Tests_PeekableEnumeratorExtensions {
 
 
-    // Tests/Take/While
+    // Take/While
     [Test]
     public void TakeWhile() {
-        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
-        Assert.That( source.TakeWhile( WhilePredicate ), Is.EqualTo( ExpectedFactory.Array( 0, 1 ) ) );
+        using var source = Source.Peekable( 0, 1, 2 );
+        var predicate = Source.Predicate( i => i <= 1 );
+        Assert.That( source.TakeWhile( predicate ), Is.EqualTo( Expected.Array( 0, 1 ) ) );
         Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
-    // Tests/Take/Until
+    // Take/Until
     [Test]
     public void TakeUntil() {
-        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
-        Assert.That( source.TakeUntil( UntilPredicate ), Is.EqualTo( ExpectedFactory.Array( 0, 1 ) ) );
+        using var source = Source.Peekable( 0, 1, 2 );
+        var predicate = Source.Predicate( i => !(i <= 1) );
+        Assert.That( source.TakeUntil( predicate ), Is.EqualTo( Expected.Array( 0, 1 ) ) );
         Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
 
 
-    // Tests/Take
+    // Take
     [Test]
     public void TakeIf() {
-        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
+        using var source = Source.Peekable( 0, 1, 2 );
         Assert.That( source.TakeIf( i => true ), Is.EqualTo( 0 ) );
         Assert.That( source.TakeIf( i => false ), Is.EqualTo( Default ) );
         Assert.That( source.TakeIf( i => true ), Is.EqualTo( 1 ) );
@@ -116,17 +118,13 @@ public class Tests_PeekableEnumeratorExtensions {
     }
     [Test]
     public void TakeIfNot() {
-        using var source = SourceFactory.Enumerator( 0, 1, 2 ).AsPeekable();
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 0 ) );
-        Assert.That( source.TakeIfNot( i => true ), Is.EqualTo( Default ) );
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 1 ) );
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( 2 ) );
-        Assert.That( source.TakeIfNot( i => false ), Is.EqualTo( Default ) );
+        using var source = Source.Peekable( 0, 1, 2 );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( 0 ) );
+        Assert.That( source.TakeIfNot( i => !false ), Is.EqualTo( Default ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( 1 ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( 2 ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Default ) );
     }
 
-
-    // Helpers
-    private static bool WhilePredicate(int value) => value <= 1;
-    private static bool UntilPredicate(int value) => !(value <= 1);
 
 }

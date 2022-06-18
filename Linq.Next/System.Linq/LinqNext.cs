@@ -44,13 +44,13 @@ public static class LinqNext {
 
 
     // Split
-    public static IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Predicate<T> predicate) {
+    public static IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> predicate) {
         return source.FastSplit( predicate, i => i ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<TResult[]> Split<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<TResult[]> Split<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         return source.FastSplit( predicate, resultSelector ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<IReadOnlyList<TResult>> FastSplit<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<IReadOnlyList<TResult>> FastSplit<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         // [false, false, false], true, [false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
@@ -69,13 +69,13 @@ public static class LinqNext {
         }
     }
     // Split/Before
-    public static IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Predicate<T> predicate) {
+    public static IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> predicate) {
         return source.FastSplitBefore( predicate, i => i ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<TResult[]> SplitBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<TResult[]> SplitBefore<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         return source.FastSplitBefore( predicate, resultSelector ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<IReadOnlyList<TResult>> FastSplitBefore<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<IReadOnlyList<TResult>> FastSplitBefore<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         // [false, false, false], [true, false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
@@ -93,13 +93,13 @@ public static class LinqNext {
         }
     }
     // Split/After
-    public static IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Predicate<T> predicate) {
+    public static IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> predicate) {
         return source.FastSplitAfter( predicate, i => i ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<TResult[]> SplitAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<TResult[]> SplitAfter<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         return source.FastSplitAfter( predicate, resultSelector ).Select( i => i.ToArray() );
     }
-    public static IEnumerable<IReadOnlyList<TResult>> FastSplitAfter<T, TResult>(this IEnumerable<T> source, Predicate<T> predicate, Func<T, TResult> resultSelector) {
+    public static IEnumerable<IReadOnlyList<TResult>> FastSplitAfter<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         // [false, false, false, true], [false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {

@@ -25,23 +25,64 @@ internal static class TestsHelper {
 
 
 }
-internal static class SourceFactory {
+internal static class Source {
+
     public static int[] Array(params int[] array) {
         return array;
     }
     public static IEnumerator<int> Enumerator(params int[] array) {
         return array.AsEnumerable().GetEnumerator();
     }
+    public static StatefulEnumerator<int> Stateful(params int[] array) {
+        return array.AsEnumerable().GetEnumerator().AsStateful();
+    }
+    public static PeekableEnumerator<int> Peekable(params int[] array) {
+        return array.AsEnumerable().GetEnumerator().AsPeekable();
+    }
+
+    public static Func<int, bool> Predicate(bool value) {
+        return i => value;
+    }
+    public static Func<int, bool> Predicate(Func<int, bool> predicate) {
+        return predicate;
+    }
+    public static Func<int, IReadOnlyList<int>, bool> Predicate(Func<int, IReadOnlyList<int>, bool> predicate) {
+        return predicate;
+    }
+
 }
-internal static class ExpectedFactory {
+internal static class Expected {
+
     public static int[] Array(params int[] array) {
         return array;
     }
 
-    public static int[][] Groups(params object[] array) {
-        return array.Select( Group ).ToArray();
+    public static int[][] Array2D(params object[] array) {
+        return array.Select( GetValues ).ToArray();
     }
-    private static int[] Group(object @object) {
+
+    public static (int, bool)[] Array_TagFirst(params (int, bool)[] array) {
+        return array;
+    }
+    public static (int, bool)[] Array_TagLast(params (int, bool)[] array) {
+        return array;
+    }
+    public static (int, bool, bool)[] Array_TagFirstLast(params (int, bool, bool)[] array) {
+        return array;
+    }
+
+    public static (int, Option<int>)[] Array_WithPrev(params (int, Option<int>)[] array) {
+        return array;
+    }
+    public static (int, Option<int>)[] Array_WithNext(params (int, Option<int>)[] array) {
+        return array;
+    }
+    public static (int, Option<int>, Option<int>)[] Array_WithPrevNext(params (int, Option<int>, Option<int>)[] array) {
+        return array;
+    }
+
+    // Helpers
+    private static int[] GetValues(object @object) {
         if (@object is ITuple values) {
             return Enumerable.Range( 0, values.Length ).Select( i => values[ i ] ).Cast<int>().ToArray();
         }
@@ -52,26 +93,6 @@ internal static class ExpectedFactory {
             return new int[ 0 ];
         }
         throw new ArgumentException( $"Object '{@object}' is invalid" );
-    }
-
-    public static (int, bool)[] TagFirst(params (int, bool)[] array) {
-        return array;
-    }
-    public static (int, bool)[] TagLast(params (int, bool)[] array) {
-        return array;
-    }
-    public static (int, bool, bool)[] TagFirstLast(params (int, bool, bool)[] array) {
-        return array;
-    }
-
-    public static (int, Option<int>)[] WithPrev(params (int, Option<int>)[] array) {
-        return array;
-    }
-    public static (int, Option<int>)[] WithNext(params (int, Option<int>)[] array) {
-        return array;
-    }
-    public static (int, Option<int>, Option<int>)[] WithPrevNext(params (int, Option<int>, Option<int>)[] array) {
-        return array;
     }
 
 }

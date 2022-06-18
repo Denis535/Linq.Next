@@ -14,21 +14,23 @@
         <RepositoryUrl>https://github.com/Denis535/Linq.Next</RepositoryUrl>
 
         <!--Nuget package attributes-->
-        <Title>$(AssemblyName)</Title>
         <IsPackable>true</IsPackable>
+        <Title>$(AssemblyName)</Title>
         <PackageId>$(AssemblyName)</PackageId>
         <PackageVersion>$(Version)</PackageVersion>
+        <PackageReadmeFile>Readme.md</PackageReadmeFile>
         <PackageIcon>Icon.png</PackageIcon>
         <PackageIconUrl></PackageIconUrl>
         <PackageDescription>$(Description)</PackageDescription>
-        <PackageTags>Linq; MoreLinq; Enumerable; Enumerator; Iterator; Peekable</PackageTags>
         <PackageProjectUrl>https://github.com/Denis535/Linq.Next</PackageProjectUrl>
-        <PackageReadmeFile>Readme.md</PackageReadmeFile>
+        <PackageTags>Linq; MoreLinq; Enumerable; Enumerator; Iterator; Peekable</PackageTags>
+        
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseUrl></PackageLicenseUrl>
+        <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+        
         <IsTool>false</IsTool>
         <DevelopmentDependency>false</DevelopmentDependency>
-        <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
 
         <!--Nuget pack options-->
         <EnableDefaultItems>true</EnableDefaultItems>

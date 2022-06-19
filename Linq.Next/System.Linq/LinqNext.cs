@@ -9,14 +9,13 @@ using System.Text;
 public static class LinqNext {
 
 
-    // CompareTo
-    public static void CompareTo<T>(this IEnumerable<T> first, IEnumerable<T> second, out T[] missing, out T[] extra) {
-        var second_ = new LinkedList<T>( second );
-        extra = first.Where( i => !second_.Remove( i ) ).ToArray();
-        missing = second_.ToArray();
+    // LazyGroup
+    public static IEnumerable<T[]> LazyGroup<T>(this IEnumerable<T> source, Func<T, bool> predicate) {
+        return source.FastLazyGroup( (i, group) => predicate( i ), i => i ).Select( i => i.ToArray() );
     }
-
-
+    public static IEnumerable<TResult[]> LazyGroup<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
+        return source.FastLazyGroup( (i, group) => predicate( i ), resultSelector ).Select( i => i.ToArray() );
+    }
     // LazyGroup
     public static IEnumerable<T[]> LazyGroup<T>(this IEnumerable<T> source, Func<T, IReadOnlyList<T>, bool> predicate) {
         return source.FastLazyGroup( predicate, i => i ).Select( i => i.ToArray() );
@@ -24,7 +23,9 @@ public static class LinqNext {
     public static IEnumerable<TResult[]> LazyGroup<T, TResult>(this IEnumerable<T> source, Func<T, IReadOnlyList<TResult>, bool> predicate, Func<T, TResult> resultSelector) {
         return source.FastLazyGroup( predicate, resultSelector ).Select( i => i.ToArray() );
     }
+    // LazyGroup/Fast
     public static IEnumerable<IReadOnlyList<TResult>> FastLazyGroup<T, TResult>(this IEnumerable<T> source, Func<T, IReadOnlyList<TResult>, bool> predicate, Func<T, TResult> resultSelector) {
+        // [true, true, true], [false, true, true]
         using var source_enumerator = source.GetEnumerator();
         var group = new List<TResult>();
         var item = source_enumerator.Take();
@@ -50,8 +51,9 @@ public static class LinqNext {
     public static IEnumerable<TResult[]> Split<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         return source.FastSplit( predicate, resultSelector ).Select( i => i.ToArray() );
     }
+    // Split/Fast
     public static IEnumerable<IReadOnlyList<TResult>> FastSplit<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
-        // [false, false, false], true, [false, false]
+        // [false, false, false], true, [false, false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
             if (predicate( item )) {
@@ -75,6 +77,7 @@ public static class LinqNext {
     public static IEnumerable<TResult[]> SplitBefore<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         return source.FastSplitBefore( predicate, resultSelector ).Select( i => i.ToArray() );
     }
+    // Split/Before/Fast
     public static IEnumerable<IReadOnlyList<TResult>> FastSplitBefore<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         // [false, false, false], [true, false, false]
         var segment = new List<TResult>();
@@ -99,8 +102,9 @@ public static class LinqNext {
     public static IEnumerable<TResult[]> SplitAfter<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
         return source.FastSplitAfter( predicate, resultSelector ).Select( i => i.ToArray() );
     }
+    // Split/After/Fast
     public static IEnumerable<IReadOnlyList<TResult>> FastSplitAfter<T, TResult>(this IEnumerable<T> source, Func<T, bool> predicate, Func<T, TResult> resultSelector) {
-        // [false, false, false, true], [false, false]
+        // [false, false, true], [false, false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
             segment.Add( resultSelector( item ) );
@@ -114,6 +118,37 @@ public static class LinqNext {
         if (segment.Any()) {
             yield return segment;
             segment.Clear();
+        }
+    }
+
+
+    // With/Prev
+    public static IEnumerable<(T Value, Option<T> Prev)> WithPrev<T>(this IEnumerable<T> source) {
+        var prev = Option<T>.Default;
+        foreach (var item in source) {
+            yield return (item, prev);
+            prev = item;
+        }
+    }
+    // With/Next
+    public static IEnumerable<(T Value, Option<T> Next)> WithNext<T>(this IEnumerable<T> source) {
+        using var source_enumerator = source.GetEnumerator();
+        var value = source_enumerator.Take();
+        var next = source_enumerator.Take();
+        while (value.HasValue) {
+            yield return (value.Value, next);
+            (value, next) = (next, source_enumerator.Take());
+        }
+    }
+    // With/Prev-Next
+    public static IEnumerable<(T Value, Option<T> Prev, Option<T> Next)> WithPrevNext<T>(this IEnumerable<T> source) {
+        using var source_enumerator = source.GetEnumerator();
+        var prev = Option<T>.Default;
+        var value = source_enumerator.Take();
+        var next = source_enumerator.Take();
+        while (value.HasValue) {
+            yield return (value.Value, prev, next);
+            (prev, value, next) = (value, next, source_enumerator.Take());
         }
     }
 
@@ -154,34 +189,11 @@ public static class LinqNext {
     }
 
 
-    // With/Prev
-    public static IEnumerable<(T Value, Option<T> Prev)> WithPrev<T>(this IEnumerable<T> source) {
-        var prev = Option<T>.Default;
-        foreach (var item in source) {
-            yield return (item, prev);
-            prev = item;
-        }
-    }
-    // With/Next
-    public static IEnumerable<(T Value, Option<T> Next)> WithNext<T>(this IEnumerable<T> source) {
-        using var source_enumerator = source.GetEnumerator();
-        var value = source_enumerator.Take();
-        var next = source_enumerator.Take();
-        while (value.HasValue) {
-            yield return (value.Value, next);
-            (value, next) = (next, source_enumerator.Take());
-        }
-    }
-    // With/Prev-Next
-    public static IEnumerable<(T Value, Option<T> Prev, Option<T> Next)> WithPrevNext<T>(this IEnumerable<T> source) {
-        using var source_enumerator = source.GetEnumerator();
-        var prev = Option<T>.Default;
-        var value = source_enumerator.Take();
-        var next = source_enumerator.Take();
-        while (value.HasValue) {
-            yield return (value.Value, prev, next);
-            (prev, value, next) = (value, next, source_enumerator.Take());
-        }
+    // CompareTo
+    public static void CompareTo<T>(this IEnumerable<T> first, IEnumerable<T> second, out T[] missing, out T[] extra) {
+        var second_ = new LinkedList<T>( second );
+        extra = first.Where( i => !second_.Remove( i ) ).ToArray();
+        missing = second_.ToArray();
     }
 
 

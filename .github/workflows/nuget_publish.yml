@@ -11,11 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Publish your nuget package
-      - name: publish nuget on version change
-        id: publish_nuget
+      - name: nuget publish on version change
+        id: nuget_publish
         uses: brandedoutcast/publish-nuget@v2
         with:
           # Filepath of the project to be packaged, relative to root of repository
@@ -28,7 +28,7 @@ jobs:
           # BUILD_PLATFORM: x64
 
           # NuGet package id, used for version detection & defaults to project name
-          # PACKAGE_NAME: Linq.Next
+          PACKAGE_NAME: Linq.Next
 
           # Filepath with version info, relative to root of repository & defaults to PROJECT_FILE_PATH
           # VERSION_FILE_PATH: Directory.Build.props
@@ -40,10 +40,10 @@ jobs:
           # VERSION_STATIC: 1.0.0
 
           # Flag to toggle git tagging, enabled by default
-          # TAG_COMMIT: true
+          TAG_COMMIT: true
 
           # Format of the git tag, [*] gets replaced with actual version
-          # TAG_FORMAT: v*
+          TAG_FORMAT: v*
 
           # API key to authenticate with NuGet server
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}

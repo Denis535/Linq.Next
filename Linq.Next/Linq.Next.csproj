@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net5.0</TargetFrameworks>
+        <TargetFramework>netstandard2.0</TargetFramework>
 
         <!--Assembly attributes-->
         <Version>1.1.2</Version>
@@ -23,11 +23,11 @@
         <PackageDescription>$(Description)</PackageDescription>
         <PackageProjectUrl>https://github.com/Denis535/Linq.Next</PackageProjectUrl>
         <PackageTags>Linq; MoreLinq; Enumerable; Enumerator; Iterator; Peekable</PackageTags>
-        
+
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseUrl></PackageLicenseUrl>
         <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
-        
+
         <IsTool>false</IsTool>
         <DevelopmentDependency>false</DevelopmentDependency>
 

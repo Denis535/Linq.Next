@@ -19,10 +19,10 @@ jobs:
           PROJECT_FILE_PATH: Linq.Next/Linq.Next.csproj
           
           # Configuration to build and package
-          # BUILD_CONFIGURATION: Release
+          BUILD_CONFIGURATION: Release
           
           # Platform target to compile (default is empty/AnyCPU)
-          # BUILD_PLATFORM: x64          
+          BUILD_PLATFORM: x64          
           
           # NuGet package id, used for version detection & defaults to project name
           # PACKAGE_NAME: Linq.Next
@@ -43,7 +43,7 @@ jobs:
           # TAG_FORMAT: v*
 
           # API key to authenticate with NuGet server
-          # NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
 
           # NuGet server uri hosting the packages, defaults to https://api.nuget.org
           # NUGET_SOURCE: https://api.nuget.org

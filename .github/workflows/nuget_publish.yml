@@ -10,11 +10,11 @@ jobs:
     name: build, pack & publish
     runs-on: ubuntu-latest
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE
+      # Check-out your repository
       - uses: actions/checkout@v3
 
       # Publish your nuget package
-      - name: nuget publish on version change
+      - name: nuget publish
         id: nuget_publish
         uses: brandedoutcast/publish-nuget@v2
         with:

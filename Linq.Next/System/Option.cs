@@ -29,7 +29,7 @@ public static class Option {
         return EqualityComparer<bool>.Default.Equals( v1.HasValue, v2.HasValue );
     }
     public static bool Equals<T>(Option<T> v1, T? v2) {
-        if (v1.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2 );
+        if (v1.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2! );
         return EqualityComparer<bool>.Default.Equals( v1.HasValue, true );
     }
     // Compare
@@ -42,7 +42,7 @@ public static class Option {
         return Comparer<bool>.Default.Compare( v1.HasValue, v2.HasValue );
     }
     public static int Compare<T>(Option<T> v1, T? v2) {
-        if (v1.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2 );
+        if (v1.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2! );
         return Comparer<bool>.Default.Compare( v1.HasValue, true );
     }
     // GetUnderlyingType

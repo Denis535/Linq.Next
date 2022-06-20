@@ -22,7 +22,7 @@
         <PackageIconUrl></PackageIconUrl>
         <PackageDescription>$(Description)</PackageDescription>
         <PackageProjectUrl>https://github.com/Denis535/Linq.Next</PackageProjectUrl>
-        <PackageTags>Linq; MoreLinq; Enumerable; Enumerator; Iterator; Peekable</PackageTags>
+        <PackageTags>Linq; MoreLinq; Enumerable; Enumerator; Iterator; Peekable; Group; Split; Slice; WithPrev; WithNext</PackageTags>
         
         <PackageLicenseFile></PackageLicenseFile>
         <PackageLicenseUrl></PackageLicenseUrl>

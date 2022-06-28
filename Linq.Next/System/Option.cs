@@ -67,6 +67,7 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
     private readonly T value;
     public static Option<T> Default => default;
     //[MemberMaybeNullWhen( false, nameof( ValueOrDefault ) )] // When false: ValueOrDefault is always default
+    //[MemberNotNullWhen( true, nameof( ValueOrDefault ) )]    // When true:  ValueOrDefault can still be default, so it doesn't work right
     public bool HasValue => hasValue;
     public T Value => hasValue ? value : throw new InvalidOperationException( "Option object must have a value" );
     public T? ValueOrDefault => hasValue ? value : default;
@@ -77,9 +78,13 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
     }
 
     // TryGetValue
-    public bool TryGetValue([MaybeNullWhen( false )] out T? value) {
-        value = hasValue ? this.value : default;
-        return hasValue;
+    public bool TryGetValue([MaybeNullWhen( false )] out T value) {
+        if (hasValue) {
+            value = this.value;
+            return true;
+        }
+        value = default;
+        return false;
     }
 
     // Utils
@@ -115,7 +120,8 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
         // This can lead to the next problem:
         // source = new Option<object>();
         // source = new Option<int>(); 
-        // Option<object>.Value is Option<int>
+        // Now Option<object>.Value is Option<int>
+        // todo: One need to throw exception when value is Option<>
         return new Option<T>( value );
     }
     public static explicit operator T(Option<T> value) {

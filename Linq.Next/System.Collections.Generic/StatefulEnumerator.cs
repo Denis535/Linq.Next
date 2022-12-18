@@ -15,20 +15,18 @@ public class StatefulEnumerator<T> : IEnumerator<T>, IDisposable {
     public bool IsFinished { get; private set; }
     public Option<T> Current => current;
 
-
-    public StatefulEnumerator(IEnumerator<T> source!!) {
+    // Constructor
+    public StatefulEnumerator(IEnumerator<T> source) {
         Source = source;
     }
     public void Dispose() {
         Source.Dispose();
     }
 
-
     // IEnumerator
     T IEnumerator<T>.Current => current.Value;
     object? IEnumerator.Current => current.Value;
     bool IEnumerator.MoveNext() => TakeInternal().HasValue;
-
 
     // Take
     public bool TryTake([MaybeNullWhen( false )] out T current) {
@@ -37,13 +35,13 @@ public class StatefulEnumerator<T> : IEnumerator<T>, IDisposable {
     public Option<T> Take() {
         return TakeInternal();
     }
+
     // Reset
     public void Reset() {
         Source.Reset();
         (IsStarted, IsFinished) = (false, false);
         current = default;
     }
-
 
     // Helpers
     private Option<T> TakeInternal() {
@@ -56,6 +54,5 @@ public class StatefulEnumerator<T> : IEnumerator<T>, IDisposable {
         current = default;
         return current;
     }
-
 
 }

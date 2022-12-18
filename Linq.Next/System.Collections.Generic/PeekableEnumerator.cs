@@ -18,20 +18,18 @@ public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
     public Option<T> Current => current;
     public Option<T> Next => PeekInternal();
 
-
-    public PeekableEnumerator(IEnumerator<T> source!!) {
+    // Constructor
+    public PeekableEnumerator(IEnumerator<T> source) {
         Source = source;
     }
     public void Dispose() {
         Source.Dispose();
     }
 
-
     // IEnumerator
     T IEnumerator<T>.Current => current.Value;
     object? IEnumerator.Current => current.Value;
     bool IEnumerator.MoveNext() => TakeInternal().HasValue;
-
 
     // Take
     public bool TryTake([MaybeNullWhen( false )] out T current) {
@@ -40,6 +38,7 @@ public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
     public Option<T> Take() {
         return TakeInternal();
     }
+
     // Peek
     public bool TryPeek([MaybeNullWhen( false )] out T next) {
         return PeekInternal().TryGetValue( out next );
@@ -47,13 +46,13 @@ public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
     public Option<T> Peek() {
         return PeekInternal();
     }
+
     // Reset
     public void Reset() {
         Source.Reset();
         (IsStarted, IsFinished) = (false, false);
         (current, next) = (default, default);
     }
-
 
     // Helpers
     private Option<T> TakeInternal() {
@@ -72,9 +71,7 @@ public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
         return current;
     }
     private Option<T> PeekInternal() {
-        // It does not affect IsStarted
-        // It does not affect IsFinished
-        // It does not affect Current
+        // It does not affect: IsStarted, IsFinished, Current
         if (next.HasValue) {
             return next;
         }
@@ -86,10 +83,8 @@ public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
         return next;
     }
 
-
 }
 public static class PeekableEnumeratorExtensions {
-
 
     // Take/While
     public static IEnumerable<T> TakeWhile<T>(this PeekableEnumerator<T> enumerator, Func<T, bool> predicate) {
@@ -106,7 +101,6 @@ public static class PeekableEnumeratorExtensions {
         }
     }
 
-
     // Take/Try
     public static bool TryTakeIf<T>(this PeekableEnumerator<T> enumerator, Func<T, bool> predicate, [MaybeNullWhen( false )] out T current) {
         return enumerator.TakeIf( predicate ).TryGetValue( out current );
@@ -114,7 +108,6 @@ public static class PeekableEnumeratorExtensions {
     public static bool TryTakeIfNot<T>(this PeekableEnumerator<T> enumerator, Func<T, bool> predicate, [MaybeNullWhen( false )] out T current) {
         return enumerator.TakeIfNot( predicate ).TryGetValue( out current );
     }
-
 
     // Take
     public static Option<T> TakeIf<T>(this PeekableEnumerator<T> enumerator, Func<T, bool> predicate) {
@@ -129,6 +122,5 @@ public static class PeekableEnumeratorExtensions {
         }
         return default;
     }
-
 
 }

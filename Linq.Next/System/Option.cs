@@ -8,6 +8,7 @@ using System.Text;
 using System.Linq;
 
 public static class Option {
+
     // Create
     public static Option<T> Create<T>() {
         return new Option<T>();
@@ -19,6 +20,7 @@ public static class Option {
         if (value.HasValue) return new Option<T>( value.Value );
         return default;
     }
+
     // Equals
     public static bool Equals<T>(Option<T> v1, Option<T> v2) {
         if (v1.HasValue && v2.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2.Value );
@@ -32,6 +34,7 @@ public static class Option {
         if (v1.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2! );
         return EqualityComparer<bool>.Default.Equals( v1.HasValue, true );
     }
+
     // Compare
     public static int Compare<T>(Option<T> v1, Option<T> v2) {
         if (v1.HasValue && v2.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2.Value );
@@ -45,19 +48,22 @@ public static class Option {
         if (v1.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2! );
         return Comparer<bool>.Default.Compare( v1.HasValue, true );
     }
+
     // GetUnderlyingType
-    public static Type? GetUnderlyingType(Type type!!) {
+    public static Type? GetUnderlyingType(Type type) {
         if (GetUnboundType( type ) == typeof( Option<> )) return type.GetGenericArguments().First();
         return null;
     }
+
     // Helpers
-    private static Type GetUnboundType(Type type!!) {
+    private static Type GetUnboundType(Type type) {
         if (type.IsGenericType) {
             return type.IsGenericTypeDefinition ? type : type.GetGenericTypeDefinition();
         } else {
             return type;
         }
     }
+
 }
 // Note: Don't override true, false operators!
 [Serializable]
@@ -72,6 +78,7 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
     public T Value => hasValue ? value : throw new InvalidOperationException( "Option object must have a value" );
     public T? ValueOrDefault => hasValue ? value : default;
 
+    // Constructor
     public Option(T value) {
         this.hasValue = true;
         this.value = value;
@@ -115,26 +122,24 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
         return 0;
     }
 
-    // Conversions
+    // Utils
     public static implicit operator Option<T>(T value) {
         // This can lead to the next problem:
         // source = new Option<object>();
-        // source = new Option<int>(); 
-        // Now Option<object>.Value is Option<int>
-        // todo: One need to throw exception when value is Option<>
+        // source = new Option<int>(); // This is identical to the following:
+        // source.Value = new Option<int>(); // Now Option<object>.Value is Option<int>
         return new Option<T>( value );
     }
     public static explicit operator T(Option<T> value) {
         return value.Value;
     }
 
-    // Operators
+    // Utils
     public static bool operator ==(Option<T> left, Option<T> right) {
         return Option.Equals( left, right );
     }
     public static bool operator !=(Option<T> left, Option<T> right) {
         return !Option.Equals( left, right );
     }
-
 
 }

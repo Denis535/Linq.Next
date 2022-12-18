@@ -8,7 +8,6 @@ using System.Text;
 
 public static class EnumeratorExtensions {
 
-
     // As/Stateful
     public static StatefulEnumerator<T> AsStateful<T>(this IEnumerator<T> enumerator) {
         return new StatefulEnumerator<T>( enumerator );
@@ -17,7 +16,6 @@ public static class EnumeratorExtensions {
     public static PeekableEnumerator<T> AsPeekable<T>(this IEnumerator<T> enumerator) {
         return new PeekableEnumerator<T>( enumerator );
     }
-
 
     // Take/Try
     public static bool TryTake<T>(this IEnumerator<T> enumerator, [MaybeNullWhen( false )] out T current) {
@@ -28,6 +26,5 @@ public static class EnumeratorExtensions {
         if (enumerator.MoveNext()) return enumerator.Current;
         return default;
     }
-
 
 }

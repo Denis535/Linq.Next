@@ -38,7 +38,7 @@ public static class LinqNext {
         this IEnumerable<T> source,
         Func<T, IReadOnlyList<TResult>, bool> predicate,
         Func<T, TResult> resultSelector) {
-        // Iterating over source items and join them into groups
+        // Iterate over items and join them into groups
         // [true, true, true], [false, true, true]
         using var source_enumerator = source.GetEnumerator();
         var group = new List<TResult>();
@@ -75,7 +75,7 @@ public static class LinqNext {
         this IEnumerable<T> source,
         Func<T, bool> predicate,
         Func<T, TResult> resultSelector) {
-        // Iterating over source items and split them into slices (excluding the separator)
+        // Iterate over items and split them into slices (excluding the separator)
         // [false, false, false], true, [false, false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
@@ -112,7 +112,7 @@ public static class LinqNext {
         this IEnumerable<T> source,
         Func<T, bool> predicate,
         Func<T, TResult> resultSelector) {
-        // Iterating over source items and split them into slices (spliting before the separator)
+        // Iterate over items and split them into slices (spliting before the separator)
         // [false, false, false], [true, false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {
@@ -148,7 +148,7 @@ public static class LinqNext {
         this IEnumerable<T> source,
         Func<T, bool> predicate,
         Func<T, TResult> resultSelector) {
-        // Iterating over source items and split them into slices (spliting after the separator)
+        // Iterate over items and split them into slices (spliting after the separator)
         // [false, false, true], [false, false, false]
         var segment = new List<TResult>();
         foreach (var item in source) {

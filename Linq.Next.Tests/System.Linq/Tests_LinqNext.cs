@@ -15,103 +15,121 @@ public class Tests_LinqNext {
     // Split
     [Test]
     public void Split() {
+        // empty
+        Split(
+            Source<int>.Array(),
+            Source<int>.Predicate( i => true ),
+            Expected<int[]>.Array( Array() )
+            );
         // none
         Split(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => false ),
-            Expected<int>.Array2D( Array( 0, 1, 1, 2 ) )
+            Expected<int[]>.Array( Array( 0, 1, 1, 2 ) )
             );
         // each
         Split(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => true ),
-            Expected<int>.Array2D( Array(), Array(), Array(), Array(), Array() )
+            Expected<int[]>.Array( Array(), Array(), Array(), Array(), Array() )
             );
         // first
         Split(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 0 ),
-            Expected<int>.Array2D( Array(), Array( 1, 1, 2 ) )
+            Expected<int[]>.Array( Array(), Array( 1, 1, 2 ) )
             );
         // last
         Split(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 2 ),
-            Expected<int>.Array2D( Array( 0, 1, 1 ), Array() )
+            Expected<int[]>.Array( Array( 0, 1, 1 ), Array() )
             );
         // center
         Split(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 1 ),
-            Expected<int>.Array2D( Array( 0 ), Array(), Array( 2 ) )
+            Expected<int[]>.Array( Array( 0 ), Array(), Array( 2 ) )
             );
     }
     // Split/Before
     [Test]
     public void SplitBefore() {
+        // empty
+        SplitBefore(
+            Source<int>.Array(),
+            Source<int>.Predicate( i => true ),
+            Expected<int[]>.Array( Array() )
+            );
         // none
         SplitBefore(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => false ),
-            Expected<int>.Array2D( Array( 0, 1, 1, 2 ) )
+            Expected<int[]>.Array( Array( 0, 1, 1, 2 ) )
             );
         // each
         SplitBefore(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => true ),
-            Expected<int>.Array2D( Array(), Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ) )
+            Expected<int[]>.Array( Array(), Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ) )
             );
         // first
         SplitBefore(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 0 ),
-            Expected<int>.Array2D( Array(), Array( 0, 1, 1, 2 ) )
+            Expected<int[]>.Array( Array(), Array( 0, 1, 1, 2 ) )
             );
         // last
         SplitBefore(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 2 ),
-            Expected<int>.Array2D( Array( 0, 1, 1 ), Array( 2 ) )
+            Expected<int[]>.Array( Array( 0, 1, 1 ), Array( 2 ) )
             );
         // center
         SplitBefore(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 1 ),
-            Expected<int>.Array2D( Array( 0 ), Array( 1 ), Array( 1, 2 ) )
+            Expected<int[]>.Array( Array( 0 ), Array( 1 ), Array( 1, 2 ) )
             );
     }
     // Split/After
     [Test]
     public void SplitAfter() {
+        // empty
+        SplitAfter(
+            Source<int>.Array(),
+            Source<int>.Predicate( i => true ),
+            Expected<int[]>.Array( Array() )
+            );
         // none
         SplitAfter(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => false ),
-            Expected<int>.Array2D( Array( 0, 1, 1, 2 ) )
+            Expected<int[]>.Array( Array( 0, 1, 1, 2 ) )
             );
         // each
         SplitAfter(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => true ),
-            Expected<int>.Array2D( Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ), Array() )
+            Expected<int[]>.Array( Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ), Array() )
             );
         // first
         SplitAfter(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 0 ),
-            Expected<int>.Array2D( Array( 0 ), Array( 1, 1, 2 ) )
+            Expected<int[]>.Array( Array( 0 ), Array( 1, 1, 2 ) )
             );
         // last
         SplitAfter(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 2 ),
-            Expected<int>.Array2D( Array( 0, 1, 1, 2 ), Array() )
+            Expected<int[]>.Array( Array( 0, 1, 1, 2 ), Array() )
             );
         // center
         SplitAfter(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 1 ),
-            Expected<int>.Array2D( Array( 0, 1 ), Array( 1 ), Array( 2 ) )
+            Expected<int[]>.Array( Array( 0, 1 ), Array( 1 ), Array( 2 ) )
             );
     }
 
@@ -119,23 +137,29 @@ public class Tests_LinqNext {
     // Slice
     [Test]
     public void Slice() {
+        // empty
+        Slice(
+            Source<int>.Array(),
+            Source<int>.Predicate( (i, group) => true ),
+            Expected<int[]>.Array()
+            );
         // none
         Slice(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( (i, group) => false ),
-            Expected<int>.Array2D( Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ) )
+            Expected<int[]>.Array( Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ) )
             );
         // each
         Slice(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( (i, group) => true ),
-            Expected<int>.Array2D( Array( 0, 1, 1, 2 ) )
+            Expected<int[]>.Array( Array( 0, 1, 1, 2 ) )
             );
         // i == prev
         Slice(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( (i, group) => i == group.Last() ),
-            Expected<int>.Array2D( Array( 0 ), Array( 1, 1 ), Array( 2 ) )
+            Expected<int[]>.Array( Array( 0 ), Array( 1, 1 ), Array( 2 ) )
             );
     }
 
@@ -143,6 +167,12 @@ public class Tests_LinqNext {
     // Unflatten
     [Test]
     public void Unflatten() {
+        // empty
+        Unflatten(
+            Source<int>.Array(),
+            Source<int>.Predicate( i => true ),
+            Expected<(Option<int>, int[])>.Array()
+            );
         // none
         Unflatten(
             Source<int>.Array( 0, 1, 1, 2 ),
@@ -181,15 +211,15 @@ public class Tests_LinqNext {
     public static void WithPrev() {
         WithPrev(
             Source<int>.Array(),
-            Expected<(int, Option<int>)>.Array()
+            Expected<int, Option<int>>.Array()
         );
         WithPrev(
             Source<int>.Array( 0 ),
-            Expected<(int, Option<int>)>.Array( (0, default) )
+            Expected<int, Option<int>>.Array( (0, default) )
             );
         WithPrev(
             Source<int>.Array( 0, 1, 2 ),
-            Expected<(int, Option<int>)>.Array( (0, default), (1, 0), (2, 1) )
+            Expected<int, Option<int>>.Array( (0, default), (1, 0), (2, 1) )
             );
     }
     // With/Next
@@ -197,15 +227,15 @@ public class Tests_LinqNext {
     public static void WithNext() {
         WithNext(
             Source<int>.Array(),
-            Expected<(int, Option<int>)>.Array()
+            Expected<int, Option<int>>.Array()
             );
         WithNext(
             Source<int>.Array( 0 ),
-            Expected<(int, Option<int>)>.Array( (0, default) )
+            Expected<int, Option<int>>.Array( (0, default) )
             );
         WithNext(
             Source<int>.Array( 0, 1, 2 ),
-            Expected<(int, Option<int>)>.Array( (0, 1), (1, 2), (2, default) )
+            Expected<int, Option<int>>.Array( (0, 1), (1, 2), (2, default) )
             );
     }
     // With/Prev-Next
@@ -213,15 +243,15 @@ public class Tests_LinqNext {
     public static void WithPrevNext() {
         WithPrevNext(
             Source<int>.Array(),
-            Expected<(int, Option<int>, Option<int>)>.Array()
+            Expected<int, Option<int>, Option<int>>.Array()
         );
         WithPrevNext(
             Source<int>.Array( 0 ),
-            Expected<(int, Option<int>, Option<int>)>.Array( (0, default, default) )
+            Expected<int, Option<int>, Option<int>>.Array( (0, default, default) )
             );
         WithPrevNext(
             Source<int>.Array( 0, 1, 2 ),
-            Expected<(int, Option<int>, Option<int>)>.Array( (0, default, 1), (1, 0, 2), (2, 1, default) )
+            Expected<int, Option<int>, Option<int>>.Array( (0, default, 1), (1, 0, 2), (2, 1, default) )
             );
     }
 
@@ -231,15 +261,15 @@ public class Tests_LinqNext {
     public static void TagFirst() {
         TagFirst(
             Source<int>.Array(),
-            Expected<(int, bool)>.Array()
+            Expected<int, bool>.Array()
         );
         TagFirst(
             Source<int>.Array( 0 ),
-            Expected<(int, bool)>.Array( (0, true) )
+            Expected<int, bool>.Array( (0, true) )
         );
         TagFirst(
             Source<int>.Array( 0, 1, 2 ),
-            Expected<(int, bool)>.Array( (0, true), (1, false), (2, false) )
+            Expected<int, bool>.Array( (0, true), (1, false), (2, false) )
         );
     }
     // Tag/Last
@@ -247,15 +277,15 @@ public class Tests_LinqNext {
     public static void TagLast() {
         TagLast(
             Source<int>.Array(),
-            Expected<(int, bool)>.Array()
+            Expected<int, bool>.Array()
             );
         TagLast(
             Source<int>.Array( 0 ),
-            Expected<(int, bool)>.Array( (0, true) )
+            Expected<int, bool>.Array( (0, true) )
             );
         TagLast(
             Source<int>.Array( 0, 1, 2 ),
-            Expected<(int, bool)>.Array( (0, false), (1, false), (2, true) )
+            Expected<int, bool>.Array( (0, false), (1, false), (2, true) )
             );
     }
     // Tag/First-Last
@@ -263,15 +293,15 @@ public class Tests_LinqNext {
     public static void TagFirstLast() {
         TagFirstLast(
             Source<int>.Array(),
-            Expected<(int, bool, bool)>.Array()
+            Expected<int, bool, bool>.Array()
             );
         TagFirstLast(
             Source<int>.Array( 0 ),
-            Expected<(int, bool, bool)>.Array( (0, true, true) )
+            Expected<int, bool, bool>.Array( (0, true, true) )
             );
         TagFirstLast(
             Source<int>.Array( 0, 1, 2 ),
-            Expected<(int, bool, bool)>.Array( (0, true, false), (1, false, false), (2, false, true) )
+            Expected<int, bool, bool>.Array( (0, true, false), (1, false, false), (2, false, true) )
             );
     }
 

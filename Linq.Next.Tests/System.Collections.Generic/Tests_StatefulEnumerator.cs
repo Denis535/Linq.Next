@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using static NUnit.Framework.TestsHelper;
 
 [TestFixture( TestName = "Tests_Enumerator/Stateful" )]
 public class Tests_StatefulEnumerator {
+
+    private static readonly Option<int> Option = default;
 
 
     // Constructor
@@ -20,7 +20,7 @@ public class Tests_StatefulEnumerator {
         using var source = Source.Stateful( 0, 1, 2 );
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Default ) );
+        Assert.That( source.Current, Is.EqualTo( Option ) );
     }
 
 
@@ -28,7 +28,7 @@ public class Tests_StatefulEnumerator {
     [Test]
     public void Take_00() {
         using var source = Source.Stateful();
-        Take( source, true, true, Default );
+        Take( source, true, true, Option );
     }
     [Test]
     public void Take_01() {
@@ -36,7 +36,7 @@ public class Tests_StatefulEnumerator {
         Take( source, true, false, 0 );
         Take( source, true, false, 1 );
         Take( source, true, false, 2 );
-        Take( source, true, true, Default );
+        Take( source, true, true, Option );
     }
     private static void Take(StatefulEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
         var current = source.Take();
@@ -56,7 +56,7 @@ public class Tests_StatefulEnumerator {
         source.Reset();
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Default ) );
+        Assert.That( source.Current, Is.EqualTo( Option ) );
     }
 
 

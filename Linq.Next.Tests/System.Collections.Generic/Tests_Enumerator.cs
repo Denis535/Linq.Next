@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using static NUnit.Framework.TestsHelper;
 
 [TestFixture( TestName = "Tests_Enumerator" )]
 public class Tests_EnumeratorExtensions {
+    
+    private static readonly Option<int> Option = default;
 
 
     // Take
@@ -21,7 +21,7 @@ public class Tests_EnumeratorExtensions {
         Assert.That( source.Take(), Is.EqualTo( 0 ) );
         Assert.That( source.Take(), Is.EqualTo( 1 ) );
         Assert.That( source.Take(), Is.EqualTo( 2 ) );
-        Assert.That( source.Take(), Is.EqualTo( Default ) );
+        Assert.That( source.Take(), Is.EqualTo( Option ) );
     }
 
 

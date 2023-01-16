@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
-using static NUnit.Framework.TestsHelper;
 
 [TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumerator {
+
+    private static readonly Option<int> Option = default;
 
 
     // Constructor
@@ -20,7 +20,7 @@ public class Tests_PeekableEnumerator {
         using var source = Source.Peekable( 0, 1, 2 );
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Default ) );
+        Assert.That( source.Current, Is.EqualTo( Option ) );
     }
 
 
@@ -29,16 +29,16 @@ public class Tests_PeekableEnumerator {
     public void Take_00() {
         using var source = Source.Peekable();
         // Peek
-        Peek( source, false, false, Default, Default );
+        Peek( source, false, false, Option, Option );
         // Take-Peek
-        Take( source, true, true, Default );
-        Peek( source, true, true, Default, Default );
+        Take( source, true, true, Option );
+        Peek( source, true, true, Option, Option );
     }
     [Test]
     public void Take_01() {
         using var source = Source.Peekable( 0, 1, 2 );
         // Peek
-        Peek( source, false, false, Default, 0 );
+        Peek( source, false, false, Option, 0 );
         // Take-Peek
         Take( source, true, false, 0 );
         Peek( source, true, false, 0, 1 );
@@ -47,10 +47,10 @@ public class Tests_PeekableEnumerator {
         Peek( source, true, false, 1, 2 );
         // Take-Peek
         Take( source, true, false, 2 );
-        Peek( source, true, false, 2, Default );
+        Peek( source, true, false, 2, Option );
         // Take-Peek
-        Take( source, true, true, Default );
-        Peek( source, true, true, Default, Default );
+        Take( source, true, true, Option );
+        Peek( source, true, true, Option, Option );
     }
     private static void Take(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
         var current = source.Take();
@@ -78,14 +78,15 @@ public class Tests_PeekableEnumerator {
         source.Reset();
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Default ) );
+        Assert.That( source.Current, Is.EqualTo( Option ) );
     }
 
 
 }
-
 [TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumeratorExtensions {
+
+    private static readonly Option<int> Default = default;
 
 
     // Take/While
@@ -93,7 +94,7 @@ public class Tests_PeekableEnumeratorExtensions {
     public void TakeWhile() {
         using var source = Source.Peekable( 0, 1, 2 );
         var predicate = Source.Predicate( i => i <= 1 );
-        Assert.That( source.TakeWhile( predicate ), Is.EqualTo( Expected.Array( 0, 1 ) ) );
+        Assert.That( source.TakeWhile( predicate ), Is.EqualTo( Expected.Array1D( 0, 1 ) ) );
         Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
     // Take/Until
@@ -101,7 +102,7 @@ public class Tests_PeekableEnumeratorExtensions {
     public void TakeUntil() {
         using var source = Source.Peekable( 0, 1, 2 );
         var predicate = Source.Predicate( i => !(i <= 1) );
-        Assert.That( source.TakeUntil( predicate ), Is.EqualTo( Expected.Array( 0, 1 ) ) );
+        Assert.That( source.TakeUntil( predicate ), Is.EqualTo( Expected.Array1D( 0, 1 ) ) );
         Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
 

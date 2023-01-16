@@ -4,8 +4,8 @@ The **Linq.Next** package is intended to enhance the linq and the collections wi
 
 - [Linq](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/LinqNext.cs):
   - Split(source, predicate, resultSelector) - Split the items into segments (the separator is excluded)
-  - SplitBefore(source, predicate, resultSelector) - Split the items into segments (the separator is included at the beginning)
-  - SplitAfter(source, predicate, resultSelector) - Split the items into segments (the separator is included at the end)
+  - SplitBefore(source, predicate, resultSelector) - Split the items into segments (the separator is included at the beginning of segment)
+  - SplitAfter(source, predicate, resultSelector) - Split the items into segments (the separator is included at the end of segment)
   - Slice(source, predicate, resultSelector) - Join the adjacent items into segments
   - Unflatten(source, predicate, keySelector, valueSelector) - Unflatten the items into key-values groups
   - WithPrev(source)

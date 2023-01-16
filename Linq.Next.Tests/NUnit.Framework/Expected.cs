@@ -3,65 +3,49 @@
 
 namespace NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 
-internal static class Expected {
+internal static class Expected<T> {
+
+    // Value
+    public static T Value(T value) {
+        return value;
+    }
 
     // Option
-    public static Option<int> Option(int? value) {
-        return value.HasValue ? new Option<int>( value.Value ) : default;
+    public static Option<T> Option() {
+        return default;
+    }
+    public static Option<T> Option(T value) {
+        return new Option<T>( value );
     }
 
     // Array
-    public static int[] Array1D(params int[] array) {
+    public static T[] Array(params T[] array) {
         return array;
     }
-    public static int[][] Array2D(params object?[] array) {
-        return array.Select( ToArray ).ToArray();
-    }
-    public static int[] ToArray(object? @object) {
-        if (@object is null) {
-            return new int[ 0 ];
-        }
-        if (@object is int value) {
-            return new int[ 1 ] { value };
-        }
-        if (@object is int[] array) {
-            return array;
-        }
-        if (@object is ITuple tuple) {
-            return Enumerable.Range( 0, tuple.Length ).Select( i => tuple[ i ] ).Cast<int>().ToArray();
-        }
-        throw new ArgumentException( $"Object '{@object}' is invalid" );
-    }
-
-    // Array
-    public static (int, int[])[] Array_Unflatten(params (int, int[])[] array) {
+    public static T[][] Array2D(params T[][] array) {
         return array;
     }
 
-    // Array
-    public static (int, bool)[] Array_TagFirst(params (int, bool)[] array) {
-        return array;
-    }
-    public static (int, bool)[] Array_TagLast(params (int, bool)[] array) {
-        return array;
-    }
-    public static (int, bool, bool)[] Array_TagFirstLast(params (int, bool, bool)[] array) {
-        return array;
-    }
-
-    // Array
-    public static (int, Option<int>)[] Array_WithPrev(params (int, Option<int>)[] array) {
-        return array;
-    }
-    public static (int, Option<int>)[] Array_WithNext(params (int, Option<int>)[] array) {
-        return array;
-    }
-    public static (int, Option<int>, Option<int>)[] Array_WithPrevNext(params (int, Option<int>, Option<int>)[] array) {
-        return array;
-    }
+    // Helpers
+    //private static T[] ToArray(object? @object) {
+    //    if (@object is null) {
+    //        return new T[ 0 ];
+    //    }
+    //    if (@object is T value) {
+    //        return new T[ 1 ] { value };
+    //    }
+    //    if (@object is T[] array) {
+    //        return array;
+    //    }
+    //    if (@object is ITuple tuple) {
+    //        return Enumerable.Range( 0, tuple.Length ).Select( i => tuple[ i ] ).Cast<T>().ToArray();
+    //    }
+    //    throw new ArgumentException( $"Object '{@object}' is invalid" );
+    //}
 
 }

@@ -20,16 +20,16 @@ public class Tests_Option {
         Assert.That( source.HasValue, Is.False );
         Assert.Throws<InvalidOperationException>( () => _ = source.Value );
         Assert.That( source.ValueOrDefault, Is.EqualTo( null ) );
-        // Value/Object
-        source = new Option<object?>( "Hello World !!!" );
-        Assert.That( source.HasValue, Is.True );
-        Assert.That( source.Value, Is.EqualTo( "Hello World !!!" ) );
-        Assert.That( source.ValueOrDefault, Is.EqualTo( "Hello World !!!" ) );
         // Value/Null
         source = new Option<object?>( null );
         Assert.That( source.HasValue, Is.True );
         Assert.That( source.Value, Is.EqualTo( null ) );
         Assert.That( source.ValueOrDefault, Is.EqualTo( null ) );
+        // Value/Object
+        source = new Option<object?>( "Hello World !!!" );
+        Assert.That( source.HasValue, Is.True );
+        Assert.That( source.Value, Is.EqualTo( "Hello World !!!" ) );
+        Assert.That( source.ValueOrDefault, Is.EqualTo( "Hello World !!!" ) );
     }
 
 

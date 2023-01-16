@@ -6,32 +6,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-internal static class Source {
+internal static class Source<T> {
 
     // Array
-    public static int[] Array(params int[] array) {
+    public static T[] Array(params T[] array) {
         return array;
     }
     // Array/Enumerator
-    public static IEnumerator<int> Enumerator(params int[] array) {
+    public static IEnumerator<T> Enumerator(params T[] array) {
         return array.AsEnumerable().GetEnumerator();
     }
-    public static StatefulEnumerator<int> Stateful(params int[] array) {
+    public static StatefulEnumerator<T> Stateful(params T[] array) {
         return array.AsEnumerable().GetEnumerator().AsStateful();
     }
-    public static PeekableEnumerator<int> Peekable(params int[] array) {
+    public static PeekableEnumerator<T> Peekable(params T[] array) {
         return array.AsEnumerable().GetEnumerator().AsPeekable();
     }
 
     // Predicate
-    public static Func<int, bool> Predicate(bool value) {
-        return i => value;
-    }
-    public static Func<int, bool> Predicate(Func<int, bool> predicate) {
+    public static Func<T, bool> Predicate(Func<T, bool> predicate) {
         return predicate;
     }
-    public static Func<int, IList<int>, bool> Predicate(Func<int, IList<int>, bool> predicate) {
+    public static Func<T, IList<T>, bool> Predicate(Func<T, IList<T>, bool> predicate) {
         return predicate;
     }
 

@@ -35,15 +35,13 @@ public static class LinqNext {
         var segment = new List<TResult>();
         foreach (var item in source) {
             if (predicate( item )) {
-                if (segment.Any()) {
-                    yield return segment;
-                    segment.Clear();
-                }
+                yield return segment;
+                segment.Clear();
             } else {
                 segment.Add( resultSelector( item ) );
             }
         }
-        if (segment.Any()) {
+        {
             yield return segment;
             segment.Clear();
         }
@@ -65,7 +63,7 @@ public static class LinqNext {
         return source.FastSplitBefore( predicate, resultSelector ).Select( i => i.ToArray() );
     }
     // Split/Before/Fast
-    // Split the items into segments (the separator is included at the beginning)
+    // Split the items into segments (the separator is included at the beginning of segment)
     // [false, false, false], [true, false, false]
     public static IEnumerable<IList<TResult>> FastSplitBefore<T, TResult>(
         this IEnumerable<T> source,
@@ -75,14 +73,12 @@ public static class LinqNext {
         var segment = new List<TResult>();
         foreach (var item in source) {
             if (predicate( item )) {
-                if (segment.Any()) {
-                    yield return segment;
-                    segment.Clear();
-                }
+                yield return segment;
+                segment.Clear();
             }
             segment.Add( resultSelector( item ) );
         }
-        if (segment.Any()) {
+        {
             yield return segment;
             segment.Clear();
         }
@@ -104,7 +100,7 @@ public static class LinqNext {
         return source.FastSplitAfter( predicate, resultSelector ).Select( i => i.ToArray() );
     }
     // Split/After/Fast
-    // Split the items into segments (the separator is included at the end)
+    // Split the items into segments (the separator is included at the end of segment)
     // [false, false, true], [false, false, false]
     public static IEnumerable<IList<TResult>> FastSplitAfter<T, TResult>(
         this IEnumerable<T> source,
@@ -115,13 +111,11 @@ public static class LinqNext {
         foreach (var item in source) {
             segment.Add( resultSelector( item ) );
             if (predicate( item )) {
-                if (segment.Any()) {
-                    yield return segment;
-                    segment.Clear();
-                }
+                yield return segment;
+                segment.Clear();
             }
         }
-        if (segment.Any()) {
+        {
             yield return segment;
             segment.Clear();
         }
@@ -169,13 +163,13 @@ public static class LinqNext {
     // Unflatten
     // Unflatten the items into key-values groups
     // true: [false, false, false], true: [false, false, false]
-    public static IEnumerable<(T? Key, T[] Values)> Unflatten<T>(
+    public static IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(
         this IEnumerable<T> source,
         Func<T, bool> predicate
         ) {
         return source.FastUnflatten( predicate, i => i, i => i ).Select( i => (i.Key, i.Values.ToArray()) );
     }
-    public static IEnumerable<(TKey? Key, TValue[] Values)> Unflatten<T, TKey, TValue>(
+    public static IEnumerable<(Option<TKey> Key, TValue[] Values)> Unflatten<T, TKey, TValue>(
         this IEnumerable<T> source,
         Func<T, bool> predicate,
         Func<T, TKey> keySelector,
@@ -184,18 +178,18 @@ public static class LinqNext {
         return source.FastUnflatten( predicate, keySelector, valueSelector ).Select( i => (i.Key, i.Values.ToArray()) );
     }
     // Unflatten/Fast
-    public static IEnumerable<(TKey? Key, IList<TValue> Values)> FastUnflatten<T, TKey, TValue>(
+    public static IEnumerable<(Option<TKey> Key, IList<TValue> Values)> FastUnflatten<T, TKey, TValue>(
         this IEnumerable<T> source,
         Func<T, bool> predicate,
         Func<T, TKey> keySelector,
         Func<T, TValue> valueSelector
         ) {
         using var source_enumerator = source.GetEnumerator();
-        var key = default( TKey );
+        var key = default( Option<TKey> );
         var values = new List<TValue>();
         foreach (var item in source) {
             if (predicate( item )) {
-                if (values.Any()) {
+                if (key.HasValue || values.Any()) {
                     yield return (key, values);
                     values.Clear();
                 }
@@ -204,7 +198,7 @@ public static class LinqNext {
                 values.Add( valueSelector( item ) );
             }
         }
-        if (values.Any()) {
+        if (key.HasValue || values.Any()) {
             yield return (key, values);
             values.Clear();
         }

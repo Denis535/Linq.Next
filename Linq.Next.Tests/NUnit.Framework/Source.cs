@@ -9,15 +9,11 @@ using System.Text;
 
 internal static class Source {
 
-    // Option
-    public static readonly Option<int> Option = default;
-
     // Array
     public static int[] Array(params int[] array) {
         return array;
     }
-
-    // Enumerator
+    // Array/Enumerator
     public static IEnumerator<int> Enumerator(params int[] array) {
         return array.AsEnumerable().GetEnumerator();
     }

@@ -10,7 +10,9 @@ using System.Text;
 internal static class Expected {
 
     // Option
-    public static readonly Option<int> Option = default;
+    public static Option<int> Option(int? value) {
+        return value.HasValue ? new Option<int>( value.Value ) : default;
+    }
 
     // Array
     public static int[] Array1D(params int[] array) {
@@ -19,7 +21,7 @@ internal static class Expected {
     public static int[][] Array2D(params object?[] array) {
         return array.Select( ToArray ).ToArray();
     }
-    private static int[] ToArray(object? @object) {
+    public static int[] ToArray(object? @object) {
         if (@object is null) {
             return new int[ 0 ];
         }
@@ -29,8 +31,8 @@ internal static class Expected {
         if (@object is int[] array) {
             return array;
         }
-        if (@object is ITuple values) {
-            return Enumerable.Range( 0, values.Length ).Select( i => values[ i ] ).Cast<int>().ToArray();
+        if (@object is ITuple tuple) {
+            return Enumerable.Range( 0, tuple.Length ).Select( i => tuple[ i ] ).Cast<int>().ToArray();
         }
         throw new ArgumentException( $"Object '{@object}' is invalid" );
     }

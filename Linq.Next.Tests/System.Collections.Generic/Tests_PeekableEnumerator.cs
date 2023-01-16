@@ -11,8 +11,6 @@ using NUnit.Framework;
 [TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumerator {
 
-    private static readonly Option<int> Option = default;
-
 
     // Constructor
     [Test]
@@ -20,7 +18,7 @@ public class Tests_PeekableEnumerator {
         using var source = Source.Peekable( 0, 1, 2 );
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Option ) );
+        Assert.That( source.Current, Is.EqualTo( Expected.Option( null ) ) );
     }
 
 
@@ -29,29 +27,45 @@ public class Tests_PeekableEnumerator {
     public void Take_00() {
         using var source = Source.Peekable();
         // Peek
-        Peek( source, false, false, Option, Option );
+        Peek( source, false, false, Expected.Option( null ), Expected.Option( null ) );
         // Take-Peek
-        Take( source, true, true, Option );
-        Peek( source, true, true, Option, Option );
+        Take( source, true, true, Expected.Option( null ) );
+        Peek( source, true, true, Expected.Option( null ), Expected.Option( null ) );
     }
     [Test]
     public void Take_01() {
         using var source = Source.Peekable( 0, 1, 2 );
         // Peek
-        Peek( source, false, false, Option, 0 );
+        Peek( source, false, false, Expected.Option( null ), Expected.Option( 0 ) );
         // Take-Peek
-        Take( source, true, false, 0 );
-        Peek( source, true, false, 0, 1 );
+        Take( source, true, false, Expected.Option( 0 ) );
+        Peek( source, true, false, Expected.Option( 0 ), Expected.Option( 1 ) );
         // Take-Peek
-        Take( source, true, false, 1 );
-        Peek( source, true, false, 1, 2 );
+        Take( source, true, false, Expected.Option( 1 ) );
+        Peek( source, true, false, Expected.Option( 1 ), Expected.Option( 2 ) );
         // Take-Peek
-        Take( source, true, false, 2 );
-        Peek( source, true, false, 2, Option );
+        Take( source, true, false, Expected.Option( 2 ) );
+        Peek( source, true, false, Expected.Option( 2 ), Expected.Option( null ) );
         // Take-Peek
-        Take( source, true, true, Option );
-        Peek( source, true, true, Option, Option );
+        Take( source, true, true, Expected.Option( null ) );
+        Peek( source, true, true, Expected.Option( null ), Expected.Option( null ) );
     }
+
+
+    // Reset
+    [Test]
+    public void Reset() {
+        using var source = Source.Peekable( 0, 1, 2 );
+        ((IEnumerator<int>) source).MoveNext();
+
+        source.Reset();
+        Assert.That( source.IsStarted, Is.False );
+        Assert.That( source.IsFinished, Is.False );
+        Assert.That( source.Current, Is.EqualTo( Expected.Option( null ) ) );
+    }
+
+
+    // Helpers/Take
     private static void Take(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
         var current = source.Take();
         Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
@@ -69,24 +83,9 @@ public class Tests_PeekableEnumerator {
     }
 
 
-    // Reset
-    [Test]
-    public void Reset() {
-        using var source = Source.Peekable( 0, 1, 2 );
-        ((IEnumerator<int>) source).MoveNext();
-
-        source.Reset();
-        Assert.That( source.IsStarted, Is.False );
-        Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Option ) );
-    }
-
-
 }
 [TestFixture( TestName = "Tests_Enumerator/Peekable" )]
 public class Tests_PeekableEnumeratorExtensions {
-
-    private static readonly Option<int> Default = default;
 
 
     // Take/While
@@ -111,20 +110,20 @@ public class Tests_PeekableEnumeratorExtensions {
     [Test]
     public void TakeIf() {
         using var source = Source.Peekable( 0, 1, 2 );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 0 ) );
-        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Default ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 1 ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( 2 ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Default ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Expected.Option( 0 ) ) );
+        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Expected.Option( null ) ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Expected.Option( 1 ) ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Expected.Option( 2 ) ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Expected.Option( null ) ) );
     }
     [Test]
     public void TakeIfNot() {
         using var source = Source.Peekable( 0, 1, 2 );
-        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( 0 ) );
-        Assert.That( source.TakeIfNot( i => !false ), Is.EqualTo( Default ) );
-        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( 1 ) );
-        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( 2 ) );
-        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Default ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Expected.Option( 0 ) ) );
+        Assert.That( source.TakeIfNot( i => !false ), Is.EqualTo( Expected.Option( null ) ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Expected.Option( 1 ) ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Expected.Option( 2 ) ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Expected.Option( null ) ) );
     }
 
 

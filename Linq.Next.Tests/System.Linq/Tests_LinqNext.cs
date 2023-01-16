@@ -93,24 +93,16 @@ public class Tests_LinqNext {
     // Unflatten
     [Test]
     public void Unflatten() {
-        //source = Source.Array( 0, 1, 1, 1, 2 );
-        //predicate = Source.Predicate( (i, group) => false );
-        //expected = Expected.Array2D( 0, 1, 1, 1, 2 );
         //Unflatten(
         //    Source.Array( 0, 1, 2, 3, 4 ),
         //    Source.Predicate( i => false ),
-        //    Expected.Array_Unflatten( (0, new ) )
+        //    Expected.Array_Unflatten( (0, new int[] { 0, 1, 2, 3, 4 }) )
         //);
-        //// By: true
-        //source = Source.Array( 0, 1, 1, 1, 2 );
-        //predicate = Source.Predicate( (i, group) => true );
-        //expected = Expected.Array2D( (0, 1, 1, 1, 2) );
-        //Unflatten( source, predicate, expected );
-        //// By: equality
-        //source = Source.Array( 0, 1, 1, 1, 2 );
-        //predicate = Source.Predicate( (i, group) => i == group.Last() );
-        //expected = Expected.Array2D( 0, (1, 1, 1), 2 );
-        //Unflatten( source, predicate, expected );
+        //Unflatten(
+        //    Source.Array( 0, 1, 2, 3, 4 ),
+        //    Source.Predicate( i => true ),
+        //    Expected.Array_Unflatten( (0, new int[ 0 ]) )
+        //);
     }
 
 

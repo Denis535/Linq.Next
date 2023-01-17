@@ -6,40 +6,40 @@ The **Linq.Next** package is intended to enhance the linq and the collections wi
 - [System.Linq](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/)
   - [LinqNext](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/LinqNext.cs)
 
-########## Split
+###### Split
 ```IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Split the items into segments (the separator is excluded)
 
-########## SplitBefore
+###### SplitBefore
 ```IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Split the items into segments (the separator is included at the beginning of segment)
 
-########## SplitAfter
+###### SplitAfter
 ```IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Split the items into segments (the separator is included at the end of segment)
 
-########## Slice
+###### Slice
 ```IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> predicate)``` - Join the adjacent items into segments
 
-########## Unflatten
+###### Unflatten
 ```IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Unflatten the items into key-values groups
 
-########## WithPrev
+###### WithPrev
 ```WithPrev(source)```
 
-########## WithNext
+###### WithNext
 ```WithNext(source)```
 
-########## WithPrevNext
+###### WithPrevNext
 ```WithPrevNext(source)```
 
-########## TagFirst
+###### TagFirst
 ```TagFirst(source)```
 
-########## TagLast
+###### TagLast
 ```TagLast(source)```
 
-########## TagFirstLast
+###### TagFirstLast
 ```TagFirstLast(source)```
 
-########## CompareTo
+###### CompareTo
 ```CompareTo(first, second, missing, extra)```
 
 ## System.Collections.Generic

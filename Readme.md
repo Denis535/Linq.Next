@@ -3,11 +3,11 @@
 The **Linq.Next** package is intended to enhance the linq and the collections with an extra useful features.
 
 - [Linq](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/LinqNext.cs):
-  - Split(source, predicate, resultSelector) - Split the items into segments (the separator is excluded)
-  - SplitBefore(source, predicate, resultSelector) - Split the items into segments (the separator is included at the beginning of segment)
-  - SplitAfter(source, predicate, resultSelector) - Split the items into segments (the separator is included at the end of segment)
-  - Slice(source, predicate, resultSelector) - Join the adjacent items into segments
-  - Unflatten(source, predicate, keySelector, valueSelector) - Unflatten the items into key-values groups
+  - IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> predicate) - Split the items into segments (the separator is excluded)
+  - IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> predicate) - Split the items into segments (the separator is included at the beginning of segment)
+  - IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> predicate) - Split the items into segments (the separator is included at the end of segment)
+  - IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> predicate) - Join the adjacent items into segments
+  - IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(this IEnumerable<T> source, Func<T, bool> predicate) - Unflatten the items into key-values groups
   - WithPrev(source)
   - WithNext(source)
   - WithPrevNext(source)

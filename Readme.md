@@ -6,51 +6,40 @@ The **Linq.Next** package is intended to enhance the linq and the collections wi
 - [System.Linq](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/)
   - [LinqNext](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/LinqNext.cs)
 
-### LinqNext
-#### Split
-Split the items into segments (the separator is excluded)
+########## Split
+```IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Split the items into segments (the separator is excluded)
 
-```IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
+########## SplitBefore
+```IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Split the items into segments (the separator is included at the beginning of segment)
 
-#### SplitBefore
-Split the items into segments (the separator is included at the beginning of segment)
+########## SplitAfter
+```IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Split the items into segments (the separator is included at the end of segment)
 
-```IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
+########## Slice
+```IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> predicate)``` - Join the adjacent items into segments
 
-#### SplitAfter
-Split the items into segments (the separator is included at the end of segment)
+########## Unflatten
+```IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Unflatten the items into key-values groups
 
-```IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
-
-#### Slice
-Join the adjacent items into segments
-
-```IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> predicate)```
-
-#### Unflatten
-Unflatten the items into key-values groups
-
-```IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
-
-#### WithPrev
+########## WithPrev
 ```WithPrev(source)```
 
-#### WithNext
+########## WithNext
 ```WithNext(source)```
 
-#### WithPrevNext
+########## WithPrevNext
 ```WithPrevNext(source)```
 
-#### TagFirst
+########## TagFirst
 ```TagFirst(source)```
 
-#### TagLast
+########## TagLast
 ```TagLast(source)```
 
-#### TagFirstLast
+########## TagFirstLast
 ```TagFirstLast(source)```
 
-#### CompareTo
+########## CompareTo
 ```CompareTo(first, second, missing, extra)```
 
 ## System.Collections.Generic
@@ -62,8 +51,6 @@ Unflatten the items into key-values groups
 - [System](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System)
   - [Option](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System/Option.cs)
 
-# Github
-https://github.com/Denis535/Linq.Next
-
-# NuGet
-https://www.nuget.org/packages/Linq.Next
+# Links
+- https://github.com/Denis535/Linq.Next
+- https://www.nuget.org/packages/Linq.Next

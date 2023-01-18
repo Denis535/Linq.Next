@@ -26,10 +26,22 @@ internal static class Source<T> {
     }
 
     // Predicate
+    public static Func<bool> Predicate(Func<bool> predicate) {
+        return predicate;
+    }
     public static Func<T, bool> Predicate(Func<T, bool> predicate) {
         return predicate;
     }
+    //public static Func<IList<T>, T, bool> Predicate(Func<IList<T>, T, bool> predicate) {
+    //    return predicate;
+    //}
+    //public static Func<T[], T, bool> Predicate(Func<T[], T, bool> predicate) {
+    //    return predicate;
+    //}
     public static Func<T, IList<T>, bool> Predicate(Func<T, IList<T>, bool> predicate) {
+        return predicate;
+    }
+    public static Func<T, T[], bool> Predicate(Func<T, T[], bool> predicate) {
         return predicate;
     }
 

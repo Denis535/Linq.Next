@@ -140,25 +140,25 @@ public class Tests_LinqNext {
         // empty
         Slice(
             Source<int>.Array(),
-            Source<int>.Predicate( (i, group) => true ),
+            Source<int>.Predicate( (i, slice) => true ),
             Expected<int[]>.Array()
             );
         // none
         Slice(
             Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( (i, group) => false ),
+            Source<int>.Predicate( (i, slice) => false ),
             Expected<int[]>.Array( Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ) )
             );
         // each
         Slice(
             Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( (i, group) => true ),
+            Source<int>.Predicate( (i, slice) => true ),
             Expected<int[]>.Array( Array( 0, 1, 1, 2 ) )
             );
         // i == prev
         Slice(
             Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( (i, group) => i == group.Last() ),
+            Source<int>.Predicate( (i, slice) => i == slice.Last() ),
             Expected<int[]>.Array( Array( 0 ), Array( 1, 1 ), Array( 2 ) )
             );
     }
@@ -171,37 +171,37 @@ public class Tests_LinqNext {
         Unflatten(
             Source<int>.Array(),
             Source<int>.Predicate( i => true ),
-            Expected<(Option<int>, int[])>.Array()
+            Expected<Option<int>, int[]>.Array()
             );
         // none
         Unflatten(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => false ),
-            Expected<(Option<int>, int[])>.Array( (default, Array( 0, 1, 1, 2 )) )
+            Expected<Option<int>, int[]>.Array( (default, Array( 0, 1, 1, 2 )) )
         );
         // each
         Unflatten(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => true ),
-            Expected<(Option<int>, int[])>.Array( (0, Array()), (1, Array()), (1, Array()), (2, Array()) )
+            Expected<Option<int>, int[]>.Array( (0, Array()), (1, Array()), (1, Array()), (2, Array()) )
         );
         // first
         Unflatten(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 0 ),
-            Expected<(Option<int>, int[])>.Array( (0, Array( 1, 1, 2 )) )
+            Expected<Option<int>, int[]>.Array( (0, Array( 1, 1, 2 )) )
         );
         // last
         Unflatten(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 2 ),
-            Expected<(Option<int>, int[])>.Array( (default, Array( 0, 1, 1 )), (2, Array()) )
+            Expected<Option<int>, int[]>.Array( (default, Array( 0, 1, 1 )), (2, Array()) )
         );
         // center
         Unflatten(
             Source<int>.Array( 0, 1, 1, 2 ),
             Source<int>.Predicate( i => i is 1 ),
-            Expected<(Option<int>, int[])>.Array( (default, Array( 0 )), (1, Array()), (1, Array( 2 )) )
+            Expected<Option<int>, int[]>.Array( (default, Array( 0 )), (1, Array()), (1, Array( 2 )) )
         );
     }
 
@@ -312,8 +312,8 @@ public class Tests_LinqNext {
         CompareTo(
             Source<int>.Array( 0, 1, 2 ),
             Source<int>.Array( 2, 3, 4 ),
-            Expected<int>.Array( 3, 4 ), // missing
-            Expected<int>.Array( 0, 1 ) // extra
+            Expected<int>.Array( 3, 4 ),
+            Expected<int>.Array( 0, 1 )
             );
     }
 

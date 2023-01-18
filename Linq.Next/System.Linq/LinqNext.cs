@@ -137,7 +137,7 @@ public static class LinqNext {
         return source.FastSlice( predicate, resultSelector ).Select( i => i.ToArray() );
     }
     // Slice/Fast
-    // Join the adjacent items into segments
+    // Slice the items into slices
     // [true, true, true], [false, true, true]
     public static IEnumerable<IList<TResult>> FastSlice<T, TResult>(
         this IEnumerable<T> source,
@@ -145,17 +145,17 @@ public static class LinqNext {
         Func<T, TResult> resultSelector
         ) {
         using var source_enumerator = source.GetEnumerator();
-        var segment = new List<TResult>();
+        var slice = new List<TResult>();
         foreach (var item in source) {
-            if (segment.Any() && !predicate( item, segment )) {
-                yield return segment;
-                segment.Clear();
+            if (slice.Any() && !predicate( item, slice )) {
+                yield return slice;
+                slice.Clear();
             }
-            segment.Add( resultSelector( item ) );
+            slice.Add( resultSelector( item ) );
         }
-        if (segment.Any()) {
-            yield return segment;
-            segment.Clear();
+        if (slice.Any()) {
+            yield return slice;
+            slice.Clear();
         }
     }
 

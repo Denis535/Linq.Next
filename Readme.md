@@ -23,14 +23,14 @@ The **Linq.Next** package is intended to enhance the linq and the collections wi
 Split the items into segments (the separator is excluded)
 
 ###### SplitBefore
-```SplitBeforesource, predicate)```
+```SplitBefore(source, predicate)```
 
 ```IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
 
 Split the items into segments (the separator is included at the beginning of segment)
 
 ###### SplitAfter
-```SplitAfter<T>(source, predicate)```
+```SplitAfter(source, predicate)```
 
 ```IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
 

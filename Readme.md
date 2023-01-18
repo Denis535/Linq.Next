@@ -7,19 +7,39 @@ The **Linq.Next** package is intended to enhance the linq and the collections wi
   - [LinqNext](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/LinqNext.cs)
 
 ###### Split
-```IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Split the items into segments (the separator is excluded)
+```Split(source, predicate)```
+
+```IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
+
+Split the items into segments (the separator is excluded)
 
 ###### SplitBefore
-```IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Split the items into segments (the separator is included at the beginning of segment)
+```SplitBeforesource, predicate)```
+
+```IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
+
+Split the items into segments (the separator is included at the beginning of segment)
 
 ###### SplitAfter
-```IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Split the items into segments (the separator is included at the end of segment)
+```SplitAfter<T>(source, predicate)```
+
+```IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
+
+Split the items into segments (the separator is included at the end of segment)
 
 ###### Slice
-```IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> predicate)``` - Join the adjacent items into segments
+```Slice(source, predicate)```
+
+```IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> predicate)```
+
+Join the adjacent items into segments
 
 ###### Unflatten
-```IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(this IEnumerable<T> source, Func<T, bool> predicate)``` - Unflatten the items into key-values groups
+```Unflatten(source, predicate)```
+
+```IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(this IEnumerable<T> source, Func<T, bool> predicate)```
+
+Unflatten the items into key-values groups
 
 ###### WithPrev
 ```WithPrev(source)```

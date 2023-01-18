@@ -2,6 +2,15 @@
 
 The **Linq.Next** package is intended to enhance the linq and the collections with an extra useful features.
 
+## System
+- [System](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System)
+  - [Option](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System/Option.cs)
+
+## System.Collections.Generic
+- [System.Collections.Generic](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System.Collections.Generic)
+  - [StatefulEnumerator](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System.Collections.Generic/StatefulEnumerator.cs)
+  - [PeekableEnumerator](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System.Collections.Generic/PeekableEnumerator.cs)
+
 ## System.Linq
 - [System.Linq](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/)
   - [LinqNext](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System.Linq/LinqNext.cs)
@@ -61,15 +70,6 @@ Unflatten the items into key-values groups
 
 ###### CompareTo
 ```CompareTo(first, second, missing, extra)```
-
-## System.Collections.Generic
-- [System.Collections.Generic](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System.Collections.Generic)
-  - [StatefulEnumerator](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System.Collections.Generic/StatefulEnumerator.cs)
-  - [PeekableEnumerator](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System.Collections.Generic/PeekableEnumerator.cs)
-
-## System
-- [System](https://github.com/Denis535/Linq.Next/tree/master/Linq.Next/System)
-  - [Option](https://github.com/Denis535/Linq.Next/blob/master/Linq.Next/System/Option.cs)
 
 # Links
 - https://github.com/Denis535/Linq.Next

@@ -126,7 +126,7 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
         // This can lead to unexpected behavior:
         //var option = new Option<object>();
         //option = new Option<int>(); // This is equivalent to following:
-        //option = new Option<object>( new Option<int>() ); // Now option contains Option<int>
+        //option = new Option<object>( new Option<int>() ); // Now option<object> contains Option<int>
         return new Option<T>( value );
     }
     public static explicit operator T(Option<T> value) {

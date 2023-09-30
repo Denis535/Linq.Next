@@ -26,13 +26,13 @@ public static class Option {
         if (v1.HasValue && v2.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2.Value );
         return EqualityComparer<bool>.Default.Equals( v1.HasValue, v2.HasValue );
     }
+    public static bool Equals<T>(Option<T> v1, T v2) {
+        if (v1.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2 );
+        return EqualityComparer<bool>.Default.Equals( v1.HasValue, true );
+    }
     public static bool Equals<T>(Option<T> v1, T? v2) where T : struct {
         if (v1.HasValue && v2.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2.Value );
         return EqualityComparer<bool>.Default.Equals( v1.HasValue, v2.HasValue );
-    }
-    public static bool Equals<T>(Option<T> v1, T? v2) {
-        if (v1.HasValue) return EqualityComparer<T>.Default.Equals( v1.Value, v2! );
-        return EqualityComparer<bool>.Default.Equals( v1.HasValue, true );
     }
 
     // Compare
@@ -40,13 +40,13 @@ public static class Option {
         if (v1.HasValue && v2.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2.Value );
         return Comparer<bool>.Default.Compare( v1.HasValue, v2.HasValue );
     }
+    public static int Compare<T>(Option<T> v1, T v2) {
+        if (v1.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2 );
+        return Comparer<bool>.Default.Compare( v1.HasValue, true );
+    }
     public static int Compare<T>(Option<T> v1, T? v2) where T : struct {
         if (v1.HasValue && v2.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2.Value );
         return Comparer<bool>.Default.Compare( v1.HasValue, v2.HasValue );
-    }
-    public static int Compare<T>(Option<T> v1, T? v2) {
-        if (v1.HasValue) return Comparer<T>.Default.Compare( v1.Value, v2! );
-        return Comparer<bool>.Default.Compare( v1.HasValue, true );
     }
 
     // GetUnderlyingType
@@ -65,17 +65,16 @@ public static class Option {
     }
 
 }
-// Note: Don't override true, false operators!
 [Serializable]
 public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, IComparable<Option<T>>, IComparable<T> {
 
     private readonly bool hasValue;
     private readonly T value;
     public static Option<T> Default => default;
-    //[MemberMaybeNullWhen( false, nameof( ValueOrDefault ) )] // When false: ValueOrDefault is always default
-    //[MemberNotNullWhen( true, nameof( ValueOrDefault ) )]    // When true:  ValueOrDefault can still be default, so it doesn't work right
+    //[MemberMaybeNullWhen( false, nameof( ValueOrDefault ) )] // When HasValue == false: ValueOrDefault is always default
+    //[MemberNotNullWhen( true, nameof( ValueOrDefault ) )]    // When HasValue == true:  ValueOrDefault can still be default, so it doesn't work right
     public bool HasValue => hasValue;
-    public T Value => hasValue ? value : throw new InvalidOperationException( "Option object must have a value" );
+    public T Value => hasValue ? value : throw new InvalidOperationException( "Option must have value" );
     public T? ValueOrDefault => hasValue ? value : default;
 
     // Constructor
@@ -98,20 +97,20 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
     public bool Equals(Option<T> other) {
         return Option.Equals( this, other );
     }
-    public bool Equals(T? other) {
+    public bool Equals(T other) {
         return Option.Equals( this, other );
     }
     public int CompareTo(Option<T> other) {
         return Option.Compare( this, other );
     }
-    public int CompareTo(T? other) {
+    public int CompareTo(T other) {
         return Option.Compare( this, other );
     }
 
     // Utils
     public override string ToString() {
         if (hasValue) return value?.ToString() ?? "Null";
-        return "Empty";
+        return "Nothing";
     }
     public override bool Equals(object? other) {
         if (other is Option<T> other_) return Option.Equals( this, other_ );
@@ -124,10 +123,10 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
 
     // Utils
     public static implicit operator Option<T>(T value) {
-        // This can lead to the next problem:
-        // source = new Option<object>();
-        // source = new Option<int>(); // This is identical to the following:
-        // source.Value = new Option<int>(); // Now Option<object>.Value is Option<int>
+        // This can lead to unexpected behavior:
+        //var option = new Option<object>();
+        //option = new Option<int>(); // This is equivalent to following:
+        //option = new Option<object>( new Option<int>() ); // Now option contains Option<int>
         return new Option<T>( value );
     }
     public static explicit operator T(Option<T> value) {

@@ -15,11 +15,11 @@ public class Tests_EnumeratorExtensions {
     // Take
     [Test]
     public void Take() {
-        using var source = Source<int>.Enumerator( 0, 1, 2 );
-        Assert.That( source.Take(), Is.EqualTo( Expected<int>.Option( 0 ) ) );
-        Assert.That( source.Take(), Is.EqualTo( Expected<int>.Option( 1 ) ) );
-        Assert.That( source.Take(), Is.EqualTo( Expected<int>.Option( 2 ) ) );
-        Assert.That( source.Take(), Is.EqualTo( Expected<int>.Option() ) );
+        using var source = Helper.Enumerator<int>( 0, 1, 2 );
+        Assert.That( source.Take(), Is.EqualTo( Helper.Option<int>( 0 ) ) );
+        Assert.That( source.Take(), Is.EqualTo( Helper.Option<int>( 1 ) ) );
+        Assert.That( source.Take(), Is.EqualTo( Helper.Option<int>( 2 ) ) );
+        Assert.That( source.Take(), Is.EqualTo( Helper.Option<int>( null ) ) );
     }
 
 

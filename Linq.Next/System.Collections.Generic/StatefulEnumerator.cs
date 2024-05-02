@@ -47,7 +47,7 @@ public class StatefulEnumerator<T> : IEnumerator<T>, IDisposable {
     private Option<T> TakeInternal() {
         if (Source.MoveNext()) {
             (IsStarted, IsFinished) = (true, false);
-            current = Source.Current;
+            current = Source.Current.AsOption();
             return current;
         }
         (IsStarted, IsFinished) = (true, true);

@@ -23,7 +23,7 @@ public static class EnumeratorExtensions {
     }
     // Take
     public static Option<T> Take<T>(this IEnumerator<T> enumerator) {
-        if (enumerator.MoveNext()) return enumerator.Current;
+        if (enumerator.MoveNext()) return enumerator.Current.AsOption();
         return default;
     }
 

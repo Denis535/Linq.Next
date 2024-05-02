@@ -163,6 +163,7 @@ public static class LinqNext {
     // Unflatten
     // Unflatten the items into key-values groups
     // true: [false, false, false], true: [false, false, false]
+    // key: [value, value, value], key: [value, value, value]
     public static IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(
         this IEnumerable<T> source,
         Func<T, bool> predicate
@@ -193,7 +194,7 @@ public static class LinqNext {
                     yield return (key, values);
                     values.Clear();
                 }
-                key = keySelector( item );
+                key = keySelector( item ).AsOption();
             } else {
                 values.Add( valueSelector( item ) );
             }
@@ -206,14 +207,16 @@ public static class LinqNext {
 
 
     // With/Prev
+    // Return the each item with prev item
     public static IEnumerable<(T Value, Option<T> Prev)> WithPrev<T>(this IEnumerable<T> source) {
-        var prev = Option<T>.Default;
+        var prev = default( Option<T> );
         foreach (var item in source) {
             yield return (item, prev);
-            prev = item;
+            prev = item.AsOption();
         }
     }
     // With/Next
+    // Return the each item with next item
     public static IEnumerable<(T Value, Option<T> Next)> WithNext<T>(this IEnumerable<T> source) {
         using var source_enumerator = source.GetEnumerator();
         var value = source_enumerator.Take();
@@ -224,9 +227,10 @@ public static class LinqNext {
         }
     }
     // With/Prev-Next
+    // Return the each item with prev and next item
     public static IEnumerable<(T Value, Option<T> Prev, Option<T> Next)> WithPrevNext<T>(this IEnumerable<T> source) {
         using var source_enumerator = source.GetEnumerator();
-        var prev = Option<T>.Default;
+        var prev = default( Option<T> );
         var value = source_enumerator.Take();
         var next = source_enumerator.Take();
         while (value.HasValue) {

@@ -15,39 +15,39 @@ public class Tests_StatefulEnumerator {
     // Constructor
     [Test]
     public void Constructor() {
-        using var source = Source<int>.Stateful( 0, 1, 2 );
+        using var source = Helper.Stateful<int>( 0, 1, 2 );
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Expected<int>.Option() ) );
+        Assert.That( source.Current, Is.EqualTo( Helper.Option<int>( null ) ) );
     }
 
 
     // Take
     [Test]
     public void Take_00() {
-        using var source = Source<int>.Stateful();
-        Take( source, true, true, Expected<int>.Option() );
+        using var source = Helper.Stateful<int>();
+        Take( source, true, true, Helper.Option<int>( null ) );
     }
     [Test]
     public void Take_01() {
-        using var source = Source<int>.Stateful( 0, 1, 2 );
-        Take( source, true, false, Expected<int>.Option( 0 ) );
-        Take( source, true, false, Expected<int>.Option( 1 ) );
-        Take( source, true, false, Expected<int>.Option( 2 ) );
-        Take( source, true, true, Expected<int>.Option() );
+        using var source = Helper.Stateful<int>( 0, 1, 2 );
+        Take( source, true, false, Helper.Option<int>( 0 ) );
+        Take( source, true, false, Helper.Option<int>( 1 ) );
+        Take( source, true, false, Helper.Option<int>( 2 ) );
+        Take( source, true, true, Helper.Option<int>( null ) );
     }
 
 
     // Reset
     [Test]
     public void Reset() {
-        using var source = Source<int>.Stateful( 0, 1, 2 );
+        using var source = Helper.Stateful<int>( 0, 1, 2 );
         ((IEnumerator<int>) source).MoveNext();
 
         source.Reset();
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Expected<int>.Option() ) );
+        Assert.That( source.Current, Is.EqualTo( Helper.Option<int>( null ) ) );
     }
 
 

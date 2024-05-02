@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using static NUnit.Framework.Helper<int>;
 
 public class Tests_LinqNext {
 
@@ -17,39 +16,39 @@ public class Tests_LinqNext {
     public void Split() {
         // empty
         Split(
-            Source<int>.Array(),
-            Source<int>.Predicate( i => true ),
-            Expected<int[]>.Array( Array() )
+            Helper.Values<int>(),
+            i => true,
+            Helper.Values<int[]>( Helper.Values<int>() )
             );
         // none
         Split(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => false ),
-            Expected<int[]>.Array( Array( 0, 1, 1, 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => false,
+            Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // each
         Split(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => true ),
-            Expected<int[]>.Array( Array(), Array(), Array(), Array(), Array() )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => true,
+            Helper.Values<int[]>( Helper.Values<int>(), Helper.Values<int>(), Helper.Values<int>(), Helper.Values<int>(), Helper.Values<int>() )
             );
         // first
         Split(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 0 ),
-            Expected<int[]>.Array( Array(), Array( 1, 1, 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 0,
+            Helper.Values<int[]>( Helper.Values<int>(), Helper.Values<int>( 1, 1, 2 ) )
             );
         // last
         Split(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 2 ),
-            Expected<int[]>.Array( Array( 0, 1, 1 ), Array() )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 2,
+            Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1 ), Helper.Values<int>() )
             );
         // center
         Split(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 1 ),
-            Expected<int[]>.Array( Array( 0 ), Array(), Array( 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 1,
+            Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>(), Helper.Values<int>( 2 ) )
             );
     }
     // Split/Before
@@ -57,39 +56,39 @@ public class Tests_LinqNext {
     public void SplitBefore() {
         // empty
         SplitBefore(
-            Source<int>.Array(),
-            Source<int>.Predicate( i => true ),
-            Expected<int[]>.Array( Array() )
+            Helper.Values<int>(),
+            i => true,
+            Helper.Values<int[]>( Helper.Values<int>() )
             );
         // none
         SplitBefore(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => false ),
-            Expected<int[]>.Array( Array( 0, 1, 1, 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => false,
+            Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // each
         SplitBefore(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => true ),
-            Expected<int[]>.Array( Array(), Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => true,
+            Helper.Values<int[]>( Helper.Values<int>(), Helper.Values<int>( 0 ), Helper.Values<int>( 1 ), Helper.Values<int>( 1 ), Helper.Values<int>( 2 ) )
             );
         // first
         SplitBefore(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 0 ),
-            Expected<int[]>.Array( Array(), Array( 0, 1, 1, 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 0,
+            Helper.Values<int[]>( Helper.Values<int>(), Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // last
         SplitBefore(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 2 ),
-            Expected<int[]>.Array( Array( 0, 1, 1 ), Array( 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 2,
+            Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1 ), Helper.Values<int>( 2 ) )
             );
         // center
         SplitBefore(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 1 ),
-            Expected<int[]>.Array( Array( 0 ), Array( 1 ), Array( 1, 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 1,
+            Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1 ), Helper.Values<int>( 1, 2 ) )
             );
     }
     // Split/After
@@ -97,39 +96,39 @@ public class Tests_LinqNext {
     public void SplitAfter() {
         // empty
         SplitAfter(
-            Source<int>.Array(),
-            Source<int>.Predicate( i => true ),
-            Expected<int[]>.Array( Array() )
+            Helper.Values<int>(),
+            i => true,
+            Helper.Values<int[]>( Helper.Values<int>() )
             );
         // none
         SplitAfter(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => false ),
-            Expected<int[]>.Array( Array( 0, 1, 1, 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => false,
+            Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // each
         SplitAfter(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => true ),
-            Expected<int[]>.Array( Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ), Array() )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => true,
+            Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1 ), Helper.Values<int>( 1 ), Helper.Values<int>( 2 ), Helper.Values<int>() )
             );
         // first
         SplitAfter(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 0 ),
-            Expected<int[]>.Array( Array( 0 ), Array( 1, 1, 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 0,
+            Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1, 1, 2 ) )
             );
         // last
         SplitAfter(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 2 ),
-            Expected<int[]>.Array( Array( 0, 1, 1, 2 ), Array() )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 2,
+            Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ), Helper.Values<int>() )
             );
         // center
         SplitAfter(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 1 ),
-            Expected<int[]>.Array( Array( 0, 1 ), Array( 1 ), Array( 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 1,
+            Helper.Values<int[]>( Helper.Values<int>( 0, 1 ), Helper.Values<int>( 1 ), Helper.Values<int>( 2 ) )
             );
     }
 
@@ -139,27 +138,27 @@ public class Tests_LinqNext {
     public void Slice() {
         // empty
         Slice(
-            Source<int>.Array(),
-            Source<int>.Predicate( (i, slice) => true ),
-            Expected<int[]>.Array()
+            Helper.Values<int>(),
+            (i, slice) => true,
+            Helper.Values<int[]>()
             );
         // none
         Slice(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( (i, slice) => false ),
-            Expected<int[]>.Array( Array( 0 ), Array( 1 ), Array( 1 ), Array( 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            (i, slice) => false,
+            Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1 ), Helper.Values<int>( 1 ), Helper.Values<int>( 2 ) )
             );
         // each
         Slice(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( (i, slice) => true ),
-            Expected<int[]>.Array( Array( 0, 1, 1, 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            (i, slice) => true,
+            Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // i == prev
         Slice(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( (i, slice) => i == slice.Last() ),
-            Expected<int[]>.Array( Array( 0 ), Array( 1, 1 ), Array( 2 ) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            (i, slice) => i == slice.Last(),
+            Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1, 1 ), Helper.Values<int>( 2 ) )
             );
     }
 
@@ -169,39 +168,39 @@ public class Tests_LinqNext {
     public void Unflatten() {
         // empty
         Unflatten(
-            Source<int>.Array(),
-            Source<int>.Predicate( i => true ),
-            Expected<Option<int>, int[]>.Array()
+            Helper.Values<int>(),
+            i => true,
+            Helper.Values<(Option<int>, int[])>()
             );
         // none
         Unflatten(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => false ),
-            Expected<Option<int>, int[]>.Array( (default, Array( 0, 1, 1, 2 )) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => false,
+            Helper.Values<(Option<int>, int[])>( (default, Helper.Values<int>( 0, 1, 1, 2 )) )
         );
         // each
         Unflatten(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => true ),
-            Expected<Option<int>, int[]>.Array( (0, Array()), (1, Array()), (1, Array()), (2, Array()) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => true,
+            Helper.Values<(Option<int>, int[])>( (0.AsOption(), Helper.Values<int>()), (1.AsOption(), Helper.Values<int>()), (1.AsOption(), Helper.Values<int>()), (2.AsOption(), Helper.Values<int>()) )
         );
         // first
         Unflatten(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 0 ),
-            Expected<Option<int>, int[]>.Array( (0, Array( 1, 1, 2 )) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 0,
+            Helper.Values<(Option<int>, int[])>( (0.AsOption(), Helper.Values<int>( 1, 1, 2 )) )
         );
         // last
         Unflatten(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 2 ),
-            Expected<Option<int>, int[]>.Array( (default, Array( 0, 1, 1 )), (2, Array()) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 2,
+            Helper.Values<(Option<int>, int[])>( (default, Helper.Values<int>( 0, 1, 1 )), (2.AsOption(), Helper.Values<int>()) )
         );
         // center
         Unflatten(
-            Source<int>.Array( 0, 1, 1, 2 ),
-            Source<int>.Predicate( i => i is 1 ),
-            Expected<Option<int>, int[]>.Array( (default, Array( 0 )), (1, Array()), (1, Array( 2 )) )
+            Helper.Values<int>( 0, 1, 1, 2 ),
+            i => i is 1,
+            Helper.Values<(Option<int>, int[])>( (default, Helper.Values<int>( 0 )), (1.AsOption(), Helper.Values<int>()), (1.AsOption(), Helper.Values<int>( 2 )) )
         );
     }
 
@@ -210,48 +209,48 @@ public class Tests_LinqNext {
     [Test]
     public static void WithPrev() {
         WithPrev(
-            Source<int>.Array(),
-            Expected<int, Option<int>>.Array()
+            Helper.Values<int>(),
+            Helper.Values<(int, Option<int>)>()
         );
         WithPrev(
-            Source<int>.Array( 0 ),
-            Expected<int, Option<int>>.Array( (0, default) )
+            Helper.Values<int>( 0 ),
+            Helper.Values<(int, Option<int>)>( (0, default) )
             );
         WithPrev(
-            Source<int>.Array( 0, 1, 2 ),
-            Expected<int, Option<int>>.Array( (0, default), (1, 0), (2, 1) )
+            Helper.Values( 0, 1, 2 ),
+            Helper.Values<(int, Option<int>)>( (0, default), (1, 0.AsOption()), (2, 1.AsOption()) )
             );
     }
     // With/Next
     [Test]
     public static void WithNext() {
         WithNext(
-            Source<int>.Array(),
-            Expected<int, Option<int>>.Array()
+            Helper.Values<int>(),
+            Helper.Values<(int, Option<int>)>()
             );
         WithNext(
-            Source<int>.Array( 0 ),
-            Expected<int, Option<int>>.Array( (0, default) )
+            Helper.Values<int>( 0 ),
+            Helper.Values<(int, Option<int>)>( (0, default) )
             );
         WithNext(
-            Source<int>.Array( 0, 1, 2 ),
-            Expected<int, Option<int>>.Array( (0, 1), (1, 2), (2, default) )
+            Helper.Values( 0, 1, 2 ),
+            Helper.Values<(int, Option<int>)>( (0, 1.AsOption()), (1, 2.AsOption()), (2, default) )
             );
     }
     // With/Prev-Next
     [Test]
     public static void WithPrevNext() {
         WithPrevNext(
-            Source<int>.Array(),
-            Expected<int, Option<int>, Option<int>>.Array()
+            Helper.Values<int>(),
+            Helper.Values<(int, Option<int>, Option<int>)>()
         );
         WithPrevNext(
-            Source<int>.Array( 0 ),
-            Expected<int, Option<int>, Option<int>>.Array( (0, default, default) )
+            Helper.Values( 0 ),
+            Helper.Values<(int, Option<int>, Option<int>)>( (0, default, default) )
             );
         WithPrevNext(
-            Source<int>.Array( 0, 1, 2 ),
-            Expected<int, Option<int>, Option<int>>.Array( (0, default, 1), (1, 0, 2), (2, 1, default) )
+            Helper.Values( 0, 1, 2 ),
+            Helper.Values<(int, Option<int>, Option<int>)>( (0, default, 1.AsOption()), (1, 0.AsOption(), 2.AsOption()), (2, 1.AsOption(), default) )
             );
     }
 
@@ -260,48 +259,48 @@ public class Tests_LinqNext {
     [Test]
     public static void TagFirst() {
         TagFirst(
-            Source<int>.Array(),
-            Expected<int, bool>.Array()
+            Helper.Values<int>(),
+            Helper.Values<(int, bool)>()
         );
         TagFirst(
-            Source<int>.Array( 0 ),
-            Expected<int, bool>.Array( (0, true) )
+            Helper.Values<int>( 0 ),
+            Helper.Values<(int, bool)>( (0, true) )
         );
         TagFirst(
-            Source<int>.Array( 0, 1, 2 ),
-            Expected<int, bool>.Array( (0, true), (1, false), (2, false) )
+            Helper.Values( 0, 1, 2 ),
+            Helper.Values<(int, bool)>( (0, true), (1, false), (2, false) )
         );
     }
     // Tag/Last
     [Test]
     public static void TagLast() {
         TagLast(
-            Source<int>.Array(),
-            Expected<int, bool>.Array()
+            Helper.Values<int>(),
+            Helper.Values<(int, bool)>()
             );
         TagLast(
-            Source<int>.Array( 0 ),
-            Expected<int, bool>.Array( (0, true) )
+            Helper.Values<int>( 0 ),
+            Helper.Values<(int, bool)>( (0, true) )
             );
         TagLast(
-            Source<int>.Array( 0, 1, 2 ),
-            Expected<int, bool>.Array( (0, false), (1, false), (2, true) )
+            Helper.Values<int>( 0, 1, 2 ),
+            Helper.Values<(int, bool)>( (0, false), (1, false), (2, true) )
             );
     }
     // Tag/First-Last
     [Test]
     public static void TagFirstLast() {
         TagFirstLast(
-            Source<int>.Array(),
-            Expected<int, bool, bool>.Array()
+            Helper.Values<int>(),
+            Helper.Values<(int, bool, bool)>()
             );
         TagFirstLast(
-            Source<int>.Array( 0 ),
-            Expected<int, bool, bool>.Array( (0, true, true) )
+            Helper.Values<int>( 0 ),
+            Helper.Values<(int, bool, bool)>( (0, true, true) )
             );
         TagFirstLast(
-            Source<int>.Array( 0, 1, 2 ),
-            Expected<int, bool, bool>.Array( (0, true, false), (1, false, false), (2, false, true) )
+            Helper.Values<int>( 0, 1, 2 ),
+            Helper.Values<(int, bool, bool)>( (0, true, false), (1, false, false), (2, false, true) )
             );
     }
 
@@ -310,10 +309,10 @@ public class Tests_LinqNext {
     [Test]
     public void CompareTo() {
         CompareTo(
-            Source<int>.Array( 0, 1, 2 ),
-            Source<int>.Array( 2, 3, 4 ),
-            Expected<int>.Array( 3, 4 ),
-            Expected<int>.Array( 0, 1 )
+            Helper.Values<int>( 0, 1, 2 ),
+            Helper.Values<int>( 2, 3, 4 ),
+            Helper.Values<int>( 3, 4 ),
+            Helper.Values<int>( 0, 1 )
             );
     }
 

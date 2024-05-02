@@ -15,53 +15,53 @@ public class Tests_PeekableEnumerator {
     // Constructor
     [Test]
     public void Constructor() {
-        using var source = Source<int>.Peekable( 0, 1, 2 );
+        using var source = Helper.Peekable<int>( 0, 1, 2 );
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Expected<int>.Option() ) );
+        Assert.That( source.Current, Is.EqualTo( Helper.Option<int>( null ) ) );
     }
 
 
     // Take
     [Test]
     public void Take_00() {
-        using var source = Source<int>.Peekable();
+        using var source = Helper.Peekable<int>();
         // Peek
-        Peek( source, false, false, Expected<int>.Option(), Expected<int>.Option() );
+        Peek( source, false, false, Helper.Option<int>( null ), Helper.Option<int>( null ) );
         // Take-Peek
-        Take( source, true, true, Expected<int>.Option() );
-        Peek( source, true, true, Expected<int>.Option(), Expected<int>.Option() );
+        Take( source, true, true, Helper.Option<int>( null ) );
+        Peek( source, true, true, Helper.Option<int>( null ), Helper.Option<int>( null ) );
     }
     [Test]
     public void Take_01() {
-        using var source = Source<int>.Peekable( 0, 1, 2 );
+        using var source = Helper.Peekable<int>( 0, 1, 2 );
         // Peek
-        Peek( source, false, false, Expected<int>.Option(), Expected<int>.Option( 0 ) );
+        Peek( source, false, false, Helper.Option<int>( null ), Helper.Option<int>( 0 ) );
         // Take-Peek
-        Take( source, true, false, Expected<int>.Option( 0 ) );
-        Peek( source, true, false, Expected<int>.Option( 0 ), Expected<int>.Option( 1 ) );
+        Take( source, true, false, Helper.Option<int>( 0 ) );
+        Peek( source, true, false, Helper.Option<int>( 0 ), Helper.Option<int>( 1 ) );
         // Take-Peek
-        Take( source, true, false, Expected<int>.Option( 1 ) );
-        Peek( source, true, false, Expected<int>.Option( 1 ), Expected<int>.Option( 2 ) );
+        Take( source, true, false, Helper.Option<int>( 1 ) );
+        Peek( source, true, false, Helper.Option<int>( 1 ), Helper.Option<int>( 2 ) );
         // Take-Peek
-        Take( source, true, false, Expected<int>.Option( 2 ) );
-        Peek( source, true, false, Expected<int>.Option( 2 ), Expected<int>.Option() );
+        Take( source, true, false, Helper.Option<int>( 2 ) );
+        Peek( source, true, false, Helper.Option<int>( 2 ), Helper.Option<int>( null ) );
         // Take-Peek
-        Take( source, true, true, Expected<int>.Option() );
-        Peek( source, true, true, Expected<int>.Option(), Expected<int>.Option() );
+        Take( source, true, true, Helper.Option<int>( null ) );
+        Peek( source, true, true, Helper.Option<int>( null ), Helper.Option<int>( null ) );
     }
 
 
     // Reset
     [Test]
     public void Reset() {
-        using var source = Source<int>.Peekable( 0, 1, 2 );
+        using var source = Helper.Peekable<int>( 0, 1, 2 );
         ((IEnumerator<int>) source).MoveNext();
 
         source.Reset();
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
-        Assert.That( source.Current, Is.EqualTo( Expected<int>.Option() ) );
+        Assert.That( source.Current, Is.EqualTo( Helper.Option<int>( null ) ) );
     }
 
 
@@ -92,17 +92,15 @@ public class Tests_PeekableEnumeratorExtensions {
     // Take/While
     [Test]
     public void TakeWhile() {
-        using var source = Source<int>.Peekable( 0, 1, 2 );
-        var predicate = Source<int>.Predicate( i => i <= 1 );
-        Assert.That( source.TakeWhile( predicate ), Is.EqualTo( Expected<int>.Array( 0, 1 ) ) );
+        using var source = Helper.Peekable<int>( 0, 1, 2 );
+        Assert.That( source.TakeWhile( i => i <= 1 ), Is.EqualTo( Helper.Values<int>( 0, 1 ) ) );
         Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
     // Take/Until
     [Test]
     public void TakeUntil() {
-        using var source = Source<int>.Peekable( 0, 1, 2 );
-        var predicate = Source<int>.Predicate( i => !(i <= 1) );
-        Assert.That( source.TakeUntil( predicate ), Is.EqualTo( Expected<int>.Array( 0, 1 ) ) );
+        using var source = Helper.Peekable<int>( 0, 1, 2 );
+        Assert.That( source.TakeUntil( i => !(i <= 1) ), Is.EqualTo( Helper.Values<int>( 0, 1 ) ) );
         Assert.That( source.Current, Is.EqualTo( 1 ) );
     }
 
@@ -110,22 +108,22 @@ public class Tests_PeekableEnumeratorExtensions {
     // Take/If
     [Test]
     public void TakeIf() {
-        using var source = Source<int>.Peekable( 0, 1, 2 );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Expected<int>.Option( 0 ) ) );
-        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Expected<int>.Option() ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Expected<int>.Option( 1 ) ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Expected<int>.Option( 2 ) ) );
-        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Expected<int>.Option() ) );
+        using var source = Helper.Peekable<int>( 0, 1, 2 );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Helper.Option<int>( 0 ) ) );
+        Assert.That( source.TakeIf( i => false ), Is.EqualTo( Helper.Option<int>( null ) ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Helper.Option<int>( 1 ) ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Helper.Option<int>( 2 ) ) );
+        Assert.That( source.TakeIf( i => true ), Is.EqualTo( Helper.Option<int>( null ) ) );
     }
     // Take/If/Not
     [Test]
     public void TakeIfNot() {
-        using var source = Source<int>.Peekable( 0, 1, 2 );
-        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Expected<int>.Option( 0 ) ) );
-        Assert.That( source.TakeIfNot( i => !false ), Is.EqualTo( Expected<int>.Option() ) );
-        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Expected<int>.Option( 1 ) ) );
-        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Expected<int>.Option( 2 ) ) );
-        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Expected<int>.Option() ) );
+        using var source = Helper.Peekable<int>( 0, 1, 2 );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Helper.Option<int>( 0 ) ) );
+        Assert.That( source.TakeIfNot( i => !false ), Is.EqualTo( Helper.Option<int>( null ) ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Helper.Option<int>( 1 ) ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Helper.Option<int>( 2 ) ) );
+        Assert.That( source.TakeIfNot( i => !true ), Is.EqualTo( Helper.Option<int>( null ) ) );
     }
 
 

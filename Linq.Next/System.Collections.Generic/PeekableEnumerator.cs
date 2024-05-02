@@ -63,7 +63,7 @@ public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
         }
         if (Source.MoveNext()) {
             (IsStarted, IsFinished) = (true, false);
-            (current, next) = (Source.Current, default);
+            (current, next) = (Source.Current.AsOption(), default);
             return current;
         }
         (IsStarted, IsFinished) = (true, true);
@@ -76,7 +76,7 @@ public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {
             return next;
         }
         if (Source.MoveNext()) {
-            next = Source.Current;
+            next = Source.Current.AsOption();
             return next;
         }
         next = default;

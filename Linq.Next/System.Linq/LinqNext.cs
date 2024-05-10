@@ -3,9 +3,9 @@
 
 namespace System.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 public static class LinqNext {
 

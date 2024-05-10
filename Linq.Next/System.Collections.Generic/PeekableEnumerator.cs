@@ -3,8 +3,9 @@
 
 namespace System.Collections.Generic;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 // Note: Don't use try-catch-finally in Take, Peek, Reset (because enumerator can not be started, finished, reseted if there was exception)
 public class PeekableEnumerator<T> : IEnumerator<T>, IDisposable {

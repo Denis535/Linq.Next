@@ -9,9 +9,9 @@ using System.Collections.Generic;
 public static class LinqNext {
 
 
-    // Split the items into segments (the separator is excluded)
-    // [false, false, false], true, [false, false, false]
     // Split
+    // Split the items into segments (the separator is excluded)
+    // Example: [false, false, false], true, [false, false, false]
     public static IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> separatorPredicate) {
         return source.FastSplit( separatorPredicate, i => i ).Select( i => i.ToArray() );
     }
@@ -35,9 +35,9 @@ public static class LinqNext {
     }
 
 
-    // Split the items into segments (the separator is included at the beginning of segment)
-    // [false, false, false], [true, false, false]
     // Split/Before
+    // Split the items into segments (the separator is included at the beginning of segment)
+    // Example: [false, false, false], [true, false, false]
     public static IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> separatorPredicate) {
         return source.FastSplitBefore( separatorPredicate, i => i ).Select( i => i.ToArray() );
     }
@@ -60,9 +60,9 @@ public static class LinqNext {
     }
 
 
-    // Split the items into segments (the separator is included at the end of segment)
-    // [false, false, true], [false, false, false]
     // Split/After
+    // Split the items into segments (the separator is included at the end of segment)
+    // Example: [false, false, true], [false, false, false]
     public static IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> separatorPredicate) {
         return source.FastSplitAfter( separatorPredicate, i => i ).Select( i => i.ToArray() );
     }
@@ -85,9 +85,9 @@ public static class LinqNext {
     }
 
 
-    // Slice the items into slices
-    // [true, true, true], [false, true, true]
     // Slice
+    // Slice the items into slices
+    // Example: [true, true, true], [false, true, true]
     public static IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> belongsToSlicePredicate) {
         return source.FastSlice( belongsToSlicePredicate, i => i ).Select( i => i.ToArray() );
     }
@@ -111,10 +111,10 @@ public static class LinqNext {
     }
 
 
-    // Unflatten the items into key-values pairs
-    // true: [false, false, false], true: [false, false, false]
-    // key: [value, value, value], key: [value, value, value]
     // Unflatten
+    // Unflatten the items into key-values pairs
+    // Example: true: [false, false, false], true: [false, false, false]
+    // Example: key: [value, value, value], key: [value, value, value]
     public static IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(this IEnumerable<T> source, Func<T, bool> keyPredicate) {
         return source.FastUnflatten( keyPredicate, i => i, i => i ).Select( i => (i.Key, i.Values.ToArray()) );
     }

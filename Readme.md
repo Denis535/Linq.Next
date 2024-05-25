@@ -17,24 +17,24 @@ The **Linq.Next** package is intended to enhance the linq and the collections wi
 
 ```
 // Split the items into segments (the separator is excluded)
-// [false, false, false], true, [false, false, false]
+// Example: [false, false, false], true, [false, false, false]
 IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> separatorPredicate)
 
 // Split the items into segments (the separator is included at the beginning of segment)
-// [false, false, false], [true, false, false]
+// Example: [false, false, false], [true, false, false]
 IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> separatorPredicate)
 
 // Split the items into segments (the separator is included at the end of segment)
-// [false, false, true], [false, false, false]
+// Example: [false, false, true], [false, false, false]
 IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> separatorPredicate)
 
 // Slice the items into slices
-// [true, true, true], [false, true, true]
+// Example: [true, true, true], [false, true, true]
 IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> belongsToSlicePredicate)
 
 // Unflatten the items into key-values pairs
-// true: [false, false, false], true: [false, false, false]
-// key: [value, value, value], key: [value, value, value]
+// Example: true: [false, false, false], true: [false, false, false]
+// Example: key: [value, value, value], key: [value, value, value]
 IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(this IEnumerable<T> source, Func<T, bool> keyPredicate)
 
 // With prev or next

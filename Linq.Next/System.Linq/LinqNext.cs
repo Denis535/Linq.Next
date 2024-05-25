@@ -5,36 +5,23 @@ namespace System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 public static class LinqNext {
 
 
-    // Split
-    public static IEnumerable<T[]> Split<T>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate
-        ) {
-        return source.FastSplit( predicate, i => i ).Select( i => i.ToArray() );
-    }
-    public static IEnumerable<TResult[]> Split<T, TResult>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate,
-        Func<T, TResult> resultSelector
-        ) {
-        return source.FastSplit( predicate, resultSelector ).Select( i => i.ToArray() );
-    }
-    // Split/Fast
     // Split the items into segments (the separator is excluded)
     // [false, false, false], true, [false, false, false]
-    public static IEnumerable<IList<TResult>> FastSplit<T, TResult>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate,
-        Func<T, TResult> resultSelector
-        ) {
+    // Split
+    public static IEnumerable<T[]> Split<T>(this IEnumerable<T> source, Func<T, bool> separatorPredicate) {
+        return source.FastSplit( separatorPredicate, i => i ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<TResult[]> Split<T, TResult>(this IEnumerable<T> source, Func<T, bool> separatorPredicate, Func<T, TResult> resultSelector) {
+        return source.FastSplit( separatorPredicate, resultSelector ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<IList<TResult>> FastSplit<T, TResult>(this IEnumerable<T> source, Func<T, bool> separatorPredicate, Func<T, TResult> resultSelector) {
         var segment = new List<TResult>();
         foreach (var item in source) {
-            if (predicate( item )) {
+            if (separatorPredicate( item )) {
                 yield return segment;
                 segment.Clear();
             } else {
@@ -48,31 +35,19 @@ public static class LinqNext {
     }
 
 
-    // Split/Before
-    public static IEnumerable<T[]> SplitBefore<T>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate
-        ) {
-        return source.FastSplitBefore( predicate, i => i ).Select( i => i.ToArray() );
-    }
-    public static IEnumerable<TResult[]> SplitBefore<T, TResult>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate,
-        Func<T, TResult> resultSelector
-        ) {
-        return source.FastSplitBefore( predicate, resultSelector ).Select( i => i.ToArray() );
-    }
-    // Split/Before/Fast
     // Split the items into segments (the separator is included at the beginning of segment)
     // [false, false, false], [true, false, false]
-    public static IEnumerable<IList<TResult>> FastSplitBefore<T, TResult>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate,
-        Func<T, TResult> resultSelector
-        ) {
+    // Split/Before
+    public static IEnumerable<T[]> SplitBefore<T>(this IEnumerable<T> source, Func<T, bool> separatorPredicate) {
+        return source.FastSplitBefore( separatorPredicate, i => i ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<TResult[]> SplitBefore<T, TResult>(this IEnumerable<T> source, Func<T, bool> separatorPredicate, Func<T, TResult> resultSelector) {
+        return source.FastSplitBefore( separatorPredicate, resultSelector ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<IList<TResult>> FastSplitBefore<T, TResult>(this IEnumerable<T> source, Func<T, bool> separatorPredicate, Func<T, TResult> resultSelector) {
         var segment = new List<TResult>();
         foreach (var item in source) {
-            if (predicate( item )) {
+            if (separatorPredicate( item )) {
                 yield return segment;
                 segment.Clear();
             }
@@ -85,32 +60,20 @@ public static class LinqNext {
     }
 
 
-    // Split/After
-    public static IEnumerable<T[]> SplitAfter<T>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate
-        ) {
-        return source.FastSplitAfter( predicate, i => i ).Select( i => i.ToArray() );
-    }
-    public static IEnumerable<TResult[]> SplitAfter<T, TResult>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate,
-        Func<T, TResult> resultSelector
-        ) {
-        return source.FastSplitAfter( predicate, resultSelector ).Select( i => i.ToArray() );
-    }
-    // Split/After/Fast
     // Split the items into segments (the separator is included at the end of segment)
     // [false, false, true], [false, false, false]
-    public static IEnumerable<IList<TResult>> FastSplitAfter<T, TResult>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate,
-        Func<T, TResult> resultSelector
-        ) {
+    // Split/After
+    public static IEnumerable<T[]> SplitAfter<T>(this IEnumerable<T> source, Func<T, bool> separatorPredicate) {
+        return source.FastSplitAfter( separatorPredicate, i => i ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<TResult[]> SplitAfter<T, TResult>(this IEnumerable<T> source, Func<T, bool> separatorPredicate, Func<T, TResult> resultSelector) {
+        return source.FastSplitAfter( separatorPredicate, resultSelector ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<IList<TResult>> FastSplitAfter<T, TResult>(this IEnumerable<T> source, Func<T, bool> separatorPredicate, Func<T, TResult> resultSelector) {
         var segment = new List<TResult>();
         foreach (var item in source) {
             segment.Add( resultSelector( item ) );
-            if (predicate( item )) {
+            if (separatorPredicate( item )) {
                 yield return segment;
                 segment.Clear();
             }
@@ -122,32 +85,20 @@ public static class LinqNext {
     }
 
 
-    // Slice
-    public static IEnumerable<T[]> Slice<T>(
-        this IEnumerable<T> source,
-        Func<T, IList<T>, bool> predicate
-        ) {
-        return source.FastSlice( predicate, i => i ).Select( i => i.ToArray() );
-    }
-    public static IEnumerable<TResult[]> Slice<T, TResult>(
-        this IEnumerable<T> source,
-        Func<T, IList<TResult>, bool> predicate,
-        Func<T, TResult> resultSelector
-        ) {
-        return source.FastSlice( predicate, resultSelector ).Select( i => i.ToArray() );
-    }
-    // Slice/Fast
     // Slice the items into slices
     // [true, true, true], [false, true, true]
-    public static IEnumerable<IList<TResult>> FastSlice<T, TResult>(
-        this IEnumerable<T> source,
-        Func<T, IList<TResult>, bool> predicate,
-        Func<T, TResult> resultSelector
-        ) {
+    // Slice
+    public static IEnumerable<T[]> Slice<T>(this IEnumerable<T> source, Func<T, IList<T>, bool> belongsToSlicePredicate) {
+        return source.FastSlice( belongsToSlicePredicate, i => i ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<TResult[]> Slice<T, TResult>(this IEnumerable<T> source, Func<T, IList<TResult>, bool> belongsToSlicePredicate, Func<T, TResult> resultSelector) {
+        return source.FastSlice( belongsToSlicePredicate, resultSelector ).Select( i => i.ToArray() );
+    }
+    public static IEnumerable<IList<TResult>> FastSlice<T, TResult>(this IEnumerable<T> source, Func<T, IList<TResult>, bool> belongsToSlicePredicate, Func<T, TResult> resultSelector) {
         using var source_enumerator = source.GetEnumerator();
         var slice = new List<TResult>();
         foreach (var item in source) {
-            if (slice.Any() && !predicate( item, slice )) {
+            if (slice.Any() && !belongsToSlicePredicate( item, slice )) {
                 yield return slice;
                 slice.Clear();
             }
@@ -160,36 +111,22 @@ public static class LinqNext {
     }
 
 
-    // Unflatten
-    // Unflatten the items into key-values groups
+    // Unflatten the items into key-values pairs
     // true: [false, false, false], true: [false, false, false]
     // key: [value, value, value], key: [value, value, value]
-    public static IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate
-        ) {
-        return source.FastUnflatten( predicate, i => i, i => i ).Select( i => (i.Key, i.Values.ToArray()) );
+    // Unflatten
+    public static IEnumerable<(Option<T> Key, T[] Values)> Unflatten<T>(this IEnumerable<T> source, Func<T, bool> keyPredicate) {
+        return source.FastUnflatten( keyPredicate, i => i, i => i ).Select( i => (i.Key, i.Values.ToArray()) );
     }
-    public static IEnumerable<(Option<TKey> Key, TValue[] Values)> Unflatten<T, TKey, TValue>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate,
-        Func<T, TKey> keySelector,
-        Func<T, TValue> valueSelector
-        ) {
-        return source.FastUnflatten( predicate, keySelector, valueSelector ).Select( i => (i.Key, i.Values.ToArray()) );
+    public static IEnumerable<(Option<TKey> Key, TValue[] Values)> Unflatten<T, TKey, TValue>(this IEnumerable<T> source, Func<T, bool> keyPredicate, Func<T, TKey> keySelector, Func<T, TValue> valueSelector) {
+        return source.FastUnflatten( keyPredicate, keySelector, valueSelector ).Select( i => (i.Key, i.Values.ToArray()) );
     }
-    // Unflatten/Fast
-    public static IEnumerable<(Option<TKey> Key, IList<TValue> Values)> FastUnflatten<T, TKey, TValue>(
-        this IEnumerable<T> source,
-        Func<T, bool> predicate,
-        Func<T, TKey> keySelector,
-        Func<T, TValue> valueSelector
-        ) {
+    public static IEnumerable<(Option<TKey> Key, IList<TValue> Values)> FastUnflatten<T, TKey, TValue>(this IEnumerable<T> source, Func<T, bool> keyPredicate, Func<T, TKey> keySelector, Func<T, TValue> valueSelector) {
         using var source_enumerator = source.GetEnumerator();
         var key = default( Option<TKey> );
         var values = new List<TValue>();
         foreach (var item in source) {
-            if (predicate( item )) {
+            if (keyPredicate( item )) {
                 if (key.HasValue || values.Any()) {
                     yield return (key, values);
                     values.Clear();
@@ -207,7 +144,6 @@ public static class LinqNext {
 
 
     // With/Prev
-    // Return the each item with prev item
     public static IEnumerable<(T Value, Option<T> Prev)> WithPrev<T>(this IEnumerable<T> source) {
         var prev = default( Option<T> );
         foreach (var item in source) {
@@ -216,7 +152,6 @@ public static class LinqNext {
         }
     }
     // With/Next
-    // Return the each item with next item
     public static IEnumerable<(T Value, Option<T> Next)> WithNext<T>(this IEnumerable<T> source) {
         using var source_enumerator = source.GetEnumerator();
         var value = source_enumerator.Take();
@@ -227,7 +162,6 @@ public static class LinqNext {
         }
     }
     // With/Prev-Next
-    // Return the each item with prev and next item
     public static IEnumerable<(T Value, Option<T> Prev, Option<T> Next)> WithPrevNext<T>(this IEnumerable<T> source) {
         using var source_enumerator = source.GetEnumerator();
         var prev = default( Option<T> );
@@ -277,9 +211,9 @@ public static class LinqNext {
 
 
     // CompareTo
-    public static void CompareTo<T>(this IEnumerable<T> first, IEnumerable<T> second, out T[] missing, out T[] extra) {
-        var second_ = new LinkedList<T>( second );
-        extra = first.Where( i => !second_.Remove( i ) ).ToArray();
+    public static void CompareTo<T>(this IEnumerable<T> actual, IEnumerable<T> expected, out T[] missing, out T[] extra) {
+        var second_ = new LinkedList<T>( expected );
+        extra = actual.Where( i => !second_.Remove( i ) ).ToArray();
         missing = second_.ToArray();
     }
 

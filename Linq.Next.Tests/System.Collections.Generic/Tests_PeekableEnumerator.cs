@@ -5,7 +5,6 @@ namespace System.Collections.Generic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
@@ -51,6 +50,21 @@ public class Tests_PeekableEnumerator {
         Take( source, true, true, Helper.Option<int>( null ) );
         Peek( source, true, true, Helper.Option<int>( null ), Helper.Option<int>( null ) );
     }
+    private static void Peek(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current, Option<int> expected_next) {
+        var next = source.Peek();
+        Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
+        Assert.That( source.IsFinished, Is.EqualTo( expected_isFinished ) );
+        Assert.That( source.Current, Is.EqualTo( expected_current ) );
+        Assert.That( source.Next, Is.EqualTo( expected_next ) );
+        Assert.That( source.Next, Is.EqualTo( next ) );
+    }
+    private static void Take(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
+        var current = source.Take();
+        Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
+        Assert.That( source.IsFinished, Is.EqualTo( expected_isFinished ) );
+        Assert.That( source.Current, Is.EqualTo( expected_current ) );
+        Assert.That( source.Current, Is.EqualTo( current ) );
+    }
 
 
     // Reset
@@ -63,25 +77,6 @@ public class Tests_PeekableEnumerator {
         Assert.That( source.IsStarted, Is.False );
         Assert.That( source.IsFinished, Is.False );
         Assert.That( source.Current, Is.EqualTo( Helper.Option<int>( null ) ) );
-    }
-
-
-    // Helpers/Take
-    private static void Take(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current) {
-        var current = source.Take();
-        Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
-        Assert.That( source.IsFinished, Is.EqualTo( expected_isFinished ) );
-        Assert.That( source.Current, Is.EqualTo( expected_current ) );
-        Assert.That( source.Current, Is.EqualTo( current ) );
-    }
-    // Helpers/Peek
-    private static void Peek(PeekableEnumerator<int> source, bool expected_isStarted, bool expected_isFinished, Option<int> expected_current, Option<int> expected_next) {
-        var next = source.Peek();
-        Assert.That( source.IsStarted, Is.EqualTo( expected_isStarted ) );
-        Assert.That( source.IsFinished, Is.EqualTo( expected_isFinished ) );
-        Assert.That( source.Current, Is.EqualTo( expected_current ) );
-        Assert.That( source.Next, Is.EqualTo( expected_next ) );
-        Assert.That( source.Next, Is.EqualTo( next ) );
     }
 
 

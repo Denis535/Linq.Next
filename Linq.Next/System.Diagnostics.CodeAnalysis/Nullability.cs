@@ -4,7 +4,8 @@
 #if NETSTANDARD2_0
 namespace System.Diagnostics.CodeAnalysis;
 using System;
-
+using System.Collections;
+using System.Collections.Generic;
 
 // AllowNull
 [AttributeUsage( AttributeTargets.Field | AttributeTargets.Parameter | AttributeTargets.Property, Inherited = false )]

@@ -5,7 +5,6 @@ namespace System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using NUnit.Framework;
 
@@ -18,37 +17,37 @@ public class Tests_LinqNext {
         // empty
         Split(
             Helper.Values<int>(),
-            i => true,
+            Helper.Predicate<int>( i => true ),
             Helper.Values<int[]>( Helper.Values<int>() )
             );
         // none
         Split(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => false,
+            Helper.Predicate<int>( i => false ),
             Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // each
         Split(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => true,
+            Helper.Predicate<int>( i => true ),
             Helper.Values<int[]>( Helper.Values<int>(), Helper.Values<int>(), Helper.Values<int>(), Helper.Values<int>(), Helper.Values<int>() )
             );
         // first
         Split(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 0,
+            Helper.Predicate<int>( i => i is 0 ),
             Helper.Values<int[]>( Helper.Values<int>(), Helper.Values<int>( 1, 1, 2 ) )
             );
         // last
         Split(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 2,
+            Helper.Predicate<int>( i => i is 2 ),
             Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1 ), Helper.Values<int>() )
             );
         // center
         Split(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 1,
+            Helper.Predicate<int>( i => i is 1 ),
             Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>(), Helper.Values<int>( 2 ) )
             );
     }
@@ -58,37 +57,37 @@ public class Tests_LinqNext {
         // empty
         SplitBefore(
             Helper.Values<int>(),
-            i => true,
+            Helper.Predicate<int>( i => true ),
             Helper.Values<int[]>( Helper.Values<int>() )
             );
         // none
         SplitBefore(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => false,
+            Helper.Predicate<int>( i => false ),
             Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // each
         SplitBefore(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => true,
+            Helper.Predicate<int>( i => true ),
             Helper.Values<int[]>( Helper.Values<int>(), Helper.Values<int>( 0 ), Helper.Values<int>( 1 ), Helper.Values<int>( 1 ), Helper.Values<int>( 2 ) )
             );
         // first
         SplitBefore(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 0,
+            Helper.Predicate<int>( i => i is 0 ),
             Helper.Values<int[]>( Helper.Values<int>(), Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // last
         SplitBefore(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 2,
+            Helper.Predicate<int>( i => i is 2 ),
             Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1 ), Helper.Values<int>( 2 ) )
             );
         // center
         SplitBefore(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 1,
+            Helper.Predicate<int>( i => i is 1 ),
             Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1 ), Helper.Values<int>( 1, 2 ) )
             );
     }
@@ -98,37 +97,37 @@ public class Tests_LinqNext {
         // empty
         SplitAfter(
             Helper.Values<int>(),
-            i => true,
+            Helper.Predicate<int>( i => true ),
             Helper.Values<int[]>( Helper.Values<int>() )
             );
         // none
         SplitAfter(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => false,
+            Helper.Predicate<int>( i => false ),
             Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // each
         SplitAfter(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => true,
+            Helper.Predicate<int>( i => true ),
             Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1 ), Helper.Values<int>( 1 ), Helper.Values<int>( 2 ), Helper.Values<int>() )
             );
         // first
         SplitAfter(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 0,
+            Helper.Predicate<int>( i => i is 0 ),
             Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1, 1, 2 ) )
             );
         // last
         SplitAfter(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 2,
+            Helper.Predicate<int>( i => i is 2 ),
             Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ), Helper.Values<int>() )
             );
         // center
         SplitAfter(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 1,
+            Helper.Predicate<int>( i => i is 1 ),
             Helper.Values<int[]>( Helper.Values<int>( 0, 1 ), Helper.Values<int>( 1 ), Helper.Values<int>( 2 ) )
             );
     }
@@ -140,25 +139,25 @@ public class Tests_LinqNext {
         // empty
         Slice(
             Helper.Values<int>(),
-            (i, slice) => true,
+            Helper.Predicate<int, IList<int>>( (i, slice) => true ),
             Helper.Values<int[]>()
             );
         // none
         Slice(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            (i, slice) => false,
+            Helper.Predicate<int, IList<int>>( (i, slice) => false ),
             Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1 ), Helper.Values<int>( 1 ), Helper.Values<int>( 2 ) )
             );
         // each
         Slice(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            (i, slice) => true,
+            Helper.Predicate<int, IList<int>>( (i, slice) => true ),
             Helper.Values<int[]>( Helper.Values<int>( 0, 1, 1, 2 ) )
             );
         // i == prev
         Slice(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            (i, slice) => i == slice.Last(),
+            Helper.Predicate<int, IList<int>>( (i, slice) => i == slice.Last() ),
             Helper.Values<int[]>( Helper.Values<int>( 0 ), Helper.Values<int>( 1, 1 ), Helper.Values<int>( 2 ) )
             );
     }
@@ -170,37 +169,37 @@ public class Tests_LinqNext {
         // empty
         Unflatten(
             Helper.Values<int>(),
-            i => true,
+            Helper.Predicate<int>( i => true ),
             Helper.Values<(Option<int>, int[])>()
             );
         // none
         Unflatten(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => false,
+            Helper.Predicate<int>( i => false ),
             Helper.Values<(Option<int>, int[])>( (default, Helper.Values<int>( 0, 1, 1, 2 )) )
         );
         // each
         Unflatten(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => true,
+            Helper.Predicate<int>( i => true ),
             Helper.Values<(Option<int>, int[])>( (0.AsOption(), Helper.Values<int>()), (1.AsOption(), Helper.Values<int>()), (1.AsOption(), Helper.Values<int>()), (2.AsOption(), Helper.Values<int>()) )
         );
         // first
         Unflatten(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 0,
+            Helper.Predicate<int>( i => i is 0 ),
             Helper.Values<(Option<int>, int[])>( (0.AsOption(), Helper.Values<int>( 1, 1, 2 )) )
         );
         // last
         Unflatten(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 2,
+            Helper.Predicate<int>( i => i is 2 ),
             Helper.Values<(Option<int>, int[])>( (default, Helper.Values<int>( 0, 1, 1 )), (2.AsOption(), Helper.Values<int>()) )
         );
         // center
         Unflatten(
             Helper.Values<int>( 0, 1, 1, 2 ),
-            i => i is 1,
+            Helper.Predicate<int>( i => i is 1 ),
             Helper.Values<(Option<int>, int[])>( (default, Helper.Values<int>( 0 )), (1.AsOption(), Helper.Values<int>()), (1.AsOption(), Helper.Values<int>( 2 )) )
         );
     }
@@ -319,26 +318,26 @@ public class Tests_LinqNext {
 
 
     // Helpers/Split
-    private static void Split(int[] source, Func<int, bool> predicate, int[][] expected) {
-        var actual = source.Split( predicate ).ToArray();
+    private static void Split(int[] source, Func<int, bool> separatorPredicate, int[][] expected) {
+        var actual = source.Split( separatorPredicate ).ToArray();
         Assert.That( actual, Is.EqualTo( expected ) );
     }
-    private static void SplitBefore(int[] source, Func<int, bool> predicate, int[][] expected) {
-        var actual = source.SplitBefore( predicate ).ToArray();
+    private static void SplitBefore(int[] source, Func<int, bool> separatorPredicate, int[][] expected) {
+        var actual = source.SplitBefore( separatorPredicate ).ToArray();
         Assert.That( actual, Is.EqualTo( expected ) );
     }
-    private static void SplitAfter(int[] source, Func<int, bool> predicate, int[][] expected) {
-        var actual = source.SplitAfter( predicate ).ToArray();
+    private static void SplitAfter(int[] source, Func<int, bool> separatorPredicate, int[][] expected) {
+        var actual = source.SplitAfter( separatorPredicate ).ToArray();
         Assert.That( actual, Is.EqualTo( expected ) );
     }
     // Helpers/Slice
-    private static void Slice(int[] source, Func<int, IList<int>, bool> predicate, int[][] expected) {
-        var actual = source.Slice( predicate ).ToArray();
+    private static void Slice(int[] source, Func<int, IList<int>, bool> belongsToSlicePredicate, int[][] expected) {
+        var actual = source.Slice( belongsToSlicePredicate ).ToArray();
         Assert.That( actual, Is.EqualTo( expected ) );
     }
     // Helpers/Unflatten
-    private static void Unflatten(int[] source, Func<int, bool> predicate, (Option<int> Key, int[] Values)[] expected) {
-        var actual = source.Unflatten( predicate ).ToArray();
+    private static void Unflatten(int[] source, Func<int, bool> keyPredicate, (Option<int> Key, int[] Values)[] expected) {
+        var actual = source.Unflatten( keyPredicate ).ToArray();
         Assert.That( actual, Is.EqualTo( expected ) );
     }
     // Helpers/With
@@ -368,8 +367,8 @@ public class Tests_LinqNext {
         Assert.That( actual, Is.EqualTo( expected ) );
     }
     // Helpers/CompareTo
-    private static void CompareTo(int[] source_first, int[] source_second, int[] expected_missing, int[] expected_extra) {
-        source_first.CompareTo( source_second, out var actual_missing, out var actual_extra );
+    private static void CompareTo(int[] source_actual, int[] source_expected, int[] expected_missing, int[] expected_extra) {
+        source_actual.CompareTo( source_expected, out var actual_missing, out var actual_extra );
         Assert.That( actual_missing, Is.EqualTo( expected_missing ) );
         Assert.That( actual_extra, Is.EqualTo( expected_extra ) );
     }

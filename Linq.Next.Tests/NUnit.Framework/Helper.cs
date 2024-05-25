@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 internal static class Helper {
 
@@ -38,6 +37,28 @@ internal static class Helper {
     }
     public static PeekableEnumerator<T> Peekable<T>(params T[] values) {
         return values.AsEnumerable().GetEnumerator().AsPeekable();
+    }
+
+    public static Func<bool> Predicate(Func<bool> predicate) {
+        return predicate;
+    }
+    public static Func<T1, bool> Predicate<T1>(Func<T1, bool> predicate) {
+        return predicate;
+    }
+    public static Func<T1, T2, bool> Predicate<T1, T2>(Func<T1, T2, bool> predicate) {
+        return predicate;
+    }
+    public static Func<T1, T2, T3, bool> Predicate<T1, T2, T3>(Func<T1, T2, T3, bool> predicate) {
+        return predicate;
+    }
+    public static Func<T1, T2, T3, T4, bool> Predicate<T1, T2, T3, T4>(Func<T1, T2, T3, T4, bool> predicate) {
+        return predicate;
+    }
+    public static Func<T1, T2, T3, T4, T5, bool> Predicate<T1, T2, T3, T4, T5>(Func<T1, T2, T3, T4, T5, bool> predicate) {
+        return predicate;
+    }
+    public static Func<T1, T2, T3, T4, T5, T6, bool> Predicate<T1, T2, T3, T4, T5, T6>(Func<T1, T2, T3, T4, T5, T6, bool> predicate) {
+        return predicate;
     }
 
 }

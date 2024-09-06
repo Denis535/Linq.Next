@@ -1,7 +1,4 @@
-﻿// This is an independent project of an individual developer. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com
-
-namespace System;
+﻿namespace System;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,16 +56,17 @@ public static class Option {
 public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, IComparable<Option<T>>, IComparable<T> {
 
     private readonly bool hasValue;
-    private readonly T? value;
+    private readonly T value; // Note: may be null/default if Option has no value
 
-    public bool HasValue => hasValue;
-    public T Value => hasValue ? value! : throw new InvalidOperationException( "Option has no value" );
-    public T? ValueOrDefault => hasValue ? value : default;
+    // Value
+    public bool HasValue => hasValue; // Note: Option can have null/default value
+    public T Value => hasValue ? value : throw new InvalidOperationException( "Option has no value" ); // Note: therefore, null/default is also valid Option's value
+    public T? ValueOrDefault => hasValue ? value : default; // always null/default if if Option has no value
 
     // Constructor
     public Option() {
         this.hasValue = false;
-        this.value = default;
+        this.value = default!;
     }
     public Option(T value) {
         this.hasValue = true;
@@ -77,8 +75,8 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
 
     // TryGetValue
     public bool TryGetValue([MaybeNullWhen( false )] out T value) {
-        if (hasValue) {
-            value = this.value!;
+        if (HasValue) {
+            value = this.value;
             return true;
         }
         value = default;
@@ -87,7 +85,7 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
 
     // Utils
     public override string ToString() {
-        if (hasValue) return value?.ToString() ?? "Null";
+        if (HasValue) return Value?.ToString() ?? "Null";
         return "Nothing";
     }
     public override bool Equals(object? other) {
@@ -95,7 +93,7 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
         return false;
     }
     public override int GetHashCode() {
-        if (hasValue) return value?.GetHashCode() ?? 0;
+        if (HasValue) return Value?.GetHashCode() ?? 0;
         return 0;
     }
 
@@ -125,6 +123,8 @@ public readonly struct Option<T> : IEquatable<Option<T>>, IEquatable<T>, ICompar
     public static bool operator ==(T left, Option<T> right) {
         return Option.Equals( left, right );
     }
+
+    // Utils
     public static bool operator !=(Option<T> left, Option<T> right) {
         return !Option.Equals( left, right );
     }
@@ -145,12 +145,6 @@ public static class OptionExtensions {
     }
     public static Option<T> AsOption<T>(this T? value) where T : struct {
         if (value.HasValue) return new Option<T>( value.Value );
-        return default;
-    }
-
-    // Cast
-    public static Option<T> Cast<T>(this Option<object?> value) {
-        if (value.HasValue) return new Option<T>( (T) value.Value! );
         return default;
     }
 

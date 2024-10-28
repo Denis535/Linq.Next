@@ -6,7 +6,7 @@
 
         <!--Assembly attributes-->
         <Version>1.2.15</Version>
-        <Description>The Linq.Next package is intended to enhance the linq and the collections with an extra useful features</Description>
+        <Description>The Linq.Next package is intended to enhance the linq and the collections with an extra useful features.</Description>
         <Authors>Denis535</Authors>
         <Company>Denis535</Company>
         <Product>$(AssemblyName)</Product>
